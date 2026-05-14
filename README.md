@@ -30,6 +30,25 @@ repo: nextbound/bragi-canvas-skill
 path: bragi-canvas
 ```
 
+## Can I Just Ask The Agent To Install It?
+
+Usually, yes. The natural-language route works when the agent has shell access, network access, and permission to write to its skill/config folders.
+
+Ask your agent:
+
+```text
+Set up Bragi Canvas from https://github.com/nextbound/bragi-canvas-skill/tree/main/bragi-canvas.
+Add an MCP server named bragi-canvas at http://127.0.0.1:17775/mcp.
+Then install the skill folder into the skill directory this agent uses.
+```
+
+For a polished public install story, each host has a different native distribution route:
+
+- **Codex**: MCP is configured with `codex mcp add`; reusable public skills should eventually be packaged as a Codex plugin.
+- **Claude Code**: MCP is configured with `claude mcp add`; public distribution should eventually be a Claude Code plugin marketplace entry.
+- **Hermes**: can install skills directly from GitHub-style skill coordinates.
+- **OpenClaw**: loads AgentSkills-compatible folders and uses ClawHub for install / update / publish flows.
+
 ## Before You Start
 
 In Obsidian:
@@ -70,12 +89,14 @@ Inside Codex, ask:
 $skill-installer install https://github.com/nextbound/bragi-canvas-skill/tree/main/bragi-canvas
 ```
 
+If your Codex build does not have `$skill-installer`, ask Codex to run the manual install below.
+
 Or install manually:
 
 ```bash
 git clone https://github.com/nextbound/bragi-canvas-skill.git /tmp/bragi-canvas-skill
-mkdir -p ~/.codex/skills
-cp -R /tmp/bragi-canvas-skill/bragi-canvas ~/.codex/skills/bragi-canvas
+mkdir -p ~/.agents/skills
+cp -R /tmp/bragi-canvas-skill/bragi-canvas ~/.agents/skills/bragi-canvas
 ```
 
 Restart Codex after installing the skill.
@@ -97,6 +118,14 @@ claude mcp add --transport http bragi-canvas http://127.0.0.1:17775/mcp \
 ```
 
 Step 2: install the skill.
+
+Inside Claude Code, you can ask:
+
+```text
+Clone https://github.com/nextbound/bragi-canvas-skill and copy bragi-canvas/ to ~/.claude/skills/bragi-canvas.
+```
+
+Or install manually:
 
 ```bash
 git clone https://github.com/nextbound/bragi-canvas-skill.git /tmp/bragi-canvas-skill
@@ -134,9 +163,29 @@ cp -R /tmp/bragi-canvas-skill/bragi-canvas ~/.agents/skills/bragi-canvas
 
 Then restart or refresh OpenClaw skills.
 
+After this skill is published to ClawHub, the intended native install flow is:
+
+```bash
+clawhub install bragi-canvas
+```
+
 ## Hermes And Other MCP-First Agents
 
-Step 1: register the MCP server:
+Step 1: install the skill.
+
+Hermes can install the multi-file skill directly from GitHub coordinates:
+
+```bash
+hermes skills install nextbound/bragi-canvas-skill/bragi-canvas
+```
+
+Inside a Hermes session, the slash-command form is:
+
+```text
+/skills install nextbound/bragi-canvas-skill/bragi-canvas
+```
+
+Step 2: register the MCP server:
 
 ```text
 name: bragi-canvas
@@ -144,7 +193,7 @@ url: http://127.0.0.1:17775/mcp
 transport: streamable-http
 ```
 
-Step 2: add `bragi-canvas/SKILL.md` as the tool-use guidance for that MCP server, or copy the `bragi-canvas/` folder into the agent's skills directory if it supports `SKILL.md` skills.
+For agents without a skill installer, add `bragi-canvas/SKILL.md` as the tool-use guidance for that MCP server, or copy the `bragi-canvas/` folder into the agent's skills directory if it supports `SKILL.md` skills.
 
 ## Smoke Test
 
