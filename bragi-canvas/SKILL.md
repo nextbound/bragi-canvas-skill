@@ -28,6 +28,35 @@ If there is no active canvas open in Obsidian, every tool throws `No active canv
 5. For `generate`: at least one provider API key is configured in plugin settings
 6. If the user has set an **MCP access token** in settings, the MCP client must send `Authorization: Bearer <token>` on every request
 
+## Host compatibility
+
+This skill is intentionally host-neutral: it uses a plain `bragi-canvas/` folder with `SKILL.md` at the root, YAML frontmatter (`name`, `description`), and Markdown references only. Do not add Codex-only, Claude-only, OpenClaw-only, or Hermes-only frontmatter unless it is optional and safely ignored by other hosts.
+
+For distribution, keep the install unit as:
+
+```
+bragi-canvas/
+  SKILL.md
+  references/
+    tools.md
+    workflows.md
+    models.md
+    gotchas.md
+```
+
+Recommended GitHub install coordinates:
+
+```
+repo: nextbound/bragi-canvas-skill
+path: bragi-canvas
+```
+
+Host rules:
+- **Codex / Claude Code / AgentSkills-style hosts:** install or copy the `bragi-canvas/` folder as a skill. The host should load `SKILL.md` and references on demand.
+- **OpenClaw-style hosts:** this folder is AgentSkills-compatible; install it into the host's workspace/global skills location or from GitHub if the host supports skill install commands.
+- **Hermes / MCP-first hosts:** if the host does not load `SKILL.md` folders directly, register the Bragi MCP server and add this `SKILL.md` as tool-use guidance/context.
+- **Any MCP-aware agent:** the operational contract is the same: connect to `http://127.0.0.1:17775/mcp` with optional bearer auth, then use `list_models` before `generate` and the documented tool names rather than relying on a host-specific prefix.
+
 ## First-run setup: register the MCP server
 
 **This skill assumes the host has the Bragi MCP server registered.** If Bragi Canvas MCP tools are missing, walk the user through registration before doing anything else.
