@@ -38,6 +38,8 @@ Model IDs below are exact strings to pass as `modelId` in `generate`.
 
 **All video generations are async.** `generate` returns `generation_started` and the result lands on the canvas minutes later.
 
+TokenRouter Seedance maps `seedance-2.0` / `seedance-2.0-fast` to Dreamina model IDs and accepts reference images, audio, and videos as URL arrays. Asset IDs (`asset://...`) are only passed through for native Volcengine / BytePlus Seedance.
+
 ---
 
 ## Text models
