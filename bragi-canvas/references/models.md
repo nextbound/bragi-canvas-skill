@@ -48,6 +48,7 @@ TokenRouter Seedance maps `seedance-2.0` / `seedance-2.0-fast` to Dreamina model
 |-------|-----------|-----------|--------------|
 | Claude Opus 4.7 | `claude-opus-4-7` | Anthropic / AWS Bedrock / TokenRouter | yes |
 | Claude Sonnet 4.6 | `claude-sonnet-4-6` | Anthropic / Bedrock / TokenRouter | yes |
+| Gemini 3.5 Flash | `gemini-3.5-flash` | Gemini / TokenRouter | text, image, video, audio, PDF |
 | Gemini 3 Flash | `gemini-3-flash` | Gemini / TokenRouter | yes |
 | Gemini 3.1 Pro | `gemini-3.1-pro` | Gemini / TokenRouter | yes |
 | Grok 4.3 | `grok-4-3` | xAI / TokenRouter | yes |
@@ -56,7 +57,7 @@ TokenRouter Seedance maps `seedance-2.0` / `seedance-2.0-fast` to Dreamina model
 | GPT-5.5 Pro | `gpt-5.5-pro` | OpenAI / TokenRouter / APIMart | yes |
 | GPT-5.5 | `gpt-5.5` | OpenAI / TokenRouter / APIMart | yes |
 
-Text model output is a text node. `Vision input` means upstream image nodes can be passed to that text model; APIMart GPT-5.5 uses the multimodal Responses API for image refs. Video, audio, and PDF refs remain provider-specific and are not implied by this column. If the output contains a line that is exactly `---SPLIT---`, Bragi splits it into multiple connected text nodes — useful for batched shot lists, scene beats, etc.
+Text model output is a text node. `Vision input` means upstream image nodes can be passed to that text model; APIMart GPT-5.5 uses the multimodal Responses API for image refs. Video, audio, and PDF refs remain provider-specific and are not implied by this column. If the output contains a line that is exactly `---SPLIT---`, Bragi splits it into multiple connected text nodes — useful for batched shot lists, scene beats, etc. For Gemini 3.5 Flash, upstream image, video, audio, and PDF file nodes can be used as multimodal text-understanding references; Google Gemini keeps images inline and sends video/audio/PDF refs through Bragi Relay as `fileData.fileUri` inputs, while TokenRouter uses its OpenAI-compatible chat endpoint with file content parts.
 
 ---
 
@@ -93,7 +94,7 @@ Two audio-node utilities exist in the Obsidian UI, but they are **not MCP `gener
 The user has to configure at least one key per model. Absent key → model is hidden from `list_models`. Common pairings:
 
 - OpenAI key → GPT Image 2, GPT-5.5, GPT-5.5 Pro
-- Gemini key → Nano Banana Pro/2, Veo 3.1 (+Lite), Gemini 3.x text
+- Gemini key → Nano Banana Pro/2, Veo 3.1 (+Lite), Gemini 3.x text including Gemini 3.5 Flash
 - Anthropic key OR AWS Bedrock → Claude 4.x text
 - Volcengine (ARK) key → Seedream / Seedance native
 - BytePlus key → Seedance on international endpoint (+ Asset library for face refs)

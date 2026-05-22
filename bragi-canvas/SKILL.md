@@ -125,7 +125,7 @@ Full parameter schemas, return shapes, and examples live in `references/tools.md
 **Upstream defines the input, the node itself carries the prompt.** When you call `generate(nodeId, ...)`:
 - the prompt text is read from the target node (its `text` if it's a text node; the file contents if it's a `.md` file node)
 - any *upstream* text nodes are concatenated before that prompt (in drag-sort order)
-- any *upstream* image / video / audio file nodes become reference inputs to the model
+- any *upstream* image / video / audio / PDF file nodes become reference inputs to models that support them
 - the output node is created to the right of the source and auto-connected with an edge
 
 **`generate` returns immediately with placeholder IDs.** The call returns `{ status: "generation_started", placeholderIds: [...], expectedOutputType }` before the real work starts. A shimmering placeholder node is created synchronously at each ID; the provider call continues in the background. To track progress:

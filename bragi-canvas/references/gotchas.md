@@ -80,19 +80,25 @@ For text generation only. If the model output contains a line consisting of exac
 
 ---
 
-## 8. Video mode defaults from MCP are dumber than the UI's
+## 8. Gemini multimodal text refs use provider-specific file paths
+
+Gemini 3.5 Flash can use upstream images, videos, audio, and PDFs for text generation. Google Gemini keeps images inline, uploads video/audio/PDF refs through Bragi Relay, and sends the relay URLs as `fileData.fileUri` parts. TokenRouter uses `google/gemini-3.5-flash` through its OpenAI-compatible chat endpoint with file content parts. Other text providers fail clearly when video/audio/PDF refs are present instead of silently ignoring them.
+
+---
+
+## 9. Video mode defaults from MCP are dumber than the UI's
 
 The Obsidian bottom bar auto-picks a smart mode based on upstream (1 img → first-frame, 2 img → first-last-frame, etc). The MCP does *not* do this — if you pass no `mode`, it uses `model.modes[0]`, which for most video models is `text-to-video`. Always pass `mode` explicitly for video unless you really want text-to-video.
 
 ---
 
-## 9. `batchCount` caps at 4
+## 10. `batchCount` caps at 4
 
 `generate({ batchCount: 10 })` is silently clamped to 4.
 
 ---
 
-## 10. Switching canvases requires user confirmation
+## 11. Switching canvases requires user confirmation
 
 Canvas-mutating and reading tools always target the currently active canvas leaf. You can enumerate other canvases with `list_canvases` and switch with `open_canvas({ path })` — but `open_canvas` pops a modal asking the user to confirm. If they dismiss it you get `cancelled by user`.
 
@@ -100,25 +106,25 @@ If the user switches tabs manually mid-session, your next tool call targets the 
 
 ---
 
-## 11. Output files land in `_bragi/assets`
+## 12. Output files land in `_bragi/assets`
 
 Generated files go to the vault-level `_bragi/assets/` directory. The file node's `file` property is a vault-relative path such as `_bragi/assets/img_<timestamp>.png`. If you need the filesystem path, combine with the vault root (not exposed via MCP — you'd have to ask the user).
 
 ---
 
-## 12. Localhost + optional bearer token auth
+## 13. Localhost + optional bearer token auth
 
 The MCP server binds to `127.0.0.1` with CORS `*`. If the user sets `MCP access token` in plugin settings, every request must carry `Authorization: Bearer <token>` (401 otherwise). If the token is blank, any local process can connect — treat canvas contents accordingly.
 
 ---
 
-## 13. Port changes need an Obsidian restart
+## 14. Port changes need an Obsidian restart
 
 Toggling `Enable MCP server` starts/stops the server live, but changing `MCP port` only takes effect after restarting Obsidian.
 
 ---
 
-## 14. Errors you might see and what they mean
+## 15. Errors you might see and what they mean
 
 | Error | Cause |
 |-------|-------|
