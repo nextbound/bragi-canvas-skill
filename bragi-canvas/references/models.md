@@ -53,10 +53,10 @@ TokenRouter Seedance maps `seedance-2.0` / `seedance-2.0-fast` to Dreamina model
 | Grok 4.3 | `grok-4-3` | xAI / TokenRouter | yes |
 | Grok 4 Fast | `grok-4-fast` | xAI / TokenRouter | yes |
 | Qwen 3.6 Plus | `qwen-3-6-plus` | TokenRouter | no |
-| GPT-5.5 Pro | `gpt-5.5-pro` | OpenAI / TokenRouter | yes |
-| GPT-5.5 | `gpt-5.5` | OpenAI / TokenRouter | yes |
+| GPT-5.5 Pro | `gpt-5.5-pro` | OpenAI / TokenRouter / APIMart | yes |
+| GPT-5.5 | `gpt-5.5` | OpenAI / TokenRouter / APIMart | yes |
 
-Text model output is a text node. If the output contains a line that is exactly `---SPLIT---`, Bragi splits it into multiple connected text nodes — useful for batched shot lists, scene beats, etc.
+Text model output is a text node. `Vision input` means upstream image nodes can be passed to that text model; APIMart GPT-5.5 uses the multimodal Responses API for image refs. Video, audio, and PDF refs remain provider-specific and are not implied by this column. If the output contains a line that is exactly `---SPLIT---`, Bragi splits it into multiple connected text nodes — useful for batched shot lists, scene beats, etc.
 
 ---
 
@@ -101,7 +101,7 @@ The user has to configure at least one key per model. Absent key → model is hi
 - fal.ai key → fal-ai/* variants of almost everything (universal fallback)
 - TokenRouter key → selected text/image/video models via `https://api.tokenrouter.com/v1`
 - xAI key → Grok text/image/video/TTS
-- APIMart key → GPT Image 2 gateway
+- APIMart key → GPT Image 2, GPT-5.5, GPT-5.5 Pro
 - Luma key → Luma Uni-1 image generation
 - MiniMax key → native TTS/Music
 - ElevenLabs key → native TTS/Music/SFX (returns binary mp3)
