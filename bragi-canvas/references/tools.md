@@ -192,6 +192,8 @@ Always call this first — the set depends on which keys the user has configured
 { prompts:  [...raw upstream prompt strings...],
   images:   [...ordered vault-relative image paths...],
   videos:   [...vault-relative video paths...],
+  audios:   [...vault-relative audio paths...],
+  pdfs:     [...vault-relative PDF paths...],
   textRefs: [{ nodeId, preview, kind, mdPath? }, ...] }
 ```
 
@@ -199,7 +201,7 @@ Notes:
 - `images` is ordered with `bragiImageOrder` / drag order applied.
 - `textRefs` is ordered with `bragiTextOrder` / drag order applied and is the best view for text / `.md` reference ordering.
 - `prompts` is a raw quick view from the edge parser; `.md` refs may appear as `__md__:<path>` and are not the authoritative final prompt. Generation resolves ordered text and `.md` refs internally before calling the provider.
-- Upstream audio files can be consumed by generation where supported, but `get_upstream` does not currently expose an `audios` field.
+- Upstream audio and PDF files can be consumed by text generation where supported; use `audios` / `pdfs` to inspect those refs before calling `generate`.
 
 ### `generate`
 Trigger a generation. Returns immediately once the placeholder is created; the provider call runs in the background.

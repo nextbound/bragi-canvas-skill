@@ -198,7 +198,7 @@ These exist as Obsidian UI actions on audio file nodes, but they are **not expos
 Before spending on a model call, confirm the upstream graph:
 
 ```
-get_upstream(nodeId)  →  { prompts, images, videos, textRefs }
+get_upstream(nodeId)  →  { prompts, images, videos, audios, pdfs, textRefs }
 ```
 
 Use this to verify:
