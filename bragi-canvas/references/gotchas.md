@@ -80,9 +80,20 @@ For text generation only. If the model output contains a line consisting of exac
 
 ---
 
-## 8. Gemini multimodal text refs use provider-specific file paths
+## 8. Text multimodal inputs are provider-specific
 
-Gemini 3.5 Flash can use upstream images, videos, audio, and PDFs for text generation. Google Gemini keeps images inline, uploads video/audio/PDF refs through Bragi Relay, and sends the relay URLs as `fileData.fileUri` parts. TokenRouter uses `google/gemini-3.5-flash` through its OpenAI-compatible chat endpoint with file content parts. Other text providers fail clearly when video/audio/PDF refs are present instead of silently ignoring them.
+Bragi validates upstream image / PDF / video / audio refs against a model × provider capability matrix before generation. Use `list_models({ type: "text" })` and read `supportedInputs` / `unsupportedInputs` for the active provider.
+
+| Provider | Image | PDF | Video | Audio |
+|----------|-------|-----|-------|-------|
+| OpenAI / APIMart GPT | yes | yes | no | no |
+| Anthropic / Bedrock Claude | yes | yes (≤32 MB) | no | no |
+| xAI Grok | yes | yes | no | no |
+| Google Gemini | yes | yes | yes | yes |
+| DashScope Qwen 3.6 Plus | yes | yes | yes (no audio track) | yes |
+| TokenRouter | slug-dependent | slug-dependent | slug-dependent | slug-dependent |
+
+Gemini and DashScope upload large or non-inline refs through Bragi Relay. Claude PDFs over 32 MB fail before the API call. OpenAI, Claude, xAI, and APIMart do **not** accept upstream video/audio for text — connect video frames as images manually if you need a workaround.
 
 ---
 
