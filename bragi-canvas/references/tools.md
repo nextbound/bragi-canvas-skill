@@ -154,7 +154,8 @@ Throws if the node isn't an image file node.
 No params. Returns `{ path, basename, nodeCount, edgeCount }` — or `null` if no canvas is active.
 
 ### `list_canvases`
-No params. Returns every `.canvas` file in the vault: `[{ path, basename }]`.
+No params. Returns `.canvas` files Bragi has seen in this vault: `[{ path, basename }]`.
+This is an indexed list, not a full vault enumeration. Open a specific canvas by exact path with `open_canvas`.
 
 ### `open_canvas`
 **Params** `{ path }`.

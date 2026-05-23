@@ -111,7 +111,9 @@ The Obsidian bottom bar auto-picks a smart mode based on upstream (1 img → fir
 
 ## 11. Switching canvases requires user confirmation
 
-Canvas-mutating and reading tools always target the currently active canvas leaf. You can enumerate other canvases with `list_canvases` and switch with `open_canvas({ path })` — but `open_canvas` pops a modal asking the user to confirm. If they dismiss it you get `cancelled by user`.
+Canvas-mutating and reading tools always target the currently active canvas leaf. You can inspect Bragi-known canvases with `list_canvases` and switch with `open_canvas({ path })` — but `open_canvas` pops a modal asking the user to confirm. If they dismiss it you get `cancelled by user`.
+
+`list_canvases` is intentionally an indexed known-canvas list, not a full vault scan. If the user gives an exact canvas path, call `open_canvas({ path })` directly.
 
 If the user switches tabs manually mid-session, your next tool call targets the new tab.
 
