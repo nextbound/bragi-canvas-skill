@@ -193,7 +193,22 @@ These exist as Obsidian UI actions on audio file nodes, but they are **not expos
 
 ---
 
-## 12. Inspecting before generating (dry run)
+## 12. PDF summary with Claude or GPT
+
+Connect a PDF file node upstream of a text prompt node, then generate with a text model whose active provider supports PDF (`list_models({ type: "text" })` → check `supportedInputs` includes `"pdf"`).
+
+```
+1. Place a PDF file node on the canvas
+2. create_text_node({ text: "Summarize this document in 5 bullet points.", ... }) → promptNodeId
+3. connect_nodes({ fromId: pdfNodeId, toId: promptNodeId })   // arrow points into the prompt node
+4. generate({ nodeId: promptNodeId, modelId: "claude-sonnet-4-6" })
+```
+
+For Qwen on DashScope with video refs, use `modelId: "qwen-3-6-plus"` and ensure DashScope key is configured. DashScope video understanding does not include audio tracks — describe spoken content separately if needed.
+
+---
+
+## 13. Inspecting before generating (dry run)
 
 Before spending on a model call, confirm the upstream graph:
 
@@ -212,7 +227,7 @@ Use this to verify:
 
 ---
 
-## 13. Fast storyboard creation (batch tools)
+## 14. Fast storyboard creation (batch tools)
 
 When creating 5+ shots, use the batch tools — one round-trip instead of N.
 

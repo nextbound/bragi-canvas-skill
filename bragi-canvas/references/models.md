@@ -44,20 +44,20 @@ TokenRouter Seedance maps `seedance-2.0` / `seedance-2.0-fast` to Dreamina model
 
 ## Text models
 
-| Model | `modelId` | Providers | Vision input |
-|-------|-----------|-----------|--------------|
-| Claude Opus 4.7 | `claude-opus-4-7` | Anthropic / AWS Bedrock / TokenRouter | yes |
-| Claude Sonnet 4.6 | `claude-sonnet-4-6` | Anthropic / Bedrock / TokenRouter | yes |
-| Gemini 3.5 Flash | `gemini-3.5-flash` | Gemini / TokenRouter | text, image, video, audio, PDF |
-| Gemini 3 Flash | `gemini-3-flash` | Gemini / TokenRouter | yes |
-| Gemini 3.1 Pro | `gemini-3.1-pro` | Gemini / TokenRouter | yes |
-| Grok 4.3 | `grok-4-3` | xAI / TokenRouter | yes |
-| Grok 4 Fast | `grok-4-fast` | xAI / TokenRouter | yes |
-| Qwen 3.6 Plus | `qwen-3-6-plus` | TokenRouter | no |
-| GPT-5.5 Pro | `gpt-5.5-pro` | OpenAI / TokenRouter / APIMart | yes |
-| GPT-5.5 | `gpt-5.5` | OpenAI / TokenRouter / APIMart | yes |
+| Model | `modelId` | Providers | Multimodal inputs (active provider) |
+|-------|-----------|-----------|-------------------------------------|
+| Claude Opus 4.7 | `claude-opus-4-7` | Anthropic / AWS Bedrock / TokenRouter | image + PDF (Anthropic/Bedrock/APIMart-style slugs); no video/audio |
+| Claude Sonnet 4.6 | `claude-sonnet-4-6` | Anthropic / Bedrock / TokenRouter | image + PDF |
+| Gemini 3.5 Flash | `gemini-3.5-flash` | Gemini / TokenRouter | image + PDF + video + audio |
+| Gemini 3 Flash | `gemini-3-flash` | Gemini / TokenRouter | full multimodal on Gemini / gemini slugs |
+| Gemini 3.1 Pro | `gemini-3.1-pro` | Gemini / TokenRouter | full multimodal on Gemini / gemini slugs |
+| Grok 4.3 | `grok-4-3` | xAI / TokenRouter | image + PDF on xAI / `x-ai/*` TokenRouter slugs |
+| Grok 4 Fast | `grok-4-fast` | xAI / TokenRouter | image + PDF on xAI / `x-ai/*` TokenRouter slugs |
+| Qwen 3.6 Plus | `qwen-3-6-plus` | DashScope / TokenRouter | image + PDF + video + audio on DashScope; qwen slugs on TokenRouter |
+| GPT-5.5 Pro | `gpt-5.5-pro` | OpenAI / TokenRouter / APIMart | image + PDF |
+| GPT-5.5 | `gpt-5.5` | OpenAI / TokenRouter / APIMart | image + PDF |
 
-Text model output is a text node. `Vision input` means upstream image nodes can be passed to that text model; APIMart GPT-5.5 uses the multimodal Responses API for image refs. Video, audio, and PDF refs remain provider-specific and are not implied by this column. If the output contains a line that is exactly `---SPLIT---`, Bragi splits it into multiple connected text nodes — useful for batched shot lists, scene beats, etc. For Gemini 3.5 Flash, upstream image, video, audio, and PDF file nodes can be used as multimodal text-understanding references; Google Gemini keeps images inline and sends video/audio/PDF refs through Bragi Relay as `fileData.fileUri` inputs, while TokenRouter uses its OpenAI-compatible chat endpoint with file content parts.
+Text model output is a text node. Bragi validates upstream media against a model × provider capability matrix before calling the provider. OpenAI, xAI, and APIMart GPT models use the Responses API for image/PDF refs. Anthropic and Bedrock send PDFs as `document` blocks (≤32 MB). Gemini keeps small images inline and uploads large or non-image refs through Bragi Relay as `fileData.fileUri`. DashScope Qwen uses the native `multimodal-generation` endpoint. TokenRouter capabilities depend on the upstream slug (`google/*`, `qwen/*`, `anthropic/*`, etc.). If the output contains a line that is exactly `---SPLIT---`, Bragi splits it into multiple connected text nodes.
 
 ---
 
@@ -101,6 +101,7 @@ The user has to configure at least one key per model. Absent key → model is hi
 - Kling AK+SK → Kling 2.6 / 3.0 native
 - fal.ai key → fal-ai/* variants of almost everything (universal fallback)
 - TokenRouter key → selected text/image/video models via `https://api.tokenrouter.com/v1`
+- DashScope key → Qwen Voice audio + Qwen 3.6 Plus text (native multimodal)
 - xAI key → Grok text/image/video/TTS
 - APIMart key → GPT Image 2, GPT-5.5, GPT-5.5 Pro
 - Luma key → Luma Uni-1 image generation

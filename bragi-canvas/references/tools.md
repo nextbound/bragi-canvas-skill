@@ -180,10 +180,11 @@ No params. Currently selected nodes.
 Returns only models with at least one configured provider key:
 ```
 [{ id, name, type, provider, modes,
+   supportedInputs?, unsupportedInputs?,
    params: [{ id, label, type, default,
               options?, min?, max?, step?, unit? }, ...] }, ...]
 ```
-Always call this first — the set depends on which keys the user has configured.
+For `type: "text"`, `supportedInputs` / `unsupportedInputs` describe which upstream media kinds the active provider accepts (for example `["text","image","pdf"]`). Always call this first — the set depends on which keys the user has configured.
 
 ### `get_upstream`
 **Params** `{ id }`
