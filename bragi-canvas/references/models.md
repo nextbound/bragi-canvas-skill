@@ -10,7 +10,7 @@ Model IDs below are exact strings to pass as `modelId` in `generate`.
 
 | Model | `modelId` | Providers | Modes | Key params |
 |-------|-----------|-----------|-------|-----------|
-| GPT Image 2 | `gpt-image-2` | OpenAI / fal.ai / TokenRouter / APIMart | text-to-image | `aspectRatio` (10), `imageSize` (Auto/1K/2K/4K), `quality` (Auto/Low/Medium/High) |
+| GPT Image 2 | `gpt-image-2` | OpenAI / fal.ai / TokenRouter / APIMart | text-to-image | `aspectRatio` (15 + Auto), `imageSize` (Auto/1K/2K/4K), `quality` (Auto/Low/Medium/High) |
 | Nano Banana Pro | `nano-banana-pro` | Gemini / fal.ai / TokenRouter | text-to-image | `aspectRatio` (10), `imageSize` (1K/2K/4K) |
 | Nano Banana 2 | `nano-banana-2` | Gemini / fal.ai / TokenRouter | text-to-image | `aspectRatio` (14), `imageSize` (512/1K/2K/4K) |
 | Grok Imagine | `grok-imagine` | xAI / fal.ai | text-to-image, image-ref-to-image | `aspectRatio` (9), `quality` |
@@ -19,6 +19,8 @@ Model IDs below are exact strings to pass as `modelId` in `generate`.
 | Luma Uni-1 | `luma-uni-1` | Luma | text-to-image, image-ref-to-image | `aspectRatio` (5) |
 | Seedream 5.0 | `seedream-5.0` | Volcengine | text-to-image | `aspectRatio` (8), `resolution` (2K/3K) |
 | Seedream 4.5 | `seedream-4.5` | Volcengine / TokenRouter | text-to-image | `aspectRatio` (8), `resolution` (2K/4K) |
+
+GPT Image 2's OpenAI and OpenAI-compatible image routes convert `imageSize` + `aspectRatio` into a concrete pixel `size`; APIMart sends the selected aspect ratio as `size` and the same tier as its `resolution` field.
 
 ---
 
