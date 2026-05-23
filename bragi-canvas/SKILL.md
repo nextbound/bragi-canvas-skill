@@ -132,7 +132,7 @@ Full parameter schemas, return shapes, and examples live in `references/tools.md
 - For **video** (async): use `list_pending_tasks` / `get_task_status` — they surface the TaskQueue. When a task disappears from `list_pending_tasks`, inspect the placeholder node: it's either been replaced by a real file node (success) or coloured red with an error message (failure).
 - For **image / text / audio** (sync, seconds to tens of seconds): there's no task ID. Just re-read the placeholder node with `get_node(placeholderId)` after a short wait — a file/text node means success, a red node means failure.
 
-**Models are not free text.** Always call `list_models` first to discover which models are actually configured (it filters by available API keys) and what params they accept. Never guess a `modelId`.
+**Models are not free text.** Always call `list_models` first to discover which models are actually configured (it filters by available API keys), what params they accept, and—for `type: "text"`—which upstream media kinds the active provider supports via `supportedInputs` / `unsupportedInputs`. Never guess a `modelId`.
 
 ## Quickstart: generate an image from a prompt
 
