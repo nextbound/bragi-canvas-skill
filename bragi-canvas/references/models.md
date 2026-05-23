@@ -51,8 +51,8 @@ TokenRouter Seedance maps `seedance-2.0` / `seedance-2.0-fast` to Dreamina model
 | Gemini 3.5 Flash | `gemini-3.5-flash` | Gemini / TokenRouter | image + PDF + video + audio |
 | Gemini 3 Flash | `gemini-3-flash` | Gemini / TokenRouter | full multimodal on Gemini / gemini slugs |
 | Gemini 3.1 Pro | `gemini-3.1-pro` | Gemini / TokenRouter | full multimodal on Gemini / gemini slugs |
-| Grok 4.3 | `grok-4-3` | xAI / TokenRouter | image + PDF on xAI; image-only on generic TokenRouter slugs |
-| Grok 4 Fast | `grok-4-fast` | xAI / TokenRouter | image + PDF on xAI |
+| Grok 4.3 | `grok-4-3` | xAI / TokenRouter | image + PDF on xAI / `x-ai/*` TokenRouter slugs |
+| Grok 4 Fast | `grok-4-fast` | xAI / TokenRouter | image + PDF on xAI / `x-ai/*` TokenRouter slugs |
 | Qwen 3.6 Plus | `qwen-3-6-plus` | DashScope / TokenRouter | image + PDF + video + audio on DashScope; qwen slugs on TokenRouter |
 | GPT-5.5 Pro | `gpt-5.5-pro` | OpenAI / TokenRouter / APIMart | image + PDF |
 | GPT-5.5 | `gpt-5.5` | OpenAI / TokenRouter / APIMart | image + PDF |
