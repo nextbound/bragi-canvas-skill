@@ -185,6 +185,8 @@ Result: 5 separate text nodes, each connected back to the prompt. Now feed them 
 For music: `mode: "music"`, ElevenLabs uses `music_length_ms` (seconds in the UI range) plus `instrumental`; MiniMax Music uses `instrumental`. Lyrics come from upstream text nodes for MiniMax Music.
 For SFX: use `modelId: "elevenlabs-sfx"`, `mode: "sound-effect"`, and `duration` from {1,3,5,10,20,30}.
 
+For voice reference cloning in the Obsidian UI, connect an upstream audio file to a TTS prompt and choose the `Voice ref` source mode. Native ElevenLabs and MiniMax TTS can clone from the upstream audio; MCP `generate` can use an already-created custom voice ID via the model's `voice` param.
+
 ---
 
 ## 11. Speech-to-text / audio isolation
@@ -273,14 +275,14 @@ For an image already in the vault, skip step 1 and use `create_file_node({ fileP
 
 ```
 1. Bind each face image:
-     set_asset_id({ nodeId: faceImgId, assetId: "asset-20260403175316-..." })
+     set_asset_id({ nodeId: faceImgId, provider: "tokenrouter", assetId: "asset-20260403175316-..." })
 
 2. Connect face image(s) → shot prompt, then
    generate({ nodeId: shotId, modelId: "seedance-2.0",
               mode: "image-ref", params: {...} })
 ```
 
-If BytePlus AK+SK are configured in settings, you can skip step 1 entirely — ref images are auto-routed through the BytePlus asset library.
+Use `provider: "byteplus"` or `provider: "bytedance"` for those native Seedance paths. If BytePlus AK+SK or TokenRouter are configured in settings, you can often skip step 1 entirely — ref media can be auto-routed through the provider's asset library and cached on the source node.
 
 ---
 

@@ -68,9 +68,9 @@ To *control* order from MCP, create the edges in the desired order, or use `read
 
 ## 6. Asset IDs for Seedance face reference
 
-Seedance's face-preservation feature uses Volcengine Asset IDs (`asset-20260403175316-…`). You can bind them from MCP via `set_asset_id({ nodeId, assetId })` — image nodes only. When provider is `bytedance`/`byteplus` and the model is Seedance, the bound Asset ID is passed through as `asset://<id>` (no base64, no upload).
+Seedance's face-preservation feature uses provider-specific Asset IDs (`asset-20260403175316-…`). You can bind them from MCP via `set_asset_id({ nodeId, provider, assetId })` — image nodes only. `provider` defaults to `tokenrouter` and can be `tokenrouter`, `byteplus`, or `bytedance`. When the active provider/model supports Seedance assets, the bound Asset ID is passed through as `asset://<id>` (no base64 inline payload).
 
-If BytePlus AK+SK are configured in settings, ref images *without* an Asset ID also get routed through the BytePlus asset library automatically — no manual binding needed.
+If BytePlus AK+SK are configured in settings, ref images without a BytePlus/Volcengine Asset ID can be routed through the BytePlus asset library automatically. If TokenRouter is active and configured, ref images/audio/videos can be routed through TokenRouter ModelArk assets automatically and cached back on the source node.
 
 ---
 

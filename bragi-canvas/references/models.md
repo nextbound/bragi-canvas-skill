@@ -40,7 +40,7 @@ GPT Image 2's OpenAI and OpenAI-compatible image routes convert `imageSize` + `a
 
 **All video generations are async.** `generate` returns `generation_started` and the result lands on the canvas minutes later.
 
-TokenRouter Seedance maps `seedance-2.0` / `seedance-2.0-fast` to Dreamina model IDs and accepts reference images, audio, and videos as URL arrays. Asset IDs (`asset://...`) are only passed through for native Volcengine / BytePlus Seedance.
+TokenRouter Seedance maps `seedance-2.0` / `seedance-2.0-fast` to Dreamina model IDs and accepts reference images, audio, and videos. When a TokenRouter key is configured, Bragi can route reference images/audio/videos through TokenRouter ModelArk assets and pass them as `asset://...`; BytePlus and Volcengine keep their own provider-scoped asset IDs.
 
 ---
 
@@ -67,8 +67,8 @@ Text model output is a text node. Bragi validates upstream media against a model
 
 | Model | `modelId` | Providers | Mode(s) | Key params |
 |-------|-----------|-----------|---------|-----------|
-| ElevenLabs TTS v3 | `elevenlabs-tts-v3` | ElevenLabs / fal.ai | tts | 8 English voices |
-| MiniMax TTS | `minimax-tts` | MiniMax / fal.ai | tts | 12 ZH+EN voices, speed 0.5–2.0 |
+| ElevenLabs TTS v3 | `elevenlabs-tts-v3` | ElevenLabs / fal.ai | tts | 8 English voices, stability/similarity/style/speed; native ElevenLabs supports voice ref cloning |
+| MiniMax TTS | `minimax-tts` | MiniMax / fal.ai | tts | 12 ZH+EN voices, speed 0.5–2.0; native MiniMax supports voice ref cloning |
 | Grok TTS | `grok-tts` | xAI | tts | 5 voices, 9 language options |
 | ElevenLabs Music | `elevenlabs-music` | ElevenLabs / fal.ai | music | `music_length_ms` 3–300s, instrumental toggle |
 | MiniMax Music | `minimax-music` | MiniMax / fal.ai | music | instrumental OR with-lyrics (needs upstream text node for lyrics) |
@@ -107,6 +107,6 @@ The user has to configure at least one key per model. Absent key → model is hi
 - xAI key → Grok text/image/video/TTS
 - APIMart key → GPT Image 2, GPT-5.5, GPT-5.5 Pro
 - Luma key → Luma Uni-1 image generation
-- MiniMax key → native TTS/Music
-- ElevenLabs key → native TTS/Music/SFX (returns binary mp3)
+- MiniMax key → native TTS/Music and voice ref cloning
+- ElevenLabs key → native TTS/Music/SFX and voice ref cloning (TTS returns binary mp3)
 - Legnext key → Midjourney v8 / niji 7
