@@ -82,7 +82,7 @@ Good image-ref-capable choices from `list_models({ type: "image" })`: `nano-bana
      connect_nodes({ fromId: imgNodeId, toId: motionTextId })   // image feeds motion prompt
 
 2. list_models({ type: "video" })
-   pick one that supports "first-frame" (Seedance 2.0, Kling 3.0, Veo 3.1, Grok Video)
+   pick one that supports "first-frame" (Seedance 2.0, Kling 3.0, Wan 2.7 Spicy I2V, Veo 3.1, Grok Video)
 
 3. For each motion text node:
      const { placeholderIds } = generate({
