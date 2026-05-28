@@ -28,8 +28,8 @@ GPT Image 2's OpenAI and OpenAI-compatible image routes convert `imageSize` + `a
 
 | Model | `modelId` | Providers | Modes | Key params |
 |-------|-----------|-----------|-------|-----------|
-| Seedance 2.0 | `seedance-2.0` | Volcengine / BytePlus / fal.ai / TokenRouter | text-to-video, first-frame, image-ref, video-ref | `duration` (Auto/4–15s), `ratio` (5), `resolution` (480p/720p/1080p), `generate_audio` |
-| Seedance 2.0 Fast | `seedance-2.0-fast` | Volcengine / BytePlus / TokenRouter | same as above | `duration`, `ratio` (3), `resolution` (480p/720p), `generate_audio` |
+| Seedance 2.0 | `seedance-2.0` | Volcengine / BytePlus / fal.ai / TokenRouter / Token360 | text-to-video, first-frame, image-ref, video-ref | `duration` (Auto/4–15s), `ratio` (5), `resolution` (480p/720p/1080p), `generate_audio` |
+| Seedance 2.0 Fast | `seedance-2.0-fast` | Volcengine / BytePlus / TokenRouter / Token360 | same as above | `duration`, `ratio` (3), `resolution` (480p/720p), `generate_audio` |
 | Kling 3.0 | `kling-3.0` | Kling / fal.ai / TokenRouter | text-to-video, first-frame, first-last-frame | `duration` (5/10s), `aspect_ratio`, `mode` (std/pro) |
 | Kling 2.6 | `kling-2.6` | Kling / TokenRouter | same as 3.0 | same |
 | HappyHorse 1.0 T2V | `happyhorse-1.0-t2v` | TokenRouter | text-to-video | provider defaults |
@@ -42,6 +42,8 @@ GPT Image 2's OpenAI and OpenAI-compatible image routes convert `imageSize` + `a
 **All video generations are async.** `generate` returns `generation_started` and the result lands on the canvas minutes later.
 
 TokenRouter Seedance maps `seedance-2.0` / `seedance-2.0-fast` to Dreamina model IDs and accepts reference images, audio, and videos. When a TokenRouter key is configured, Bragi can route reference images/audio/videos through TokenRouter ModelArk assets and pass them as `asset://...`; BytePlus and Volcengine keep their own provider-scoped asset IDs.
+
+Token360 Seedance uses the official `seedance-2.0` / `seedance-2.0-fast` model IDs through `https://api.token360.ai/v1`. Without a Token360 Asset group ID, Bragi uploads local reference media to temporary HTTPS URLs. With an Asset group ID configured, Token360 image refs are uploaded as RealFace / Virtual Portrait assets, cached on the source node, and sent as `asset://ta_...`; audio and video refs still use HTTPS URLs.
 
 MuleRouter Wan 2.7 Spicy I2V requires a connected upstream image and can use the first connected upstream audio as `audio_url`. Bragi uploads local image/audio refs to temporary HTTPS URLs before calling MuleRouter.
 
@@ -103,6 +105,7 @@ The user has to configure at least one provider key and connect that provider to
 - Anthropic key OR AWS Bedrock → Claude 4.x text
 - Volcengine (ARK) key → Seedream / Seedance native
 - BytePlus key → Seedance on international endpoint (+ Asset library for face refs)
+- Token360 key → Seedance 2.0 / 2.0 Fast via `https://api.token360.ai/v1` (+ optional Asset group ID for RealFace / Virtual Portrait image refs)
 - Kling AK+SK → Kling 2.6 / 3.0 native
 - fal.ai key → fal-ai/* variants of almost everything (universal fallback)
 - TokenRouter key → selected text/image/video models via `https://api.tokenrouter.com/v1`

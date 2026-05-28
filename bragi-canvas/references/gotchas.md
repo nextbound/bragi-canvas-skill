@@ -72,6 +72,8 @@ Seedance's face-preservation feature uses provider-specific Asset IDs (`asset-20
 
 If BytePlus AK+SK are configured in settings, ref images without a BytePlus/Volcengine Asset ID can be routed through the BytePlus asset library automatically. If TokenRouter is active and configured, ref images/audio/videos can be routed through TokenRouter ModelArk assets automatically and cached back on the source node.
 
+Token360 Seedance does not use the manual `set_asset_id` flow. Keep `set_asset_id` provider values to `tokenrouter`, `byteplus`, or `bytedance`. If a Token360 Asset group ID is configured in settings, Bragi automatically uploads image refs into that group, caches the returned `ta_...` ID on the source node as `bragiAssetIds.token360`, and sends `asset://ta_...` to Token360. If no group ID is configured, Token360 image/audio/video refs use temporary public HTTPS URLs.
+
 ---
 
 ## 7. `---SPLIT---` splits text output into multiple nodes
