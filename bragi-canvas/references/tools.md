@@ -178,14 +178,14 @@ No params. Currently selected nodes.
 
 ### `list_models`
 **Params** `{ type?: "image" | "video" | "text" | "audio" }`
-Returns only models with at least one configured provider key:
+Returns only models with at least one connected provider-model pair and a configured provider key:
 ```
 [{ id, name, type, provider, modes,
    supportedInputs?, unsupportedInputs?,
    params: [{ id, label, type, default,
               options?, min?, max?, step?, unit? }, ...] }, ...]
 ```
-For `type: "text"`, `supportedInputs` / `unsupportedInputs` describe which upstream media kinds the active provider accepts (for example `["text","image","pdf"]`). Always call this first — the set depends on which keys the user has configured.
+For `type: "text"`, `supportedInputs` / `unsupportedInputs` describe which upstream media kinds the active provider accepts (for example `["text","image","pdf"]`). Always call this first — the set depends on which provider keys the user has configured and which model/provider connections are enabled in settings.
 
 ### `get_upstream`
 **Params** `{ id }`

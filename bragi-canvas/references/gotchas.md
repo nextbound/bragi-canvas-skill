@@ -145,7 +145,7 @@ Toggling `Enable MCP server` starts/stops the server live, but changing `MCP por
 | `Node not found: <id>` | Wrong id, or the node was just deleted. |
 | `Edge not found: <id>` | Wrong edgeId. |
 | `Model not found: <id>` | `modelId` isn't in the hardcoded catalogue. Typo or wrong provider prefix. |
-| `No configured provider for model <id>` | Model exists but user hasn't set a key. They need to configure one. |
+| `No configured provider for model <id>` | Model exists, but the user either hasn't set a provider key or hasn't connected that provider to this model in settings. |
 | `Node contains no prompt text` | Target node empty, and no upstream text node either. |
 | `Settings not available` | MCP server started without the settings callback — shouldn't happen in practice. |
 | `Generation not available` | MCP started without the `runGeneration` callback — same, shouldn't happen. |

@@ -1,6 +1,6 @@
 # Bragi Canvas — model catalogue
 
-This is a snapshot of the hardcoded model catalogue (`plugin/src/models/`). The authoritative list for a given session is whatever `list_models` returns — it filters by which provider keys the user has configured. Use this doc only to *understand* each model's purpose and typical params.
+This is a snapshot of the hardcoded model catalogue (`plugin/src/models/`). The authoritative list for a given session is whatever `list_models` returns — it filters by which provider keys the user has configured and which provider-model pairs are connected in settings. Use this doc only to *understand* each model's purpose and typical params.
 
 Model IDs below are exact strings to pass as `modelId` in `generate`.
 
@@ -91,9 +91,9 @@ Two audio-node utilities exist in the Obsidian UI, but they are **not MCP `gener
 
 ---
 
-## Provider key → model availability
+## Provider key + connection → model availability
 
-The user has to configure at least one key per model. Absent key → model is hidden from `list_models`. Common pairings:
+The user has to configure at least one provider key and connect that provider to the model in Bragi settings. Absent key or no connected provider-model pair → model is hidden from `list_models`. Common pairings:
 
 - OpenAI key → GPT Image 2, GPT-5.5, GPT-5.5 Pro
 - Gemini key → Nano Banana Pro/2, Veo 3.1 (+Lite), Gemini 3.x text including Gemini 3.5 Flash
