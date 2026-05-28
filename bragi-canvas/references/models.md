@@ -34,6 +34,7 @@ GPT Image 2's OpenAI and OpenAI-compatible image routes convert `imageSize` + `a
 | Kling 2.6 | `kling-2.6` | Kling / TokenRouter | same as 3.0 | same |
 | HappyHorse 1.0 T2V | `happyhorse-1.0-t2v` | TokenRouter | text-to-video | provider defaults |
 | HappyHorse 1.0 I2V | `happyhorse-1.0-i2v` | TokenRouter | first-frame | requires one upstream image |
+| Wan 2.7 Spicy I2V | `wan-2.7-i2v-spicy` | MuleRouter | first-frame | requires one upstream image; optional upstream audio; `resolution` (720p/1080p), `duration` (2–15s), `prompt_extend` |
 | Veo 3.1 | `veo-3.1` | Gemini / fal.ai | text-to-video, first-frame, first-last-frame, image-ref (≤3) | `durationSeconds` (4/6/8s), `aspectRatio` (16:9/9:16), `resolution` (720p/1080p) |
 | Veo 3.1 Lite | `veo-3.1-lite` | Gemini | text-to-video, first-frame (no image-ref) | same as 3.1 |
 | Grok Video | `grok-video` | xAI / fal.ai | text-to-video, first-frame, image-ref, video-extend | `duration`, `aspect_ratio` (7), `resolution` (480p/720p/1080p) |
@@ -41,6 +42,8 @@ GPT Image 2's OpenAI and OpenAI-compatible image routes convert `imageSize` + `a
 **All video generations are async.** `generate` returns `generation_started` and the result lands on the canvas minutes later.
 
 TokenRouter Seedance maps `seedance-2.0` / `seedance-2.0-fast` to Dreamina model IDs and accepts reference images, audio, and videos. When a TokenRouter key is configured, Bragi can route reference images/audio/videos through TokenRouter ModelArk assets and pass them as `asset://...`; BytePlus and Volcengine keep their own provider-scoped asset IDs.
+
+MuleRouter Wan 2.7 Spicy I2V requires a connected upstream image and can use the first connected upstream audio as `audio_url`. Bragi uploads local image/audio refs to temporary HTTPS URLs before calling MuleRouter.
 
 ---
 
@@ -103,6 +106,7 @@ The user has to configure at least one provider key and connect that provider to
 - Kling AK+SK → Kling 2.6 / 3.0 native
 - fal.ai key → fal-ai/* variants of almost everything (universal fallback)
 - TokenRouter key → selected text/image/video models via `https://api.tokenrouter.com/v1`
+- MuleRouter key → Wan 2.7 Spicy I2V
 - DashScope key → Qwen Voice audio + Qwen 3.6 Plus text (native multimodal)
 - xAI key → Grok text/image/video/TTS
 - APIMart key → GPT Image 2, GPT-5.5, GPT-5.5 Pro
