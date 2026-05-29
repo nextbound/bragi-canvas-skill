@@ -41,7 +41,7 @@ GPT Image 2's OpenAI and OpenAI-compatible image routes convert `imageSize` + `a
 
 **All video generations are async.** `generate` returns `generation_started` and the result lands on the canvas minutes later.
 
-TokenRouter Seedance maps `seedance-2.0` / `seedance-2.0-fast` to Dreamina model IDs and accepts reference images, audio, and videos. When a TokenRouter key is configured, Bragi can route reference images/audio/videos through TokenRouter ModelArk assets and pass them as `asset://...`; BytePlus and Volcengine keep their own provider-scoped asset IDs.
+TokenRouter Seedance maps `seedance-2.0` / `seedance-2.0-fast` to Dreamina model IDs and accepts reference images, audio, and videos. When both a TokenRouter key and TokenRouter Asset group ID are configured, Bragi routes reference images/audio/videos through that explicit ModelArk group and passes them as `asset://...`; without a group ID, local refs use temporary HTTPS URLs. BytePlus and Volcengine keep their own provider-scoped asset IDs.
 
 Token360 Seedance uses the official `seedance-2.0` / `seedance-2.0-fast` model IDs through `https://api.token360.ai/v1`. Without a Token360 Asset group ID, Bragi uploads local reference media to temporary HTTPS URLs. With an Asset group ID configured, Token360 image refs are uploaded as RealFace / Virtual Portrait assets, cached on the source node, and sent as `asset://ta_...`; audio and video refs still use HTTPS URLs.
 
@@ -108,7 +108,7 @@ The user has to configure at least one provider key and connect that provider to
 - Token360 key → Seedance 2.0 / 2.0 Fast via `https://api.token360.ai/v1` (+ optional Asset group ID for RealFace / Virtual Portrait image refs)
 - Kling AK+SK → Kling 2.6 / 3.0 native
 - fal.ai key → fal-ai/* variants of almost everything (universal fallback)
-- TokenRouter key → selected text/image/video models via `https://api.tokenrouter.com/v1`
+- TokenRouter key → selected text/image/video models via `https://api.tokenrouter.com/v1` (+ optional ModelArk Asset group ID for Seedance `asset://...` refs)
 - MuleRouter key → Wan 2.7 Spicy I2V
 - DashScope key → Qwen Voice audio + Qwen 3.6 Plus text (native multimodal)
 - xAI key → Grok text/image/video/TTS
