@@ -19,8 +19,12 @@ Model IDs below are exact strings to pass as `modelId` in `generate`.
 | Luma Uni-1 | `luma-uni-1` | Luma | text-to-image, image-ref-to-image | `aspectRatio` (5) |
 | Seedream 5.0 | `seedream-5.0` | Volcengine | text-to-image | `aspectRatio` (8), `resolution` (2K/3K) |
 | Seedream 4.5 | `seedream-4.5` | Volcengine / TokenRouter | text-to-image | `aspectRatio` (8), `resolution` (2K/4K) |
+| Z-Image Spicy | `z-image-spicy` | MuleRouter | text-to-image | `aspectRatio` (1:1, 2:3, 3:2, 3:4, 4:3, 4:5, 5:4, 9:16, 16:9), `prompt_extend` |
+| Qwen Image Edit Spicy | `qwen-image-edit-spicy` | MuleRouter | image-ref-to-image | requires one upstream image |
 
 GPT Image 2's OpenAI and OpenAI-compatible image routes convert `imageSize` + `aspectRatio` into a concrete pixel `size`; APIMart sends the selected aspect ratio as `size` and the same tier as its `resolution` field.
+
+MuleRouter Z-Image Spicy maps the selected `aspectRatio` to fixed dimensions inside MuleRouter's 256–1536 px range, then submits an async CarrotHub image task internally. Qwen Image Edit Spicy uses only the first ordered upstream image. Bragi waits for completion and writes the returned image URL to the canvas.
 
 ---
 
@@ -112,7 +116,7 @@ The user has to configure at least one provider key and connect that provider to
 - Kling AK+SK → Kling 2.6 / 3.0 native
 - fal.ai key → fal-ai/* variants of almost everything (universal fallback)
 - TokenRouter key → selected text/image/video models via `https://api.tokenrouter.com/v1` (+ optional ModelArk Asset group ID for Seedance `asset://...` refs)
-- MuleRouter key → Wan 2.7 Spicy I2V
+- MuleRouter key → Z-Image Spicy, Qwen Image Edit Spicy, Wan 2.7 Spicy I2V
 - DashScope key → Qwen Voice audio + Qwen 3.6 Plus text (native multimodal)
 - xAI key → Grok text/image/video/TTS
 - APIMart key → GPT Image 2, GPT-5.5, GPT-5.5 Pro, Omni-Flash-Ext
