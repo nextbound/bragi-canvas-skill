@@ -42,7 +42,7 @@ MuleRouter Z-Image Spicy maps the selected `aspectRatio` to fixed dimensions ins
 | Veo 3.1 | `veo-3.1` | Gemini / fal.ai | text-to-video, first-frame, first-last-frame, image-ref (≤3) | `durationSeconds` (4/6/8s), `aspectRatio` (16:9/9:16), `resolution` (720p/1080p) |
 | Veo 3.1 Lite | `veo-3.1-lite` | Gemini | text-to-video, first-frame (no image-ref) | same as 3.1 |
 | Grok Video | `grok-video` | xAI / fal.ai | text-to-video, first-frame, image-ref, video-extend | `duration`, `aspect_ratio` (7), `resolution` (480p/720p/1080p) |
-| Omni-Flash-Ext | `omni-flash-ext` | APIMart | text-to-video, first-frame, multi-image-ref, video-ref | `duration` (4/6/8/10s), `resolution` (720p/1080p/4k), `aspect_ratio` (16:9/9:16) |
+| Omni-Flash-Ext | `omni-flash-ext` | APIMart / SuChuang | text-to-video, first-frame, multi-image-ref, video-ref | `duration` (4/6/8/10s), `resolution` (720p/1080p/4k), `aspect_ratio` (16:9/9:16) |
 
 **All video generations are async.** `generate` returns `generation_started` and the result lands on the canvas minutes later.
 
@@ -53,6 +53,8 @@ Token360 Seedance uses the official `seedance-2.0` / `seedance-2.0-fast` model I
 MuleRouter Wan 2.7 Spicy I2V requires a connected upstream image and can use the first connected upstream audio as `audio_url`. Bragi uploads local image/audio refs to temporary HTTPS URLs before calling MuleRouter.
 
 APIMart Omni-Flash-Ext accepts 0, 1, or 3 reference images and at most 1 reference video. Bragi re-uploads every APIMart image/video reference through the temporary Bragi Relay before sending `image_urls` / `video_urls`; APIMart never receives data URIs or third-party source URLs. When using `video-ref`, Bragi omits `duration` because APIMart derives timing from the reference video.
+
+SuChuang Omni-Flash-Ext uses the provider's `google_omni` endpoint. It accepts text plus up to 7 reference images, sent as temporary Bragi Relay URLs in the comma-separated `images` field. SuChuang does not support reference videos on this endpoint and only supports 720p/1080p sizes; choose APIMart when you need `video-ref` or `4k`.
 
 ---
 
@@ -120,6 +122,7 @@ The user has to configure at least one provider key and connect that provider to
 - DashScope key → Qwen Voice audio + Qwen 3.6 Plus text (native multimodal)
 - xAI key → Grok text/image/video/TTS
 - APIMart key → GPT Image 2, GPT-5.5, GPT-5.5 Pro, Omni-Flash-Ext
+- SuChuang key → Omni-Flash-Ext via `https://api.wuyinkeji.com`
 - Luma key → Luma Uni-1 image generation
 - MiniMax key → native TTS/Music and voice ref cloning
 - ElevenLabs key → native TTS/Music/SFX and voice ref cloning (TTS returns binary mp3)
