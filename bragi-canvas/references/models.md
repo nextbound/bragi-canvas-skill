@@ -18,6 +18,7 @@ Model IDs below are exact strings to pass as `modelId` in `generate`.
 | Midjourney niji 7 | `midjourney-niji-7` | Legnext | text-to-image | `ar` (7), `stylize` |
 | Luma Uni-1 | `luma-uni-1` | Luma | text-to-image, image-ref-to-image | `aspectRatio` (5) |
 | Seedream 5.0 | `seedream-5.0` | Volcengine | text-to-image | `aspectRatio` (8), `resolution` (2K/3K) |
+| Seedream 5.0 Lite | `seedream-5.0-lite` | Volcengine / BytePlus | text-to-image | `aspectRatio` (8), `resolution` (2K/3K/4K) |
 | Seedream 4.5 | `seedream-4.5` | Volcengine / TokenRouter | text-to-image | `aspectRatio` (8), `resolution` (2K/4K) |
 | Z-Image Spicy | `z-image-spicy` | MuleRouter | text-to-image | `aspectRatio` (1:1, 2:3, 3:2, 3:4, 4:3, 4:5, 5:4, 9:16, 16:9), `prompt_extend` |
 | Qwen Image Edit Spicy | `qwen-image-edit-spicy` | MuleRouter | image-ref-to-image | requires one upstream image |
@@ -113,7 +114,7 @@ The user has to configure at least one provider key and connect that provider to
 - Gemini key → Nano Banana Pro/2, Veo 3.1 (+Lite), Gemini 3.x text including Gemini 3.5 Flash
 - Anthropic key OR AWS Bedrock → Claude 4.x text
 - Volcengine (ARK) key → Seedream / Seedance native
-- BytePlus key → Seedance on international endpoint (+ Asset library for face refs)
+- BytePlus key → Seedance on international endpoint (+ explicit Asset group ID for face refs) and Seedream 5.0 Lite image generation
 - Token360 key → Seedance 2.0 / 2.0 Fast via `https://api.token360.ai/v1` (+ optional Asset group ID for RealFace / Virtual Portrait image refs)
 - Kling AK+SK → Kling 2.6 / 3.0 native
 - fal.ai key → fal-ai/* variants of almost everything (universal fallback)
