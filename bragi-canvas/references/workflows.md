@@ -82,7 +82,8 @@ Good image-ref-capable choices from `list_models({ type: "image" })`: `nano-bana
      connect_nodes({ fromId: imgNodeId, toId: motionTextId })   // image feeds motion prompt
 
 2. list_models({ type: "video" })
-   pick one that supports "first-frame" (Seedance 2.0, Kling 3.0, Wan 2.7 Spicy I2V, Veo 3.1, Grok Video)
+   pick one whose entry lists "first-frame" (Seedance 2.0, Kling 3.0, Wan 2.7, Veo 3.1, Grok Video)
+   // Wan 2.7 is one modelId "wan-2.7"; on MuleRouter it is first-frame only, on DashScope it has all modes
 
 3. For each motion text node:
      const { placeholderIds } = generate({

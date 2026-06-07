@@ -6,6 +6,7 @@ Errors are thrown as plain strings. Most common:
 - `No active canvas open in Obsidian`
 - `Node not found: <id>` / `Edge not found: <id>`
 - `Model not found: <id>` / `No configured provider for model <id>`
+- `Mode "<mode>" is not supported by <provider> for <modelId>. Supported modes: …` (the active provider does not offer that mode)
 - `Node contains no prompt text`
 - `Self-loop not allowed: <id>`
 - `cancelled by user` (from `open_canvas` when the confirmation modal is dismissed)
@@ -187,6 +188,8 @@ Returns only models with at least one connected provider-model pair and a config
 ```
 For `type: "text"`, `supportedInputs` / `unsupportedInputs` describe which upstream media kinds the active provider accepts (for example `["text","image","pdf"]`). Always call this first — the set depends on which provider keys the user has configured and which model/provider connections are enabled in settings.
 
+Each entry is scoped to the model's **active provider**: `modes` is that provider's effective modes (a provider may expose a subset of the catalogue's modes), and `params` is the provider-effective schema — params hidden for the provider are omitted, and a param's `options` / `default` / `min` / `max` may be narrower than another provider's. Param objects may also include `modes` (param applies only in those modes) and `optionsByMode`. Treat this entry as the only source of truth for the modes and params to send to that model+provider; do not assume catalogue-wide values from `references/models.md`.
+
 ### `get_upstream`
 **Params** `{ id }`
 **Returns**
@@ -211,8 +214,8 @@ Trigger a generation. Returns immediately once the placeholder is created; the p
 **Params**
 - `nodeId` — must contain (or have upstream) prompt text
 - `modelId` — from `list_models`
-- `mode?` — pass a mode from the selected model's `modes` in `list_models`; common video modes include `"text-to-video" | "first-frame" | "first-last-frame" | "image-ref" | "video-ref" | "video-extend"`, and audio modes include `"tts" | "music" | "sound-effect"` — defaults to the model's first mode
-- `params?` — model-specific
+- `mode?` — must be one of the modes in the selected model's `list_models` entry (the active provider's modes). MCP validates it and rejects unsupported modes with `Mode "…" is not supported by …`. Common video modes include `"text-to-video" | "first-frame" | "first-last-frame" | "image-ref" | "video-ref" | "video-extend"`, audio modes include `"tts" | "music" | "sound-effect"`. Defaults to the first mode in that `list_models` entry (the active provider's first mode), not necessarily the catalogue default.
+- `params?` — model-specific; pass only params present in the model's `list_models` entry for that provider (params hidden for the provider are ignored)
 - `batchCount?` — 1–4, default 1
 
 **Returns**

@@ -132,7 +132,7 @@ Full parameter schemas, return shapes, and examples live in `references/tools.md
 - For **video** (async): use `list_pending_tasks` / `get_task_status` — they surface the TaskQueue. When a task disappears from `list_pending_tasks`, inspect the placeholder node: it's either been replaced by a real file node (success) or coloured red with an error message (failure).
 - For **image / text / audio** (sync, seconds to tens of seconds): there's no task ID. Just re-read the placeholder node with `get_node(placeholderId)` after a short wait — a file/text node means success, a red node means failure.
 
-**Models are not free text.** Always call `list_models` first to discover which models are actually connected in settings (it filters by available API keys and explicit provider-model connections), what params they accept, and—for `type: "text"`—which upstream media kinds the active provider supports via `supportedInputs` / `unsupportedInputs`. Never guess a `modelId`.
+**Models are not free text.** Always call `list_models` first to discover which models are actually connected in settings (it filters by available API keys and explicit provider-model connections), and what **modes and params the active provider accepts** — the entry is provider-scoped, so a model's modes/params there can be a subset of the catalogue (e.g. MuleRouter `wan-2.7` is `first-frame` only, with no `ratio`). For `type: "text"`, also read which upstream media kinds the active provider supports via `supportedInputs` / `unsupportedInputs`. Never guess a `modelId`, mode, or param.
 
 ## Quickstart: generate an image from a prompt
 
@@ -175,7 +175,7 @@ Load these on demand — they are not in this file to keep SKILL.md small:
 
 ## Hard rules
 
-- **Never invent `modelId` or param values.** Always derive them from `list_models`.
+- **Never invent `modelId`, `mode`, or param values.** Always derive them from the model's `list_models` entry (which is provider-scoped); passing a mode the active provider doesn't offer is rejected with `Mode "…" is not supported by …`.
 - **Never assume a canvas is open.** If a tool returns "No active canvas open", surface that to the user rather than retrying.
 - **Don't block on `generate`.** It returns immediately; don't poll in a tight loop. If the user wants to know when it's done, tell them to watch the canvas, or re-check after a reasonable delay.
 - **Don't use `read_canvas` when `list_nodes`/`get_node` suffices.** The raw JSON is large and wastes context.

@@ -101,7 +101,19 @@ Gemini and DashScope upload large or non-inline refs through Bragi Relay. Claude
 
 ## 9. Video mode defaults from MCP are dumber than the UI's
 
-The Obsidian bottom bar auto-picks a smart mode based on upstream (1 img → first-frame, 2 img → first-last-frame, etc). The MCP does *not* do this — if you pass no `mode`, it uses `model.modes[0]`, which for most video models is `text-to-video`. Always pass `mode` explicitly for video unless you really want text-to-video.
+The Obsidian bottom bar auto-picks a smart mode based on upstream (1 img → first-frame, 2 img → first-last-frame, etc). The MCP does *not* do this — if you pass no `mode`, it uses the **first mode in the model's `list_models` entry** (the active provider's first mode). For most video models that is `text-to-video`, but for a provider that only exposes a subset it is that subset's first mode (e.g. MuleRouter `wan-2.7` → `first-frame`). Always pass `mode` explicitly for video.
+
+---
+
+## 9b. `list_models` is provider-scoped; modes and params differ by provider
+
+The same model can expose different modes and params depending on its active provider. `list_models` already returns the provider-effective set: a provider may offer a subset of modes (MuleRouter `wan-2.7` is `first-frame` only) and may narrow or hide params (MuleRouter `wan-2.7` hides `ratio`, uses lowercase resolutions). Never pass a mode or param taken from `references/models.md` or from another provider's row — read them from the model's own `list_models` entry.
+
+---
+
+## 9c. MCP rejects unsupported modes before the provider
+
+If you pass a `mode` the active provider does not offer, `generate` throws `Mode "<mode>" is not supported by <provider> for <modelId>. Supported modes: …` before any provider call. This is an MCP-level guard, not an upstream error — fix the `mode` to one listed in `list_models`.
 
 ---
 
@@ -149,5 +161,6 @@ Toggling `Enable MCP server` starts/stops the server live, but changing `MCP por
 | `Model not found: <id>` | `modelId` isn't in the hardcoded catalogue. Typo or wrong provider prefix. |
 | `No configured provider for model <id>` | Model exists, but the user either hasn't set a provider key or hasn't connected that provider to this model in settings. |
 | `Node contains no prompt text` | Target node empty, and no upstream text node either. |
+| `Mode "…" is not supported by <provider> for <modelId>. Supported modes: …` | The mode isn't offered by the model's active provider. Use a mode from the model's `list_models` entry. |
 | `Settings not available` | MCP server started without the settings callback — shouldn't happen in practice. |
 | `Generation not available` | MCP started without the `runGeneration` callback — same, shouldn't happen. |
