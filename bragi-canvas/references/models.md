@@ -39,7 +39,7 @@ MuleRouter Z-Image Spicy maps the selected `aspectRatio` to fixed dimensions ins
 | Kling 2.6 | `kling-2.6` | Kling / TokenRouter | same as 3.0 | same |
 | HappyHorse 1.0 T2V | `happyhorse-1.0-t2v` | TokenRouter | text-to-video | provider defaults |
 | HappyHorse 1.0 I2V | `happyhorse-1.0-i2v` | TokenRouter | first-frame | requires one upstream image |
-| Wan 2.7 Spicy I2V | `wan-2.7-i2v-spicy` | MuleRouter | first-frame | requires one upstream image; optional upstream audio; `resolution` (720p/1080p), `duration` (2–15s), `prompt_extend` |
+| Wan 2.7 | `wan-2.7` | DashScope / MuleRouter | provider-dependent (see note) | DashScope: `resolution` (720P/1080P), `ratio`, `duration` (2–15s), `prompt_extend`, `audio_setting` (video-edit only). MuleRouter: `resolution` (720p/1080p), `duration`, `prompt_extend` (no `ratio`) |
 | Veo 3.1 | `veo-3.1` | Gemini / fal.ai | text-to-video, first-frame, first-last-frame, image-ref (≤3) | `durationSeconds` (4/6/8s), `aspectRatio` (16:9/9:16), `resolution` (720p/1080p) |
 | Veo 3.1 Lite | `veo-3.1-lite` | Gemini | text-to-video, first-frame (no image-ref) | same as 3.1 |
 | Grok Video | `grok-video` | xAI / fal.ai | text-to-video, first-frame, image-ref, video-extend | `duration`, `aspect_ratio` (7), `resolution` (480p/720p/1080p) |
@@ -51,7 +51,12 @@ TokenRouter Seedance maps `seedance-2.0` / `seedance-2.0-fast` to Dreamina model
 
 Token360 Seedance uses the official `seedance-2.0` / `seedance-2.0-fast` model IDs through `https://api.token360.ai/v1`. Without a Token360 Asset group ID, Bragi uploads local reference media to temporary HTTPS URLs. With an Asset group ID configured, Token360 image refs are uploaded as RealFace / Virtual Portrait assets, cached on the source node, and sent as `asset://ta_...`; audio and video refs still use HTTPS URLs.
 
-MuleRouter Wan 2.7 Spicy I2V requires a connected upstream image and can use the first connected upstream audio as `audio_url`. Bragi uploads local image/audio refs to temporary HTTPS URLs before calling MuleRouter.
+Wan 2.7 is a single model (`wan-2.7`) with two providers whose modes differ — always read the modes from the model's `list_models` entry for the active provider:
+
+- **DashScope** is aggregated: one `wan-2.7` id routes internally to the t2v / i2v / r2v / video-edit upstream models. It offers all modes: `text-to-video`, `first-frame`, `first-last-frame`, `image-ref`, `video-ref`, `video-extend`, and `video-edit`. The API model id is not editable.
+- **MuleRouter** offers only `first-frame` (the spicy I2V variant): it requires one upstream image, can use the first upstream audio, uses lowercase `resolution` values, and has no `ratio` param. Pass `modelId: "wan-2.7"` with `mode: "first-frame"`.
+
+Bragi uploads local image/audio refs to temporary HTTPS URLs before calling either provider. The old `wan-2.7-i2v-spicy` model id no longer exists; saved settings are migrated to `wan-2.7`.
 
 APIMart Omni-Flash-Ext accepts 0, 1, or 3 reference images and at most 1 reference video. Bragi re-uploads every APIMart image/video reference through the temporary Bragi Relay before sending `image_urls` / `video_urls`; APIMart never receives data URIs or third-party source URLs. When using `video-ref`, Bragi omits `duration` because APIMart derives timing from the reference video.
 
@@ -100,9 +105,14 @@ Two audio-node utilities exist in the Obsidian UI, but they are **not MCP `gener
 
 ## How mode selection works in `generate`
 
-- If you pass no `mode`, Bragi picks `model.modes[0]`.
+- The catalogue is **provider-scoped**: `list_models` returns, for each model, only the modes and params of its *active* provider. A provider may expose a subset of a model's modes (e.g. MuleRouter `wan-2.7` is `first-frame` only). Never pass a mode or param taken from this doc or from another provider — use the model's `list_models` entry as the source of truth.
+- If you pass no `mode`, Bragi picks the **first mode in that `list_models` entry** (the active provider's first mode), not necessarily the catalogue default. For MuleRouter `wan-2.7` that is `first-frame`, not `text-to-video`.
 - For video with reference images, the UI picks a smart default (1 img → `first-frame`, 2 img → `first-last-frame`, 3+ → `image-ref`). The MCP does **not** infer this for you — explicitly pass `mode` when you want something specific.
-- Unsupported modes throw an error from the provider, not from MCP. If a model doesn't list a mode in `list_models({ type: "video" })[i].modes`, don't pass it.
+- Unsupported modes are rejected by MCP `generate` **before** the provider is called, with an error like `Mode "<mode>" is not supported by <provider> for <modelId>. Supported modes: …`. If a mode isn't in the `list_models` entry, don't pass it.
+
+### Provider-effective params and reference delivery
+
+`list_models` params are also provider-effective: a provider may narrow a param's options/default/range or hide it entirely (e.g. MuleRouter `wan-2.7` hides `ratio` and uses lowercase resolutions). Aggregated providers route one model id to several upstream ids internally and expose a non-editable API model id. Reference media is delivered per a catalog declaration — relay HTTPS URL, inline data, a provider-native `asset://` id, or passthrough — handled automatically by Bragi; agents always just connect upstream nodes.
 
 ---
 
@@ -119,7 +129,8 @@ The user has to configure at least one provider key and connect that provider to
 - Kling AK+SK → Kling 2.6 / 3.0 native
 - fal.ai key → fal-ai/* variants of almost everything (universal fallback)
 - TokenRouter key → selected text/image/video models via `https://api.tokenrouter.com/v1` (+ optional ModelArk Asset group ID for Seedance `asset://...` refs)
-- MuleRouter key → Z-Image Spicy, Qwen Image Edit Spicy, Wan 2.7 Spicy I2V
+- MuleRouter key → Z-Image Spicy, Qwen Image Edit Spicy, Wan 2.7 (`first-frame` only)
+- DashScope key (video) → Wan 2.7 (all modes, incl. `video-edit`)
 - DashScope key → Qwen Voice audio + Qwen 3.6 Plus text (native multimodal)
 - xAI key → Grok text/image/video/TTS
 - APIMart key → GPT Image 2, GPT-5.5, GPT-5.5 Pro, Omni-Flash-Ext
