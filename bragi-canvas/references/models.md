@@ -25,6 +25,8 @@ Model IDs below are exact strings to pass as `modelId` in `generate`.
 
 GPT Image 2's OpenAI and OpenAI-compatible image routes convert `imageSize` + `aspectRatio` into a concrete pixel `size`; APIMart sends the selected aspect ratio as `size` and the same tier as its `resolution` field.
 
+When GPT Image 2 uses TokenRouter with upstream image refs, Bragi keeps those image refs inline and uploads them as multipart files to `/v1/images/edits`; TokenRouter ModelArk Asset IDs are only for Seedance refs.
+
 MuleRouter Z-Image Spicy maps the selected `aspectRatio` to fixed dimensions inside MuleRouter's 256–1536 px range, then submits an async CarrotHub image task internally. Qwen Image Edit Spicy uses only the first ordered upstream image. Bragi waits for completion and writes the returned image URL to the canvas.
 
 ---
