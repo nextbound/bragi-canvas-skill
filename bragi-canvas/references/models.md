@@ -10,20 +10,21 @@ Model IDs below are exact strings to pass as `modelId` in `generate`.
 
 | Model | `modelId` | Providers | Modes | Key params |
 |-------|-----------|-----------|-------|-----------|
-| GPT Image 2 | `gpt-image-2` | OpenAI / fal.ai / TokenRouter / APIMart | text-to-image | `aspectRatio` (15 + Auto), `imageSize` (Auto/1K/2K/4K), `quality` (Auto/Low/Medium/High) |
-| Nano Banana Pro | `nano-banana-pro` | Gemini / fal.ai / TokenRouter | text-to-image | `aspectRatio` (10), `imageSize` (1K/2K/4K) |
-| Nano Banana 2 | `nano-banana-2` | Gemini / fal.ai / TokenRouter | text-to-image | `aspectRatio` (14), `imageSize` (512/1K/2K/4K) |
+| GPT Image 2 | `gpt-image-2` | OpenAI / fal.ai / TokenRouter / APIMart / SV NewAPI | text-to-image | `aspectRatio` (15 + Auto), `imageSize` (Auto/1K/2K/4K), `quality` (Auto/Low/Medium/High) |
+| GPT Image 2 (Official) | `gpt-image-2-official` | APIMart / SV NewAPI | text-to-image | same controls as GPT Image 2; the official channel honors `quality` |
+| Nano Banana Pro | `nano-banana-pro` | Gemini / fal.ai / TokenRouter / APIMart / SV NewAPI | text-to-image | `aspectRatio` (10), `imageSize` (1K/2K/4K) |
+| Nano Banana 2 | `nano-banana-2` | Gemini / fal.ai / TokenRouter / APIMart | text-to-image | `aspectRatio` (14), `imageSize` (512/1K/2K/4K) |
 | Grok Imagine | `grok-imagine` | xAI / fal.ai | text-to-image, image-ref-to-image | `aspectRatio` (9), `quality` |
 | Midjourney v8 | `midjourney-v8` | Legnext | text-to-image | `ar` (10), `quality`, `stylize` (0–1000) |
 | Midjourney niji 7 | `midjourney-niji-7` | Legnext | text-to-image | `ar` (7), `stylize` |
 | Luma Uni-1 | `luma-uni-1` | Luma | text-to-image, image-ref-to-image | `aspectRatio` (5) |
 | Seedream 5.0 | `seedream-5.0` | Volcengine | text-to-image | `aspectRatio` (8), `resolution` (2K/3K) |
-| Seedream 5.0 Lite | `seedream-5.0-lite` | Volcengine / BytePlus | text-to-image | `aspectRatio` (8), `resolution` (2K/3K/4K) |
+| Seedream 5.0 Lite | `seedream-5.0-lite` | Volcengine / BytePlus / SV NewAPI | text-to-image | `aspectRatio` (8), `resolution` (2K/3K/4K) |
 | Seedream 4.5 | `seedream-4.5` | Volcengine / TokenRouter | text-to-image | `aspectRatio` (8), `resolution` (2K/4K) |
 | Z-Image Spicy | `z-image-spicy` | MuleRouter | text-to-image | `aspectRatio` (1:1, 2:3, 3:2, 3:4, 4:3, 4:5, 5:4, 9:16, 16:9), `prompt_extend` |
 | Qwen Image Edit Spicy | `qwen-image-edit-spicy` | MuleRouter | image-ref-to-image | requires one upstream image |
 
-GPT Image 2's OpenAI and OpenAI-compatible image routes convert `imageSize` + `aspectRatio` into a concrete pixel `size`; APIMart sends the selected aspect ratio as `size` and the same tier as its `resolution` field.
+GPT Image 2's OpenAI and OpenAI-compatible image routes convert `imageSize` + `aspectRatio` into a concrete pixel `size`; APIMart and SV NewAPI's GPT Image 2 family send the selected aspect ratio as `size` and the same tier as `resolution`. `gpt-image-2-official` is separate because its APIMart/SV NewAPI official channel honors `quality`; the non-official SV gateway route deliberately does not forward the OpenAI `quality` enum.
 
 When GPT Image 2 uses TokenRouter with upstream image refs, Bragi keeps those image refs inline and uploads them as multipart files to `/v1/images/edits`; TokenRouter ModelArk Asset IDs are only for Seedance refs.
 
@@ -35,16 +36,16 @@ MuleRouter Z-Image Spicy maps the selected `aspectRatio` to fixed dimensions ins
 
 | Model | `modelId` | Providers | Modes | Key params |
 |-------|-----------|-----------|-------|-----------|
-| Seedance 2.0 | `seedance-2.0` | Volcengine / BytePlus / fal.ai / TokenRouter / Token360 | text-to-video, first-frame, image-ref, video-ref | `duration` (Auto/4–15s), `ratio` (5), `resolution` (480p/720p/1080p), `generate_audio` |
+| Seedance 2.0 | `seedance-2.0` | Volcengine / BytePlus / fal.ai / TokenRouter / Token360 / SV NewAPI | text-to-video, first-frame, image-ref, video-ref | `duration` (Auto/4–15s), `ratio` (5), `resolution` (480p/720p/1080p), `generate_audio` |
 | Seedance 2.0 Fast | `seedance-2.0-fast` | Volcengine / BytePlus / TokenRouter / Token360 | same as above | `duration`, `ratio` (3), `resolution` (480p/720p), `generate_audio` |
-| Kling 3.0 | `kling-3.0` | Kling / fal.ai / TokenRouter | text-to-video, first-frame, first-last-frame | `duration` (5/10s), `aspect_ratio`, `mode` (std/pro) |
+| Kling 3.0 | `kling-3.0` | Kling / APIMart / fal.ai / TokenRouter / SV NewAPI | provider-dependent | `duration` (5/10s), `aspect_ratio`, `mode` (std/pro); APIMart is Motion Control only |
 | Kling 2.6 | `kling-2.6` | Kling / TokenRouter | same as 3.0 | same |
 | HappyHorse 1.0 T2V | `happyhorse-1.0-t2v` | TokenRouter | text-to-video | provider defaults |
 | HappyHorse 1.0 I2V | `happyhorse-1.0-i2v` | TokenRouter | first-frame | requires one upstream image |
 | Wan 2.7 | `wan-2.7` | DashScope / MuleRouter | provider-dependent (see note) | DashScope: `resolution` (720P/1080P), `ratio`, `duration` (2–15s), `prompt_extend`, `audio_setting` (video-edit only). MuleRouter: `resolution` (720p/1080p), `duration`, `prompt_extend` (no `ratio`) |
-| Veo 3.1 | `veo-3.1` | Gemini / fal.ai | text-to-video, first-frame, first-last-frame, image-ref (≤3) | `durationSeconds` (4/6/8s), `aspectRatio` (16:9/9:16), `resolution` (720p/1080p) |
+| Veo 3.1 | `veo-3.1` | Gemini / fal.ai / SV NewAPI | provider-dependent; Gemini/fal include text-to-video, first-frame, first-last-frame, image-ref (≤3); SV NewAPI exposes text-to-video + first-frame | `durationSeconds` (4/6/8s), `aspectRatio` (16:9/9:16), `resolution` (720p/1080p) |
 | Veo 3.1 Lite | `veo-3.1-lite` | Gemini | text-to-video, first-frame (no image-ref) | same as 3.1 |
-| Grok Video | `grok-video` | xAI / fal.ai | text-to-video, first-frame, image-ref, video-extend | `duration`, `aspect_ratio` (7), `resolution` (480p/720p/1080p) |
+| Grok Video | `grok-video` | xAI / fal.ai / SV NewAPI | text-to-video, first-frame, image-ref, video-extend | `duration`, `aspect_ratio` (7), `resolution` (480p/720p/1080p) |
 | Omni-Flash-Ext | `omni-flash-ext` | APIMart / SuChuang | text-to-video, first-frame, multi-image-ref, video-ref | `duration` (4/6/8/10s), `resolution` (720p/1080p/4k), `aspect_ratio` (16:9/9:16) |
 
 **All video generations are async.** `generate` returns `generation_started` and the result lands on the canvas minutes later.
@@ -59,6 +60,8 @@ Wan 2.7 is a single model (`wan-2.7`) with two providers whose modes differ — 
 - **MuleRouter** offers only `first-frame` (the spicy I2V variant): it requires one upstream image, can use the first upstream audio, uses lowercase `resolution` values, and has no `ratio` param. Pass `modelId: "wan-2.7"` with `mode: "first-frame"`.
 
 Bragi uploads local image/audio refs to temporary HTTPS URLs before calling either provider. The old `wan-2.7-i2v-spicy` model id no longer exists; saved settings are migrated to `wan-2.7`.
+
+SV NewAPI video models use stable `sv-*` gateway ids. Seedance receives refs as top-level `images` / `audios` / `videos` plus `metadata` for ratio, duration, resolution, and `generate_audio`; fal-routed SV NewAPI models such as Kling, Grok, and Veo receive top-level `images` plus the provider-effective media params.
 
 APIMart Omni-Flash-Ext accepts 0, 1, or 3 reference images and at most 1 reference video. Bragi re-uploads every APIMart image/video reference through the temporary Bragi Relay before sending `image_urls` / `video_urls`; APIMart never receives data URIs or third-party source URLs. When using `video-ref`, Bragi omits `duration` because APIMart derives timing from the reference video.
 
@@ -79,7 +82,7 @@ SuChuang Omni-Flash-Ext uses the provider's `google_omni` endpoint. It accepts t
 | Grok 4 Fast | `grok-4-fast` | xAI / TokenRouter | image + PDF on xAI / `x-ai/*` TokenRouter slugs |
 | Qwen 3.6 Plus | `qwen-3-6-plus` | DashScope / TokenRouter | image + PDF + video + audio on DashScope; qwen slugs on TokenRouter |
 | GPT-5.5 Pro | `gpt-5.5-pro` | OpenAI / TokenRouter / APIMart | image + PDF |
-| GPT-5.5 | `gpt-5.5` | OpenAI / TokenRouter / APIMart | image + PDF |
+| GPT-5.5 | `gpt-5.5` | OpenAI / TokenRouter / APIMart / SV NewAPI | image + PDF |
 
 Text model output is a text node. Bragi validates upstream media against a model × provider capability matrix before calling the provider. OpenAI, xAI, and APIMart GPT models use the Responses API for image/PDF refs. Anthropic and Bedrock send PDFs as `document` blocks (≤32 MB). Gemini keeps small images inline and uploads large or non-image refs through Bragi Relay as `fileData.fileUri`. DashScope Qwen uses the native `multimodal-generation` endpoint. TokenRouter capabilities depend on the upstream slug (`google/*`, `qwen/*`, `anthropic/*`, etc.). If the output contains a line that is exactly `---SPLIT---`, Bragi splits it into multiple connected text nodes.
 
@@ -89,12 +92,12 @@ Text model output is a text node. Bragi validates upstream media against a model
 
 | Model | `modelId` | Providers | Mode(s) | Key params |
 |-------|-----------|-----------|---------|-----------|
-| ElevenLabs TTS v3 | `elevenlabs-tts-v3` | ElevenLabs / fal.ai | tts | 8 English voices, stability/similarity/style/speed; native ElevenLabs supports voice ref cloning |
-| MiniMax TTS | `minimax-tts` | MiniMax / fal.ai | tts | 12 ZH+EN voices, speed 0.5–2.0; native MiniMax supports voice ref cloning |
+| ElevenLabs TTS v3 | `elevenlabs-tts-v3` | ElevenLabs / fal.ai / SV NewAPI | tts | 8 English voices, stability/similarity/style/speed; native ElevenLabs supports voice ref cloning |
+| MiniMax TTS | `minimax-tts` | MiniMax / fal.ai / SV NewAPI | tts | 12 ZH+EN voices, speed 0.5–2.0; native MiniMax supports voice ref cloning |
 | Grok TTS | `grok-tts` | xAI | tts | 5 voices, 9 language options |
 | ElevenLabs Music | `elevenlabs-music` | ElevenLabs / fal.ai | music | `music_length_ms` 3–300s, instrumental toggle |
 | MiniMax Music | `minimax-music` | MiniMax / fal.ai | music | instrumental OR with-lyrics (needs upstream text node for lyrics) |
-| ElevenLabs SFX v2 | `elevenlabs-sfx` | ElevenLabs / fal.ai | sound-effect | `duration` ∈ {1,3,5,10,20,30}s |
+| ElevenLabs SFX v2 | `elevenlabs-sfx` | ElevenLabs / fal.ai / SV NewAPI | sound-effect | `duration` ∈ {1,3,5,10,20,30}s |
 
 Two audio-node utilities exist in the Obsidian UI, but they are **not MCP `generate` models** today and do not appear in `list_models`:
 
@@ -135,7 +138,8 @@ The user has to configure at least one provider key and connect that provider to
 - DashScope key (video) → Wan 2.7 (all modes, incl. `video-edit`)
 - DashScope key → Qwen Voice audio + Qwen 3.6 Plus text (native multimodal)
 - xAI key → Grok text/image/video/TTS
-- APIMart key → GPT Image 2, GPT-5.5, GPT-5.5 Pro, Omni-Flash-Ext
+- APIMart key → GPT Image 2, GPT Image 2 (Official), GPT-5.5, GPT-5.5 Pro, Omni-Flash-Ext
+- SV NewAPI key → gateway `sv-*` routes for GPT Image 2 / GPT Image 2 (Official), selected image/video/audio models, and GPT-5.5 text
 - SuChuang key → Omni-Flash-Ext via `https://api.wuyinkeji.com`
 - Luma key → Luma Uni-1 image generation
 - MiniMax key → native TTS/Music and voice ref cloning
