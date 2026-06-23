@@ -24,7 +24,7 @@ Model IDs below are exact strings to pass as `modelId` in `generate`.
 | Z-Image Spicy | `z-image-spicy` | MuleRouter | text-to-image | `aspectRatio` (1:1, 2:3, 3:2, 3:4, 4:3, 4:5, 5:4, 9:16, 16:9), `prompt_extend` |
 | Qwen Image Edit Spicy | `qwen-image-edit-spicy` | MuleRouter | image-ref-to-image | requires one upstream image |
 
-GPT Image 2's OpenAI and OpenAI-compatible image routes convert `imageSize` + `aspectRatio` into a concrete pixel `size`; APIMart and SV NewAPI's GPT Image 2 family send the selected aspect ratio as `size` and the same tier as `resolution`. APIMart's stable `gpt-image-2` Bragi model ID routes to the official upstream model ID so `quality` is honored. `gpt-image-2-official` remains a separate Bragi model for explicitly selecting the APIMart/SV NewAPI official channel; the non-official SV gateway route deliberately does not forward the OpenAI `quality` enum.
+GPT Image 2's OpenAI and OpenAI-compatible image routes convert `imageSize` + `aspectRatio` into a concrete pixel `size`; APIMart and SV NewAPI's GPT Image 2 family send the selected aspect ratio as `size` and the same tier as `resolution`. APIMart's stable `gpt-image-2` Bragi model ID routes to the official upstream model ID so `quality` is honored. `gpt-image-2-official` remains a separate Bragi model for explicitly selecting the APIMart/SV NewAPI official channel; the non-official SV gateway route deliberately does not forward the OpenAI `quality` enum. SV NewAPI Nano Banana Pro also uses the APIMart-style `size` + `resolution` payload shape.
 
 When GPT Image 2 uses TokenRouter with upstream image refs, Bragi keeps those image refs inline and uploads them as multipart files to `/v1/images/edits`; TokenRouter ModelArk Asset IDs are only for Seedance refs.
 
