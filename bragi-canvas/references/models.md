@@ -61,7 +61,7 @@ Wan 2.7 is a single model (`wan-2.7`) with two providers whose modes differ — 
 
 Bragi uploads local image/audio refs to temporary HTTPS URLs before calling either provider. The old `wan-2.7-i2v-spicy` model id no longer exists; saved settings are migrated to `wan-2.7`.
 
-SV NewAPI video models use stable `sv-*` gateway ids. Seedance receives refs as top-level `images` / `audios` / `videos` plus `metadata` for ratio, duration, resolution, and `generate_audio`; fal-routed SV NewAPI models such as Kling, Grok, and Veo receive top-level `images` plus the provider-effective media params.
+SV NewAPI video models use stable `sv-*` gateway ids. Seedance receives refs as top-level `images` / `audios` / `videos` plus `metadata` for ratio, duration, resolution, and `generate_audio`; Auto duration is forwarded as `metadata.duration = -1`, matching direct Ark Seedance behavior. Fal-routed SV NewAPI models such as Kling, Grok, and Veo receive top-level `images` plus the provider-effective media params.
 
 APIMart Omni-Flash-Ext accepts 0, 1, or 3 reference images and at most 1 reference video. Bragi re-uploads every APIMart image/video reference through the temporary Bragi Relay before sending `image_urls` / `video_urls`; APIMart never receives data URIs or third-party source URLs. When using `video-ref`, Bragi omits `duration` because APIMart derives timing from the reference video.
 
