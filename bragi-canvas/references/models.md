@@ -39,6 +39,7 @@ MuleRouter Z-Image Spicy maps the selected `aspectRatio` to fixed dimensions ins
 | Seedance 2.0 | `seedance-2.0` | Volcengine / BytePlus / fal.ai / TokenRouter / Token360 / SV NewAPI | text-to-video, first-frame, image-ref, video-ref | `duration` (Auto/4–15s), `ratio` (5), `resolution` (480p/720p/1080p), `generate_audio` |
 | Seedance 2.0 Fast | `seedance-2.0-fast` | Volcengine / BytePlus / TokenRouter / Token360 | same as above | `duration`, `ratio` (3), `resolution` (480p/720p), `generate_audio` |
 | Kling 3.0 | `kling-3.0` | Kling / APIMart / fal.ai / TokenRouter / SV NewAPI | provider-dependent | `duration` (5/10s), `aspect_ratio`, `mode` (std/pro); APIMart is Motion Control only |
+| Kling 3.0 Omni | `kling-3.0-omni` | Kling / APIMart | text-to-video, first-frame, first-last-frame, image-ref, video-ref, video-edit | `duration` (3–15s), `aspect_ratio`, `mode` (std/pro/4k), `multi_shot` (default true), mode-specific audio control |
 | Kling 2.6 | `kling-2.6` | Kling / TokenRouter | same as 3.0 | same |
 | HappyHorse 1.0 T2V | `happyhorse-1.0-t2v` | TokenRouter | text-to-video | provider defaults |
 | HappyHorse 1.0 I2V | `happyhorse-1.0-i2v` | TokenRouter | first-frame | requires one upstream image |
@@ -64,6 +65,8 @@ Bragi uploads local image/audio refs to temporary HTTPS URLs before calling eith
 SV NewAPI video models use stable `sv-*` gateway ids. Seedance receives refs as top-level `images` / `audios` / `videos` plus `metadata` for ratio, duration, resolution, and `generate_audio`; Auto duration is forwarded as `metadata.duration = -1`, matching direct Ark Seedance behavior. Fal-routed SV NewAPI models such as Kling, Grok, and Veo receive top-level `images` plus the provider-effective media params.
 
 APIMart Omni-Flash-Ext accepts 0, 1, or 3 reference images and at most 1 reference video. Bragi re-uploads every APIMart image/video reference through the temporary Bragi Relay before sending `image_urls` / `video_urls`; APIMart never receives data URIs or third-party source URLs. When using `video-ref`, Bragi omits `duration` because APIMart derives timing from the reference video.
+
+Kling 3.0 Omni uses the native Kling `/v1/videos/omni-video` endpoint or APIMart's `/v1/videos/generations` endpoint with the same upstream model ID, `kling-v3-omni`. Ordered upstream images map to first/last frame roles in `first-frame` and `first-last-frame`; `image-ref` sends up to 7 reference images and automatically adds missing `<<<image_N>>>` prompt references. `video-ref` sends one feature reference video, while `video-edit` sends one base video and follows its duration. Connected media is uploaded to temporary HTTPS URLs. The generator bar exposes intelligent multi-shot as `Multi shots` by default, with `Single shot` as the alternative; generated audio is labeled `Audio On` / `Audio Off`. Advanced provider calls may also pass custom `multi_prompt` shot lists and subject-list payloads.
 
 SuChuang Omni-Flash-Ext uses the provider's `google_omni` endpoint. It accepts text plus up to 7 reference images, sent as temporary Bragi Relay URLs in the comma-separated `images` field. SuChuang does not support reference videos on this endpoint and only supports 720p/1080p sizes; choose APIMart when you need `video-ref` or `4k`.
 
@@ -131,14 +134,14 @@ The user has to configure at least one provider key and connect that provider to
 - Volcengine (ARK) key → Seedream / Seedance native
 - BytePlus key → Seedance on international endpoint (+ explicit Asset group ID for face refs) and Seedream 5.0 Lite image generation
 - Token360 key → Seedance 2.0 / 2.0 Fast via `https://api.token360.ai/v1` (+ optional Asset group ID for RealFace / Virtual Portrait image refs)
-- Kling AK+SK → Kling 2.6 / 3.0 native
+- Kling AK+SK → Kling 2.6 / 3.0 / 3.0 Omni native
 - fal.ai key → fal-ai/* variants of almost everything (universal fallback)
 - TokenRouter key → selected text/image/video models via `https://api.tokenrouter.com/v1` (+ optional ModelArk Asset group ID for Seedance `asset://...` refs)
 - MuleRouter key → Z-Image Spicy, Qwen Image Edit Spicy, Wan 2.7 (`first-frame` only)
 - DashScope key (video) → Wan 2.7 (all modes, incl. `video-edit`)
 - DashScope key → Qwen Voice audio + Qwen 3.6 Plus text (native multimodal)
 - xAI key → Grok text/image/video/TTS
-- APIMart key → GPT Image 2, GPT Image 2 (Official), GPT-5.5, GPT-5.5 Pro, Omni-Flash-Ext
+- APIMart key → GPT Image 2, GPT Image 2 (Official), GPT-5.5, GPT-5.5 Pro, Kling 3.0 Omni, Omni-Flash-Ext
 - SV NewAPI key → gateway `sv-*` routes for GPT Image 2 / GPT Image 2 (Official), selected image/video/audio models, and GPT-5.5 text
 - SuChuang key → Omni-Flash-Ext via `https://api.wuyinkeji.com`
 - Luma key → Luma Uni-1 image generation
