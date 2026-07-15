@@ -18,7 +18,7 @@ Model IDs below are exact strings to pass as `modelId` in `generate`.
 | Midjourney v8 | `midjourney-v8` | Legnext | text-to-image | `ar` (10), `quality`, `stylize` (0–1000) |
 | Midjourney niji 7 | `midjourney-niji-7` | Legnext | text-to-image | `ar` (7), `stylize` |
 | Luma Uni-1 | `luma-uni-1` | Luma | text-to-image, image-ref-to-image | `aspectRatio` (5) |
-| FLUX.2 Klein 9B | `flux-2-klein-9b` | BFL / Runpod | text-to-image, image-ref-to-image | `aspectRatio` (9), `targetLongEdge` (1K/2K/3K; Runpod max 2K), provider denoise defaults |
+| FLUX.2 Klein 9B | `flux-2-klein-9b` | BFL / Runpod / fal.ai | text-to-image, image-ref-to-image | `aspectRatio` (9), `targetLongEdge` (1K/2K/3K; Runpod/fal max 2K), provider denoise defaults |
 | Seedream 5.0 | `seedream-5.0` | Volcengine | text-to-image | `aspectRatio` (8), `resolution` (2K/3K) |
 | Seedream 5.0 Lite | `seedream-5.0-lite` | Volcengine / BytePlus / SVRouter | text-to-image | `aspectRatio` (8), `resolution` (2K/3K/4K) |
 | Seedream 4.5 | `seedream-4.5` | Volcengine / TokenRouter | text-to-image | `aspectRatio` (8), `resolution` (2K/4K) |
@@ -27,7 +27,7 @@ Model IDs below are exact strings to pass as `modelId` in `generate`.
 
 GPT Image 2's OpenAI and OpenAI-compatible image routes convert `imageSize` + `aspectRatio` into a concrete pixel `size`; APIMart and SVRouter's GPT Image 2 family send the selected aspect ratio as `size` and the same tier as `resolution`. APIMart's stable `gpt-image-2` Bragi model ID routes to the official upstream model ID so `quality` is honored. `gpt-image-2-official` remains a separate Bragi model for explicitly selecting the APIMart/SVRouter official channel; the non-official SV gateway route deliberately does not forward the OpenAI `quality` enum. SVRouter Nano Banana Pro also uses the APIMart-style `size` + `resolution` payload shape.
 
-FLUX.2 Klein 9B supports text-to-image and single reference image generation through BFL or Runpod. BFL accepts up to 3K long edge; Runpod is capped at 2K. Bragi applies the provider's denoise-oriented defaults and optional color matching when reference images are used.
+FLUX.2 Klein 9B supports text-to-image and single reference image generation through BFL, Runpod, or fal.ai. BFL accepts up to 3K long edge; Runpod and fal.ai are capped at 2K. Bragi applies the provider's denoise-oriented defaults and optional color matching when reference images are used.
 
 When GPT Image 2 uses TokenRouter with upstream image refs, Bragi keeps those image refs inline and uploads them as multipart files to `/v1/images/edits`; TokenRouter ModelArk Asset IDs are only for Seedance refs.
 
@@ -146,7 +146,7 @@ The user has to configure at least one provider key and connect that provider to
 - xAI key → Grok text/image/video/TTS
 - APIMart key → GPT Image 2, GPT Image 2 (Official), GPT-5.5, GPT-5.5 Pro, Kling 3.0 Omni, Omni-Flash-Ext
 - SVRouter key → gateway `sv-*` routes for GPT Image 2 / GPT Image 2 (Official), selected image/video/audio models, and GPT-5.5 text. The stored settings key remains `svnewapi` for compatibility.
-- BFL or Runpod key → FLUX.2 Klein 9B image generation
+- BFL, Runpod, or fal.ai key → FLUX.2 Klein 9B image generation
 - SuChuang key → Omni-Flash-Ext via `https://api.wuyinkeji.com`
 - Luma key → Luma Uni-1 image generation
 - MiniMax key → native TTS/Music and voice ref cloning
