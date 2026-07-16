@@ -117,6 +117,12 @@ If you pass a `mode` the active provider does not offer, `generate` throws `Mode
 
 ---
 
+## 9d. Kling 3.0 Omni video edit supports ordinary reference images
+
+For `kling-3.0-omni`, `video-edit` requires exactly one upstream base video, but it may also receive upstream images as ordinary references. These images are not first/last frames: native Kling sends them in `image_list`, while APIMart sends them in `image_urls`. Bragi adds missing `<<<image_N>>>` prompt references automatically. Native Kling allows up to 4 reference images when a video is present.
+
+---
+
 ## 10. `batchCount` caps at 4
 
 `generate({ batchCount: 10 })` is silently clamped to 4.
