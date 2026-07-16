@@ -105,10 +105,11 @@ Text model output is a text node. Bragi validates upstream media against a model
 | MiniMax Music | `minimax-music` | MiniMax / fal.ai | music | instrumental OR with-lyrics (needs upstream text node for lyrics) |
 | ElevenLabs SFX v2 | `elevenlabs-sfx` | ElevenLabs / fal.ai / SVRouter | sound-effect | `duration` ∈ {1,3,5,10,20,30}s |
 
-Two audio-node utilities exist in the Obsidian UI, but they are **not MCP `generate` models** today and do not appear in `list_models`:
+Three audio-node utilities exist in the Obsidian UI, but they are **not MCP `generate` models** today and do not appear in `list_models`:
 
 | Utility | Backing service | Output |
 |---------|-----------------|--------|
+| Voice Changer | Native ElevenLabs `eleven_multilingual_sts_v2` | converted audio file |
 | Speech-to-Text | fal.ai ElevenLabs Scribe v2 | text node |
 | Audio Isolation | fal.ai ElevenLabs audio isolation | cleaned audio file |
 
