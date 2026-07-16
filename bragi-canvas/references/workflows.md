@@ -190,9 +190,11 @@ For voice reference cloning in the Obsidian UI, connect an upstream audio file t
 
 ---
 
-## 11. Speech-to-text / audio isolation
+## 11. Voice Changer / speech-to-text / audio isolation
 
-These exist as Obsidian UI actions on audio file nodes, but they are **not exposed as MCP `generate` models** today. Do not call `generate` with `stt`, `isolation`, or fal.ai utility IDs; `getModelById` will reject them.
+These exist as Obsidian UI actions on audio file nodes, but they are **not exposed as MCP `generate` models** today. Do not call `generate` with Voice Changer, `stt`, `isolation`, or fal.ai utility IDs; `getModelById` will reject them.
+
+For **Voice Changer**, configure ElevenLabs, select the audio whose content, timing, and emotion should be preserved, and connect exactly one incoming audio node as the target voice reference. Every click creates a separate output node, so conversions can run in parallel.
 
 ---
 
