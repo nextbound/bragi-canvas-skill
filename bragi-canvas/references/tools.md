@@ -143,9 +143,9 @@ Write a base64 image into the canvas's output directory (`_bragi/assets`) and cr
 Use this to inject reference images from outside Obsidian.
 
 ### `set_asset_id`
-Bind / clear a provider-scoped Seedance Asset ID on an image node (`bragiAssetIds[provider]`). Used for Seedance face-reference (`asset://<id>` protocol is passed directly to the provider).
+Bind / clear a provider-scoped Seedance Asset ID on an image or audio node (`bragiAssetIds[provider]`). The matching provider receives the reference as `asset://<id>`.
 **Params** `{ nodeId, provider?="tokenrouter", assetId }` — `provider` is `"tokenrouter" | "byteplus" | "bytedance"`; pass `assetId: ""` to clear that provider's ID.
-Throws if the node isn't an image file node. Supported image files include png/jpg/webp/bmp/tiff/gif/heic/heif.
+Throws if the node isn't an image or audio file node. Supported audio files include mp3/wav/flac/m4a/ogg/aac/opus; supported image files include png/jpg/webp/bmp/tiff/gif/heic/heif.
 
 ---
 

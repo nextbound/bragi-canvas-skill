@@ -66,11 +66,11 @@ To *control* order from MCP, create the edges in the desired order, or use `read
 
 ---
 
-## 6. Asset IDs for Seedance face reference
+## 6. Asset IDs for Seedance references
 
-Seedance's face-preservation feature uses provider-specific Asset IDs (`asset-20260403175316-…`). You can bind them from MCP via `set_asset_id({ nodeId, provider, assetId })` — image nodes only. `provider` defaults to `tokenrouter` and can be `tokenrouter`, `byteplus`, or `bytedance`. When the active provider/model supports Seedance assets, the bound Asset ID is passed through as `asset://<id>` (no base64 inline payload).
+Seedance uses provider-specific Asset IDs (`asset-20260403175316-…`) for native image and audio references. You can bind them from MCP via `set_asset_id({ nodeId, provider, assetId })` on image or audio nodes. `provider` defaults to `tokenrouter` and can be `tokenrouter`, `byteplus`, or `bytedance`. When the active provider/model supports Seedance assets, the bound Asset ID is passed through as `asset://<id>` (no base64 inline payload).
 
-If BytePlus AK+SK and a BytePlus Asset group ID are configured in settings, ref images without a BytePlus/Volcengine Asset ID can be routed through that explicit BytePlus asset library group. Bragi no longer creates BytePlus asset groups automatically; without a configured group ID, Seedance refs use temporary HTTPS URLs instead of BytePlus `asset://...`. If TokenRouter is active and both a TokenRouter key and Asset group ID are configured, ref images/audio/videos can be routed through that explicit TokenRouter ModelArk group and cached back on the source node. TokenRouter no longer creates or guesses a ModelArk group; without a configured group ID, Seedance refs use temporary HTTPS URLs instead of `asset://...`.
+If BytePlus AK+SK and a BytePlus Asset group ID are configured in settings, reference media without a BytePlus/Volcengine Asset ID can be routed through that explicit BytePlus asset library group. Bragi no longer creates BytePlus asset groups automatically; without a configured group ID, Seedance refs use temporary HTTPS URLs instead of BytePlus `asset://...`. If TokenRouter is active and both a TokenRouter key and Asset group ID are configured, ref images/audio/videos can be routed through that explicit TokenRouter ModelArk group and cached back on the source node. TokenRouter no longer creates or guesses a ModelArk group; without a configured group ID, Seedance refs use temporary HTTPS URLs instead of `asset://...`.
 
 Token360 Seedance does not use the manual `set_asset_id` flow. Keep `set_asset_id` provider values to `tokenrouter`, `byteplus`, or `bytedance`. If a Token360 Asset group ID is configured in settings, Bragi automatically uploads image refs into that group, caches the returned `ta_...` ID on the source node as `bragiAssetIds.token360`, and sends `asset://ta_...` to Token360. If no group ID is configured, Token360 image/audio/video refs use temporary public HTTPS URLs.
 
