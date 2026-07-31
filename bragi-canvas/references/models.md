@@ -41,8 +41,8 @@ MuleRouter Z-Image Spicy maps the selected `aspectRatio` to fixed dimensions ins
 |-------|-----------|-----------|-------|-----------|
 | Seedance 2.0 | `seedance-2.0` | Volcengine / BytePlus / fal.ai / TokenRouter / Token360 / SVRouter | text-to-video, first-frame, image-ref, video-ref | `duration` (Auto/4–15s), `ratio` (5), `resolution` (480p/720p/1080p/4k), `generate_audio` |
 | Seedance 2.0 Fast | `seedance-2.0-fast` | Volcengine / BytePlus / TokenRouter / Token360 | same as above | `duration`, `ratio` (3), `resolution` (480p/720p), `generate_audio` |
-| Kling 3.0 | `kling-3.0` | Kling / APIMart / fal.ai / TokenRouter / SVRouter | provider-dependent | `duration` (5/10s), `aspect_ratio`, `mode` (std/pro); APIMart is Motion Control only |
-| Kling 3.0 Omni | `kling-3.0-omni` | Kling / APIMart | text-to-video, first-frame, first-last-frame, image-ref, video-ref, video-edit | `duration` (3–15s), `aspect_ratio`, `mode` (std/pro/4k), `multi_shot` (default true), mode-specific audio control |
+| Kling 3.0 | `kling-3.0` | Kling / Pika / APIMart / fal.ai / TokenRouter / SVRouter | provider-dependent | `duration` (5/10s), `aspect_ratio`, `mode` (std/pro; Pika also 4k); APIMart is Motion Control only |
+| Kling 3.0 Omni | `kling-3.0-omni` | Kling / Pika / APIMart | provider-dependent; Pika is first-frame only | `duration` (3–15s), `aspect_ratio`, `mode` (std/pro/4k), `multi_shot` (default true), mode-specific audio control |
 | Kling 2.6 | `kling-2.6` | Kling / TokenRouter | same as 3.0 | same |
 | HappyHorse 1.0 T2V | `happyhorse-1.0-t2v` | TokenRouter | text-to-video | provider defaults |
 | HappyHorse 1.0 I2V | `happyhorse-1.0-i2v` | TokenRouter | first-frame | requires one upstream image |
@@ -57,6 +57,8 @@ MuleRouter Z-Image Spicy maps the selected `aspectRatio` to fixed dimensions ins
 TokenRouter Seedance maps `seedance-2.0` / `seedance-2.0-fast` to Dreamina model IDs and accepts reference images, audio, and videos. When both a TokenRouter key and TokenRouter Asset group ID are configured, Bragi routes reference images/audio/videos through that explicit ModelArk group and passes them as `asset://...`; without a group ID, local refs use temporary HTTPS URLs. BytePlus and Volcengine keep their own provider-scoped asset IDs.
 
 Token360 Seedance uses the official `seedance-2.0` / `seedance-2.0-fast` model IDs through `https://api.token360.ai/v1`. Without a Token360 Asset group ID, Bragi uploads local reference media to temporary HTTPS URLs. With an Asset group ID configured, Token360 image refs are uploaded as RealFace / Virtual Portrait assets, cached on the source node, and sent as `asset://ta_...`; audio and video refs still use HTTPS URLs.
+
+Pika is an aggregated Kling provider. For `kling-3.0`, it exposes `text-to-video`, `first-frame`, and `motion-control`; its quality param accepts Standard, Pro, or 4K. For `kling-3.0-omni`, Pika routes to `kling-o3` and only exposes `first-frame`, with the Omni quality and multi-shot controls hidden. Always use the provider-effective modes and params from `list_models`.
 
 Wan 2.7 is a single model (`wan-2.7`) with two providers whose modes differ — always read the modes from the model's `list_models` entry for the active provider:
 
@@ -139,6 +141,7 @@ The user has to configure at least one provider key and connect that provider to
 - BytePlus key → Seedance on international endpoint (+ explicit Asset group ID for face refs) and Seedream 5.0 Lite image generation
 - Token360 key → Seedance 2.0 / 2.0 Fast via `https://api.token360.ai/v1` (+ optional Asset group ID for RealFace / Virtual Portrait image refs)
 - Kling AK+SK → Kling 2.6 / 3.0 / 3.0 Omni native
+- Pika key → Kling 3.0 and Kling 3.0 Omni aggregated routes
 - fal.ai key → fal-ai/* variants of almost everything (universal fallback)
 - TokenRouter key → selected text/image/video models via `https://api.tokenrouter.com/v1` (+ optional ModelArk Asset group ID for Seedance `asset://...` refs)
 - MuleRouter key → Z-Image Spicy, Qwen Image Edit Spicy, Wan 2.7 (`first-frame` only)

@@ -123,13 +123,21 @@ For `kling-3.0-omni`, `video-edit` requires exactly one upstream base video, but
 
 ---
 
-## 10. `batchCount` caps at 4
+## 10. Denoise actions are UI-only
+
+NLM 35 and FLUX Denoise are Obsidian UI actions on image file nodes, not MCP models. They do not appear in `list_models`, and `generate` will reject denoise-like model IDs.
+
+The NLM 35 option requires the separate local service to be reachable at the configured service URL (default `http://127.0.0.1:17776`, endpoint `/v1/denoise`). If the service is stopped or returns an invalid payload, Bragi errors before writing a final output file.
+
+---
+
+## 11. `batchCount` caps at 4
 
 `generate({ batchCount: 10 })` is silently clamped to 4.
 
 ---
 
-## 11. Switching canvases requires user confirmation
+## 12. Switching canvases requires user confirmation
 
 Canvas-mutating and reading tools always target the currently active canvas leaf. You can inspect Bragi-known canvases with `list_canvases` and switch with `open_canvas({ path })` — but `open_canvas` pops a modal asking the user to confirm. If they dismiss it you get `cancelled by user`.
 
@@ -139,25 +147,25 @@ If the user switches tabs manually mid-session, your next tool call targets the 
 
 ---
 
-## 12. Output files land in `_bragi/assets`
+## 13. Output files land in `_bragi/assets`
 
 Generated files go to the vault-level `_bragi/assets/` directory. The file node's `file` property is a vault-relative path such as `_bragi/assets/img_<timestamp>.png`. If you need the filesystem path, combine with the vault root (not exposed via MCP — you'd have to ask the user).
 
 ---
 
-## 13. Localhost + optional bearer token auth
+## 14. Localhost + optional bearer token auth
 
 The MCP server binds to `127.0.0.1` with CORS `*`. If the user sets `MCP access token` in plugin settings, every request must carry `Authorization: Bearer <token>` (401 otherwise). If the token is blank, any local process can connect — treat canvas contents accordingly.
 
 ---
 
-## 14. Port changes need an Obsidian restart
+## 15. Port changes need an Obsidian restart
 
 Toggling `Enable MCP server` starts/stops the server live, but changing `MCP port` only takes effect after restarting Obsidian.
 
 ---
 
-## 15. Errors you might see and what they mean
+## 16. Errors you might see and what they mean
 
 | Error | Cause |
 |-------|-------|
