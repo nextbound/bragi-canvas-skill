@@ -202,7 +202,7 @@ For **Voice Changer**, configure ElevenLabs, select the audio whose content, tim
 
 Denoise exists as an Obsidian UI image-node action, not an MCP `generate` model. Do not call `generate` with NLM 35, denoise, or FLUX utility IDs.
 
-The default denoise method is **NLM 35 - Local CPU**. It calls a local service URL from settings (default `http://127.0.0.1:17776`) at `/v1/denoise` with strength `0.35`, then replaces the normal placeholder with the returned image. The separate local service must already be running.
+The default denoise method is **NLM 35 - local CPU**. It calls a local service URL from settings (default `http://127.0.0.1:17776`) at `/v1/denoise` with strength `0.35`, then replaces the normal placeholder with the returned image. The separate local service must already be running.
 
 The **FLUX.2 Klein 9B** choice remains available in the modal when a configured provider supports it. If FLUX is unavailable, the UI disables that choice instead of hiding the whole action.
 
