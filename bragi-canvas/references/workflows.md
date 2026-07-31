@@ -198,7 +198,17 @@ For **Voice Changer**, configure ElevenLabs, select the audio whose content, tim
 
 ---
 
-## 12. PDF summary with Claude or GPT
+## 12. Denoise image nodes
+
+Denoise exists as an Obsidian UI image-node action, not an MCP `generate` model. Do not call `generate` with NLM 35, denoise, or FLUX utility IDs.
+
+The default denoise method is **NLM 35 - Local CPU**. It calls a local service URL from settings (default `http://127.0.0.1:17776`) at `/v1/denoise` with strength `0.35`, then replaces the normal placeholder with the returned image. The separate local service must already be running.
+
+The **FLUX.2 Klein 9B** choice remains available in the modal when a configured provider supports it. If FLUX is unavailable, the UI disables that choice instead of hiding the whole action.
+
+---
+
+## 13. PDF summary with Claude or GPT
 
 Connect a PDF file node upstream of a text prompt node, then generate with a text model whose active provider supports PDF (`list_models({ type: "text" })` → check `supportedInputs` includes `"pdf"`).
 
@@ -213,7 +223,7 @@ For Qwen on DashScope with video refs, use `modelId: "qwen-3-6-plus"` and ensure
 
 ---
 
-## 13. Inspecting before generating (dry run)
+## 14. Inspecting before generating (dry run)
 
 Before spending on a model call, confirm the upstream graph:
 
@@ -232,7 +242,7 @@ Use this to verify:
 
 ---
 
-## 14. Fast storyboard creation (batch tools)
+## 15. Fast storyboard creation (batch tools)
 
 When creating 5+ shots, use the batch tools — one round-trip instead of N.
 
