@@ -129,8 +129,8 @@ Full parameter schemas, return shapes, and examples live in `references/tools.md
 - the output node is created to the right of the source and auto-connected with an edge
 
 **`generate` returns immediately with placeholder IDs.** The call returns `{ status: "generation_started", placeholderIds: [...], expectedOutputType }` before the real work starts. A shimmering placeholder node is created synchronously at each ID; the provider call continues in the background. To track progress:
-- For **video** (async): use `list_pending_tasks` / `get_task_status` — they surface the TaskQueue. When a task disappears from `list_pending_tasks`, inspect the placeholder node: it's either been replaced by a real file node (success) or coloured red with an error message (failure).
-- For **image / text / audio** (sync, seconds to tens of seconds): there's no task ID. Just re-read the placeholder node with `get_node(placeholderId)` after a short wait — a file/text node means success, a red node means failure.
+- For **video and async audio such as Mureka Music**: use `list_pending_tasks` / `get_task_status` — they surface the persistent TaskQueue. When a task disappears from `list_pending_tasks`, inspect the placeholder node: it's either been replaced by a real file node (success) or coloured red with an error message (failure).
+- For **image / text / synchronous audio**: no task appears in the queue. Re-read the placeholder node with `get_node(placeholderId)` after a short wait — a file/text node means success, a red node means failure.
 
 **Models are not free text.** Always call `list_models` first to discover which models are actually connected in settings (it filters by available API keys and explicit provider-model connections), and what **modes and params the active provider accepts** — the entry is provider-scoped, so a model's modes/params there can be a subset of the catalogue (e.g. MuleRouter `wan-2.7` is `first-frame` only, with no `ratio`). For `type: "text"`, also read which upstream media kinds the active provider supports via `supportedInputs` / `unsupportedInputs`. Never guess a `modelId`, mode, or param.
 

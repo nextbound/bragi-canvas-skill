@@ -105,7 +105,10 @@ Text model output is a text node. Bragi validates upstream media against a model
 | Grok TTS | `grok-tts` | xAI | tts | 5 voices, 9 language options |
 | ElevenLabs Music | `elevenlabs-music` | ElevenLabs / fal.ai | music | `music_length_ms` 3–300s, instrumental toggle |
 | MiniMax Music | `minimax-music` | MiniMax / fal.ai | music | instrumental OR with-lyrics (needs upstream text node for lyrics) |
+| Mureka Music | `mureka-music` | Mureka | music | `generation_mode`: `prompt`, `lyrics`, or `instrumental`; lyrics mode needs upstream text |
 | ElevenLabs SFX v2 | `elevenlabs-sfx` | ElevenLabs / fal.ai / SVRouter | sound-effect | `duration` ∈ {1,3,5,10,20,30}s |
+
+Mureka Music is asynchronous. The target node remains the music/style prompt in all three generation modes. In `lyrics` mode, ordered upstream text nodes are joined as lyrics; in `prompt` mode Mureka writes the song from the target prompt; in `instrumental` mode it uses the target prompt without vocals. Bragi always requests one Mureka choice per task and uses `batchCount` 1–4 for variations.
 
 Three audio-node utilities exist in the Obsidian UI, but they are **not MCP `generate` models** today and do not appear in `list_models`:
 
@@ -154,5 +157,6 @@ The user has to configure at least one provider key and connect that provider to
 - SuChuang key → Omni-Flash-Ext via `https://api.wuyinkeji.com`
 - Luma key → Luma Uni-1 image generation
 - MiniMax key → native TTS/Music and voice ref cloning
+- Mureka key → prompt-to-song, upstream-lyrics-to-song, and instrumental music generation
 - ElevenLabs key → native TTS/Music/SFX and voice ref cloning (TTS returns binary mp3)
 - Legnext key → Midjourney v8 / niji 7
