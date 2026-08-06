@@ -183,7 +183,15 @@ Result: 5 separate text nodes, each connected back to the prompt. Now feed them 
    })
 ```
 
-For music: `mode: "music"`, ElevenLabs uses `music_length_ms` (seconds in the UI range) plus `instrumental`; MiniMax Music uses `instrumental`. Lyrics come from upstream text nodes for MiniMax Music.
+For music: `mode: "music"`, ElevenLabs uses `music_length_ms` (seconds in the UI range) plus `instrumental`; MiniMax Music uses `instrumental`. Lyrics come from ordered upstream text nodes for MiniMax Music.
+
+For Mureka Music, use `modelId: "mureka-music"` and one of the `generation_mode` values returned by `list_models`:
+
+- `prompt`: the target node is a complete prompt-to-song description.
+- `lyrics`: connect one or more lyrics text nodes into a separate target style-prompt node, then generate from that target. Ordered upstream text becomes lyrics; target text stays the music/style prompt.
+- `instrumental`: the target node describes the instrumental music.
+
+Mureka is async. Bragi sends one choice per task and maps `batchCount` 1–4 to separate variations. After the provider task appears, track it with `list_pending_tasks`; when it disappears, inspect the placeholder/file node.
 For SFX: use `modelId: "elevenlabs-sfx"`, `mode: "sound-effect"`, and `duration` from {1,3,5,10,20,30}.
 
 For voice reference cloning in the Obsidian UI, connect an upstream audio file to a TTS prompt and choose the `Voice ref` source mode. Native ElevenLabs and MiniMax TTS can clone from the upstream audio; MCP `generate` can use an already-created custom voice ID via the model's `voice` param.

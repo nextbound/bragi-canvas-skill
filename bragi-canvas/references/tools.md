@@ -228,13 +228,13 @@ Trigger a generation. Returns immediately once the placeholder is created; the p
 ```
 
 **How to track completion:**
-- For `image`/`text`/`audio`: call `get_node(placeholderId)` after a short delay. A file/text node = success. A red node with error text = failure.
-- For `video`: call `list_pending_tasks` or `get_task_status(taskId)`. When the task disappears, inspect the placeholder as above.
+- For `image`/`text` and synchronous `audio`: call `get_node(placeholderId)` after a short delay. A file/text node = success. A red node with error text = failure.
+- For `video` and async `audio` such as Mureka Music: call `list_pending_tasks` or `get_task_status(taskId)` after the provider has submitted the task. When the task disappears, inspect the placeholder as above.
 
 ### `list_pending_tasks`
-No params. Returns all currently pending async tasks (video only today):
+No params. Returns all currently pending async audio and video tasks:
 ```
-[{ taskId, modelName, providerName, sourceNodeId,
+[{ taskId, modelName, providerName, outputType: "audio" | "video", sourceNodeId,
    placeholderNodeId, canvasPath, elapsedMs }, ...]
 ```
 Empty array means no async work in flight.
@@ -242,7 +242,7 @@ Empty array means no async work in flight.
 ### `get_task_status`
 **Params** `{ taskId }`
 **Returns**
-- `{ status: "pending", taskId, modelName, ..., elapsedMs }` — still running
+- `{ status: "pending", taskId, modelName, providerName, outputType: "audio" | "video", ..., elapsedMs }` — still running
 - `{ status: "not_found", taskId }` — completed, failed, or never existed. Inspect `placeholderNodeId` on the canvas to see the actual outcome.
 
 **Note:** Tasks are removed from the queue the moment they complete (success or failure). "not_found" isn't an error — it's the signal that the placeholder is now the authoritative source of truth.
