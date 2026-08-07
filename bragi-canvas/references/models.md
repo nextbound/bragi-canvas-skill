@@ -46,6 +46,7 @@ MuleRouter Z-Image Spicy maps the selected `aspectRatio` to fixed dimensions ins
 | Kling 2.6 | `kling-2.6` | Kling / TokenRouter | same as 3.0 | same |
 | HappyHorse 1.0 T2V | `happyhorse-1.0-t2v` | TokenRouter | text-to-video | provider defaults |
 | HappyHorse 1.0 I2V | `happyhorse-1.0-i2v` | TokenRouter | first-frame | requires one upstream image |
+| Wan 3.0 | `wan-3.0` | DashScope | text-to-video, first-frame, first-last-frame, image-ref, video-ref | `resolution` (480P/720P/1080P), `ratio` (Adaptive + 5 fixed ratios), `duration` (Auto/2–30s), `audio` |
 | Wan 2.7 | `wan-2.7` | DashScope / MuleRouter | provider-dependent (see note) | DashScope: `resolution` (720P/1080P), `ratio`, `duration` (2–15s), `prompt_extend`, `audio_setting` (video-edit only). MuleRouter: `resolution` (720p/1080p), `duration`, `prompt_extend` (no `ratio`) |
 | Veo 3.1 | `veo-3.1` | Gemini / fal.ai / SVRouter | provider-dependent; Gemini/fal include text-to-video, first-frame, first-last-frame, image-ref (≤3); SVRouter exposes text-to-video + first-frame | `durationSeconds` (4/6/8s), `aspectRatio` (16:9/9:16), `resolution` (720p/1080p) |
 | Veo 3.1 Lite | `veo-3.1-lite` | Gemini | text-to-video, first-frame (no image-ref) | same as 3.1 |
@@ -59,6 +60,8 @@ TokenRouter Seedance maps `seedance-2.0` / `seedance-2.0-fast` to Dreamina model
 Token360 Seedance uses the official `seedance-2.0` / `seedance-2.0-fast` model IDs through `https://api.token360.ai/v1`. Without a Token360 Asset group ID, Bragi uploads local reference media to temporary HTTPS URLs. With an Asset group ID configured, Token360 image refs are uploaded as RealFace / Virtual Portrait assets, cached on the source node, and sent as `asset://ta_...`; audio and video refs still use HTTPS URLs.
 
 Pika is an aggregated Kling provider for `kling-3.0`. It uses the current Pika `kling-3.0` routes and exposes `text-to-video`, `first-frame`, and `motion-control`; Bragi hides the quality selector because Pika no longer exposes the old Standard/Pro/4K route family. Pika does not currently list a compatible Kling 3.0 Omni model, so Bragi does not expose Pika for `kling-3.0-omni`. Always use the provider-effective modes and params from `list_models`.
+
+Wan 3.0 uses DashScope's unified `wan3.0-video` endpoint. `first-frame` requires exactly one upstream image; `first-last-frame` requires exactly two and cannot be mixed with reference video/audio/files. Reference modes accept up to 10 images, 5 videos, 5 audio clips, and one upstream PDF file, which Bragi uploads to temporary HTTPS URLs. Video and audio reference clips must each fit the upstream 1–15 second limit, and the total reference-video and reference-audio durations must each remain within 15 seconds. Output may be 2–30 seconds at 480P, 720P, or 1080P; generated audio is on by default. International-region users must set the DashScope Base URL to the workspace-scoped Singapore `/api/v1` endpoint that matches their API key.
 
 Wan 2.7 is a single model (`wan-2.7`) with two providers whose modes differ — always read the modes from the model's `list_models` entry for the active provider:
 
@@ -148,7 +151,7 @@ The user has to configure at least one provider key and connect that provider to
 - fal.ai key → fal-ai/* variants of almost everything (universal fallback)
 - TokenRouter key → selected text/image/video models via `https://api.tokenrouter.com/v1` (+ optional ModelArk Asset group ID for Seedance `asset://...` refs)
 - MuleRouter key → Z-Image Spicy, Qwen Image Edit Spicy, Wan 2.7 (`first-frame` only)
-- DashScope key (video) → Wan 2.7 (all modes, incl. `video-edit`)
+- DashScope key (video) → Wan 3.0 + Wan 2.7 (Wan 2.7 includes `video-edit`)
 - DashScope key → Qwen Voice audio + Qwen 3.6 Plus text (native multimodal)
 - xAI key → Grok text/image/video/TTS
 - APIMart key → GPT Image 2, GPT Image 2 (Official), GPT-5.5, GPT-5.5 Pro, Kling 3.0 Omni, Omni-Flash-Ext
