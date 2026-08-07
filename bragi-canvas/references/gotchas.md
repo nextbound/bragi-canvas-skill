@@ -123,6 +123,12 @@ For `kling-3.0-omni`, `video-edit` requires exactly one upstream base video, but
 
 ---
 
+## 9e. Seedance 2.5 editing and extension depend on prompt intent
+
+BytePlus classifies `seedance-2.5` reference tasks after they enter the queue. `video-edit` must use explicit editing language (for example add/remove/replace/change), `ratio: "adaptive"`, and `duration: "-1"`. `video-extend` must use explicit extension language (extend/continue), and also requires `ratio: "adaptive"`. If the prompt intent and selected mode disagree, BytePlus may return the asynchronous `InvalidParameter.TaskTypeConstraint` error even though task creation initially succeeded.
+
+---
+
 ## 10. Denoise actions are UI-only
 
 NLM 35 and FLUX Denoise are Obsidian UI actions on image file nodes, not MCP models. They do not appear in `list_models`, and `generate` will reject denoise-like model IDs.

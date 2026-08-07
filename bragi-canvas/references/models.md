@@ -39,6 +39,7 @@ MuleRouter Z-Image Spicy maps the selected `aspectRatio` to fixed dimensions ins
 
 | Model | `modelId` | Providers | Modes | Key params |
 |-------|-----------|-----------|-------|-----------|
+| Seedance 2.5 | `seedance-2.5` | BytePlus | text-to-video, first-frame, first-last-frame, image-ref, video-ref, video-extend, video-edit | `duration` (Auto/4–30s), `ratio` (Adaptive + 6 fixed ratios where allowed), `resolution` (480p/720p), `generate_audio`, `output_format` (MP4/MOV) |
 | Seedance 2.0 | `seedance-2.0` | Volcengine / BytePlus / fal.ai / TokenRouter / Token360 / SVRouter | text-to-video, first-frame, image-ref, video-ref | `duration` (Auto/4–15s), `ratio` (5), `resolution` (480p/720p/1080p/4k), `generate_audio` |
 | Seedance 2.0 Fast | `seedance-2.0-fast` | Volcengine / BytePlus / TokenRouter / Token360 | same as above | `duration`, `ratio` (3), `resolution` (480p/720p), `generate_audio` |
 | Kling 3.0 | `kling-3.0` | Kling / Pika / APIMart / fal.ai / TokenRouter / SVRouter | provider-dependent | `duration` (5/10s), `aspect_ratio`; Pika hides the quality selector; APIMart is Motion Control only |
@@ -54,6 +55,10 @@ MuleRouter Z-Image Spicy maps the selected `aspectRatio` to fixed dimensions ins
 | Omni-Flash-Ext | `omni-flash-ext` | APIMart / SuChuang | text-to-video, first-frame, multi-image-ref, video-ref | `duration` (4/6/8/10s), `resolution` (720p/1080p/4k), `aspect_ratio` (16:9/9:16) |
 
 **All video generations are async.** `generate` returns `generation_started` and the result lands on the canvas minutes later.
+
+BytePlus Seedance 2.5 uses upstream model `dreamina-seedance-2-5-260628`. It accepts up to 30 reference images, 10 reference videos, and 10 reference audio clips; audio-only reference generation is supported by selecting `video-ref`. First-frame and first-last-frame modes require exactly one or two ordered upstream images and cannot be mixed with other reference media. Video edit and video extend require an upstream video. First-frame, first-last-frame, video-edit, and video-extend require `ratio: "adaptive"`; video-edit also requires `duration: "-1"` (Auto). Other tasks accept Auto or 4–30 seconds. MOV output is saved with a `.mov` extension.
+
+Seedance 2.5 determines reference-to-video, editing, and extension subtasks partly from prompt intent. For `video-edit`, explicitly use editing language such as “add”, “remove”, “replace”, or “change”. For `video-extend`, explicitly say “extend”, “continue”, or “continue the story”. This avoids the provider classifying the queued task differently and returning an asynchronous `InvalidParameter.TaskTypeConstraint` failure.
 
 TokenRouter Seedance maps `seedance-2.0` / `seedance-2.0-fast` to Dreamina model IDs and accepts reference images, audio, and videos. When both a TokenRouter key and TokenRouter Asset group ID are configured, Bragi routes reference images/audio/videos through that explicit ModelArk group and passes them as `asset://...`; without a group ID, local refs use temporary HTTPS URLs. BytePlus and Volcengine keep their own provider-scoped asset IDs.
 
@@ -144,7 +149,7 @@ The user has to configure at least one provider key and connect that provider to
 - Gemini key → Nano Banana Pro/2, Veo 3.1 (+Lite), Gemini 3.x text including Gemini 3.5 Flash
 - Anthropic key OR AWS Bedrock → Claude 4.x text
 - Volcengine (ARK) key → Seedream / Seedance native
-- BytePlus key → Seedance on international endpoint (+ explicit Asset group ID for face refs) and Seedream 5.0 Lite image generation
+- BytePlus key → Seedance 2.5 / 2.0 on the international endpoint (+ explicit Asset group ID for face refs) and Seedream 5.0 Lite image generation
 - Token360 key → Seedance 2.0 / 2.0 Fast via `https://api.token360.ai/v1` (+ optional Asset group ID for RealFace / Virtual Portrait image refs)
 - Kling AK+SK → Kling 2.6 / 3.0 / 3.0 Omni native
 - Pika key → Kling 3.0 aggregated routes
