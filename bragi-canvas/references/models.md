@@ -58,6 +58,8 @@ MuleRouter Z-Image Spicy maps the selected `aspectRatio` to fixed dimensions ins
 
 Seedance 2.5 uses upstream model `doubao-seedance-2-5-260628` on Volcengine and `dreamina-seedance-2-5-260628` on BytePlus. It accepts up to 30 reference images, 10 reference videos, and 10 reference audio clips; audio-only reference generation is supported by selecting `video-ref`. First-frame and first-last-frame modes require exactly one or two ordered upstream images and cannot be mixed with other reference media. Video edit and video extend require an upstream video. First-frame, first-last-frame, video-edit, and video-extend require `ratio: "adaptive"`; video-edit also requires `duration: "-1"` (Auto). Other tasks accept Auto or 4–30 seconds. MOV output is saved with a `.mov` extension.
 
+BytePlus Seedance defaults to `https://ark.ap-southeast.bytepluses.com/api/v3/contents/generations/tasks`, but the provider settings can override the complete task endpoint for Seedance 2.0, Seedance 2.0 Fast, and Seedance 2.5. Bragi normalizes trailing slashes and polls by appending `/{task_id}` to the configured task endpoint.
+
 Seedance 2.5 determines reference-to-video, editing, and extension subtasks partly from prompt intent. For `video-edit`, explicitly use editing language such as “add”, “remove”, “replace”, or “change”. For `video-extend`, explicitly say “extend”, “continue”, or “continue the story”. This avoids the provider classifying the queued task differently and returning an asynchronous `InvalidParameter.TaskTypeConstraint` failure.
 
 TokenRouter Seedance maps `seedance-2.0` / `seedance-2.0-fast` to Dreamina model IDs and accepts reference images, audio, and videos. When both a TokenRouter key and TokenRouter Asset group ID are configured, Bragi routes reference images/audio/videos through that explicit ModelArk group and passes them as `asset://...`; without a group ID, local refs use temporary HTTPS URLs. BytePlus and Volcengine keep their own provider-scoped asset IDs.
@@ -149,7 +151,7 @@ The user has to configure at least one provider key and connect that provider to
 - Gemini key → Nano Banana Pro/2, Veo 3.1 (+Lite), Gemini 3.x text including Gemini 3.5 Flash
 - Anthropic key OR AWS Bedrock → Claude 4.x text
 - Volcengine (ARK) key → Seedream / Seedance 2.5 / 2.0 native
-- BytePlus key → Seedance 2.5 / 2.0 on the international endpoint (+ explicit Asset group ID for face refs) and Seedream 5.0 Lite image generation
+- BytePlus key → Seedance 2.5 / 2.0 on the configurable international endpoint (+ explicit Asset group ID for face refs) and Seedream 5.0 Lite image generation
 - Token360 key → Seedance 2.0 / 2.0 Fast via `https://api.token360.ai/v1` (+ optional Asset group ID for RealFace / Virtual Portrait image refs)
 - Kling AK+SK → Kling 2.6 / 3.0 / 3.0 Omni native
 - Pika key → Kling 3.0 aggregated routes
