@@ -39,7 +39,7 @@ MuleRouter Z-Image Spicy maps the selected `aspectRatio` to fixed dimensions ins
 
 | Model | `modelId` | Providers | Modes | Key params |
 |-------|-----------|-----------|-------|-----------|
-| Seedance 2.5 | `seedance-2.5` | Volcengine / BytePlus | text-to-video, first-frame, first-last-frame, image-ref, video-ref, video-extend, video-edit | `duration` (Auto/4–30s), `ratio` (Adaptive + 6 fixed ratios where allowed), `resolution` (480p/720p), `generate_audio`, `output_format` (MP4/MOV) |
+| Seedance 2.5 | `seedance-2.5` | Volcengine / BytePlus / SVRouter | text-to-video, first-frame, first-last-frame, image-ref, video-ref, video-extend, video-edit | `duration` (Auto/4–30s), `ratio` (Adaptive + 6 fixed ratios where allowed), `resolution` (480p/720p), `generate_audio`, `output_format` (MP4/MOV) |
 | Seedance 2.0 | `seedance-2.0` | Volcengine / BytePlus / fal.ai / TokenRouter / Token360 / SVRouter | text-to-video, first-frame, image-ref, video-ref | `duration` (Auto/4–15s), `ratio` (5), `resolution` (480p/720p/1080p/4k), `generate_audio` |
 | Seedance 2.0 Fast | `seedance-2.0-fast` | Volcengine / BytePlus / TokenRouter / Token360 | same as above | `duration`, `ratio` (3), `resolution` (480p/720p), `generate_audio` |
 | Kling 3.0 | `kling-3.0` | Kling / Pika / APIMart / fal.ai / TokenRouter / SVRouter | provider-dependent | `duration` (5/10s), `aspect_ratio`; Pika hides the quality selector; APIMart is Motion Control only |
@@ -56,7 +56,7 @@ MuleRouter Z-Image Spicy maps the selected `aspectRatio` to fixed dimensions ins
 
 **All video generations are async.** `generate` returns `generation_started` and the result lands on the canvas minutes later.
 
-Seedance 2.5 uses upstream model `doubao-seedance-2-5-260628` on Volcengine and `dreamina-seedance-2-5-260628` on BytePlus. It accepts up to 30 reference images, 10 reference videos, and 10 reference audio clips; audio-only reference generation is supported by selecting `video-ref`. First-frame and first-last-frame modes require exactly one or two ordered upstream images and cannot be mixed with other reference media. Video edit and video extend require an upstream video. First-frame, first-last-frame, video-edit, and video-extend require `ratio: "adaptive"`; video-edit also requires `duration: "-1"` (Auto). Other tasks accept Auto or 4–30 seconds. MOV output is saved with a `.mov` extension.
+Seedance 2.5 uses upstream model `doubao-seedance-2-5-260628` on Volcengine, `dreamina-seedance-2-5-260628` on BytePlus, and `sv-seedance-2.5` through SVRouter. It accepts up to 30 reference images, 10 reference videos, and 10 reference audio clips; audio-only reference generation is supported by selecting `video-ref`. First-frame and first-last-frame modes require exactly one or two ordered upstream images and cannot be mixed with other reference media. Video edit and video extend require an upstream video. First-frame, first-last-frame, video-edit, and video-extend require `ratio: "adaptive"`; video-edit also requires `duration: "-1"` (Auto). Other tasks accept Auto or 4–30 seconds. MOV output is saved with a `.mov` extension.
 
 BytePlus Seedance defaults to `https://ark.ap-southeast.bytepluses.com/api/v3/contents/generations/tasks`, but the provider settings can override the complete task endpoint for Seedance 2.0, Seedance 2.0 Fast, and Seedance 2.5. Bragi normalizes trailing slashes and polls by appending `/{task_id}` to the configured task endpoint.
 
@@ -77,7 +77,7 @@ Wan 2.7 is a single model (`wan-2.7`) with two providers whose modes differ — 
 
 Bragi uploads local image/audio refs to temporary HTTPS URLs before calling either provider. The old `wan-2.7-i2v-spicy` model id no longer exists; saved settings are migrated to `wan-2.7`.
 
-SVRouter video models use stable `sv-*` gateway ids. Seedance receives refs as top-level `images` / `audios` / `videos` plus `metadata` for ratio, duration, resolution, and `generate_audio`; Auto duration is forwarded as `metadata.duration = -1`, matching direct Ark Seedance behavior. Fal-routed SVRouter models such as Kling, Grok, and Veo receive top-level `images` plus the provider-effective media params.
+SVRouter video models use stable `sv-*` gateway ids. Seedance 2.0 and 2.5 receive refs as top-level `images` / `audios` / `videos` plus `metadata` for ratio, duration, resolution, `generate_audio`, mode, and output format; Auto duration is forwarded as `metadata.duration = -1`, matching direct Ark Seedance behavior. Fal-routed SVRouter models such as Kling, Grok, and Veo receive top-level `images` plus the provider-effective media params.
 
 APIMart Omni-Flash-Ext accepts 0, 1, or 3 reference images and at most 1 reference video. Bragi re-uploads every APIMart image/video reference through the temporary Bragi Relay before sending `image_urls` / `video_urls`; APIMart never receives data URIs or third-party source URLs. When using `video-ref`, Bragi omits `duration` because APIMart derives timing from the reference video.
 
