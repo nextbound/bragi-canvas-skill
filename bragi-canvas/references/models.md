@@ -52,6 +52,7 @@ MuleRouter Z-Image Spicy maps the selected `aspectRatio` to fixed dimensions ins
 | Veo 3.1 | `veo-3.1` | Gemini / fal.ai / SVRouter | provider-dependent; Gemini/fal include text-to-video, first-frame, first-last-frame, image-ref (≤3); SVRouter exposes text-to-video + first-frame | `durationSeconds` (4/6/8s), `aspectRatio` (16:9/9:16), `resolution` (720p/1080p) |
 | Veo 3.1 Lite | `veo-3.1-lite` | Gemini | text-to-video, first-frame (no image-ref) | same as 3.1 |
 | Grok Video | `grok-video` | xAI / fal.ai / SVRouter | text-to-video, first-frame, image-ref, video-extend | `duration`, `aspect_ratio` (7), `resolution` (480p/720p/1080p) |
+| MiniMax-H3 | `minimax-h3` | APIMart | text-to-video, first-frame, first-last-frame, image-ref, video-ref | `duration` (4–15s), `resolution` (2K/768P), `aspect_ratio` (Adaptive + 6 fixed ratios), `watermark` |
 | Omni-Flash-Ext | `omni-flash-ext` | APIMart / SuChuang | text-to-video, first-frame, multi-image-ref, video-ref | `duration` (4/6/8/10s), `resolution` (720p/1080p/4k), `aspect_ratio` (16:9/9:16) |
 
 **All video generations are async.** `generate` returns `generation_started` and the result lands on the canvas minutes later.
@@ -80,6 +81,8 @@ Bragi uploads local image/audio refs to temporary HTTPS URLs before calling eith
 SVRouter video models use stable `sv-*` gateway ids. Seedance 2.0 and 2.5 receive refs as top-level `images` / `audios` / `videos` plus `metadata` for ratio, duration, resolution, `generate_audio`, mode, and output format; Auto duration is forwarded as `metadata.duration = -1`, matching direct Ark Seedance behavior. Fal-routed SVRouter models such as Kling, Grok, and Veo receive top-level `images` plus the provider-effective media params.
 
 APIMart Omni-Flash-Ext accepts 0, 1, or 3 reference images and at most 1 reference video. Bragi re-uploads every APIMart image/video reference through the temporary Bragi Relay before sending `image_urls` / `video_urls`; APIMart never receives data URIs or third-party source URLs. When using `video-ref`, Bragi omits `duration` because APIMart derives timing from the reference video.
+
+APIMart MiniMax-H3 uses upstream model `MiniMax-H3`. `first-frame` and `first-last-frame` map one or two ordered images to explicit frame fields and cannot be mixed with reference media. `image-ref` accepts up to 9 images plus 3 audio clips; `video-ref` accepts up to 3 videos and may combine them with up to 9 images and 3 audios. Audio alone is invalid. Bragi re-uploads every image/video/audio input through the temporary Relay. Prompts are required and capped at 7000 characters; duration is any whole number from 4–15 seconds, resolution is 2K or 768P, and frame-controlled modes derive their ratio from the input image.
 
 Kling 3.0 Omni uses the native Kling `/v1/videos/omni-video` endpoint or APIMart's `/v1/videos/generations` endpoint with the same upstream model ID, `kling-v3-omni`. Ordered upstream images map to first/last frame roles in `first-frame` and `first-last-frame`; `image-ref` sends up to 7 reference images and automatically adds missing `<<<image_N>>>` prompt references. `video-ref` sends one feature reference video. `video-edit` sends one base video, may also include ordinary reference images, adds any missing `<<<image_N>>>` references, and follows the base video's duration. Native Kling accepts up to 4 reference images when a video is present; APIMart sends video-edit references through `image_urls`. Connected media is uploaded to temporary HTTPS URLs. The generator bar exposes intelligent multi-shot as `Multi shots` by default, with `Single shot` as the alternative; generated audio is labeled `Audio On` / `Audio Off`. Advanced provider calls may also pass custom `multi_prompt` shot lists and subject-list payloads.
 
@@ -161,7 +164,7 @@ The user has to configure at least one provider key and connect that provider to
 - DashScope key (video) → Wan 3.0 + Wan 2.7 (Wan 2.7 includes `video-edit`)
 - DashScope key → Qwen Voice audio + Qwen 3.6 Plus text (native multimodal)
 - xAI key → Grok text/image/video/TTS
-- APIMart key → GPT Image 2, GPT Image 2 (Official), GPT-5.5, GPT-5.5 Pro, Kling 3.0 Omni, Omni-Flash-Ext
+- APIMart key → GPT Image 2, GPT Image 2 (Official), GPT-5.5, GPT-5.5 Pro, Kling 3.0 Omni, MiniMax-H3, Omni-Flash-Ext
 - SVRouter key → gateway `sv-*` routes for GPT Image 2 / GPT Image 2 (Official), selected image/video/audio models, and GPT-5.5 text. The stored settings key remains `svnewapi` for compatibility.
 - BFL, Runpod, or fal.ai key → FLUX.2 Klein 9B image generation
 - SuChuang key → Omni-Flash-Ext via `https://api.wuyinkeji.com`
