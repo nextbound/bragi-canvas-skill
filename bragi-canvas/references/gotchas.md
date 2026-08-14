@@ -129,6 +129,12 @@ Volcengine and BytePlus classify `seedance-2.5` reference tasks after they enter
 
 ---
 
+## 9f. MiniMax-H3 frame and reference inputs are mutually exclusive
+
+For `minimax-h3`, `first-frame` requires exactly one ordered image and `first-last-frame` requires exactly two. Neither mode may include reference video or audio. Use `image-ref` for images with optional audio, or `video-ref` for at least one video with optional image/audio references. Audio-only generation is rejected by APIMart. Every MiniMax-H3 prompt is still required, including reference modes, and is limited to 7000 characters.
+
+---
+
 ## 10. Denoise actions are UI-only
 
 NLM 35 and FLUX Denoise are Obsidian UI actions on image file nodes, not MCP models. They do not appear in `list_models`, and `generate` will reject denoise-like model IDs.
