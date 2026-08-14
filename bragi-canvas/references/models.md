@@ -166,7 +166,8 @@ The user has to configure at least one provider key and connect that provider to
 - xAI key → Grok text/image/video/TTS
 - APIMart key → GPT Image 2, GPT Image 2 (Official), GPT-5.5, GPT-5.5 Pro, Kling 3.0 Omni, MiniMax-H3, Omni-Flash-Ext
 - SVRouter key → gateway `sv-*` routes for GPT Image 2 / GPT Image 2 (Official), selected image/video/audio models, and GPT-5.5 text. The stored settings key remains `svnewapi` for compatibility.
-- BFL, Runpod, or fal.ai key → FLUX.2 Klein 9B image generation
+- BFL key → FLUX.2 Klein 9B image generation
+- Runpod or fal.ai key → FLUX.2 Klein 9B image generation with provider-specific long-edge limits
 - SuChuang key → Omni-Flash-Ext via `https://api.wuyinkeji.com`
 - Luma key → Luma Uni-1 image generation
 - MiniMax key → native TTS/Music and voice ref cloning
