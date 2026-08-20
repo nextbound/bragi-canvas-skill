@@ -129,6 +129,12 @@ Volcengine and BytePlus classify `seedance-2.5` reference tasks after they enter
 
 ---
 
+## 9f. Grok Video modes differ between xAI and gateway providers
+
+With xAI active, `grok-video` is aggregated: Grok Imagine Video 1.5 handles text-to-video, first-frame, and image-ref, while the official legacy `grok-imagine-video` handles video-edit and video-extend because xAI rejects those operations on 1.5. fal.ai and SVRouter keep the four legacy modes and reject `video-edit` before any request. For xAI, first-frame requires exactly one upstream image, image-ref accepts 1–7 images and no 1080p, and video-edit/video-extend each require exactly one upstream video. Edit ignores duration, ratio, and resolution; extension accepts only a 2–10 second duration. Read the xAI-effective `optionsByMode` from `list_models` instead of reusing the fal.ai/SVRouter duration options.
+
+---
+
 ## 9f. MiniMax-H3 frame and reference inputs are mutually exclusive
 
 For `minimax-h3`, `first-frame` requires exactly one ordered image and `first-last-frame` requires exactly two. Neither mode may include reference video or audio. Use `image-ref` for images with optional audio, or `video-ref` for at least one video with optional image/audio references. Audio-only generation is rejected by APIMart. Every MiniMax-H3 prompt is still required, including reference modes, and is limited to 7000 characters.
