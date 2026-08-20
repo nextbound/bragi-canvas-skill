@@ -14,7 +14,7 @@ Model IDs below are exact strings to pass as `modelId` in `generate`.
 | GPT Image 2 (Official) | `gpt-image-2-official` | APIMart / SVRouter | text-to-image | same controls as GPT Image 2; the official channel honors `quality` |
 | Nano Banana Pro | `nano-banana-pro` | Gemini / fal.ai / TokenRouter / APIMart / SVRouter | text-to-image | `aspectRatio` (10), `imageSize` (1K/2K/4K) |
 | Nano Banana 2 | `nano-banana-2` | Gemini / fal.ai / TokenRouter / APIMart | text-to-image | `aspectRatio` (14), `imageSize` (512/1K/2K/4K) |
-| Grok Imagine | `grok-imagine` | xAI / fal.ai | text-to-image, image-ref-to-image | `aspectRatio` (9), `quality` |
+| Grok Imagine | `grok-imagine` | xAI / fal.ai | text-to-image, image-ref-to-image | xAI Image 2.0: `aspectRatio` (14 incl. Auto), `resolution` (1K/2K), `quality` (Low/Medium); fal.ai keeps 9 legacy ratios |
 | Midjourney v8 | `midjourney-v8` | Legnext | text-to-image | `ar` (10), `quality`, `stylize` (0–1000) |
 | Midjourney niji 7 | `midjourney-niji-7` | Legnext | text-to-image | `ar` (7), `stylize` |
 | Luma Uni-1 | `luma-uni-1` | Luma | text-to-image, image-ref-to-image | `aspectRatio` (5) |
@@ -51,11 +51,13 @@ MuleRouter Z-Image Spicy maps the selected `aspectRatio` to fixed dimensions ins
 | Wan 2.7 | `wan-2.7` | DashScope / MuleRouter | provider-dependent (see note) | DashScope: `resolution` (720P/1080P), `ratio`, `duration` (2–15s), `prompt_extend`, `audio_setting` (video-edit only). MuleRouter: `resolution` (720p/1080p), `duration`, `prompt_extend` (no `ratio`) |
 | Veo 3.1 | `veo-3.1` | Gemini / fal.ai / SVRouter | provider-dependent; Gemini/fal include text-to-video, first-frame, first-last-frame, image-ref (≤3); SVRouter exposes text-to-video + first-frame | `durationSeconds` (4/6/8s), `aspectRatio` (16:9/9:16), `resolution` (720p/1080p) |
 | Veo 3.1 Lite | `veo-3.1-lite` | Gemini | text-to-video, first-frame (no image-ref) | same as 3.1 |
-| Grok Video | `grok-video` | xAI / fal.ai / SVRouter | text-to-video, first-frame, image-ref, video-extend | `duration`, `aspect_ratio` (7), `resolution` (480p/720p/1080p) |
+| Grok Video | `grok-video` | xAI / fal.ai / SVRouter | provider-dependent; xAI Video 1.5 adds video-edit, fal.ai/SVRouter keep text-to-video, first-frame, image-ref, video-extend | `duration` (xAI 1–15s; extend 2–10s), `aspect_ratio` (7), `resolution` (480p/720p/1080p; image-ref max 720p) |
 | MiniMax-H3 | `minimax-h3` | APIMart | text-to-video, first-frame, first-last-frame, image-ref, video-ref | `duration` (4–15s), `resolution` (2K/768P), `aspect_ratio` (Adaptive + 6 fixed ratios), `watermark` |
 | Omni-Flash-Ext | `omni-flash-ext` | APIMart / SuChuang | text-to-video, first-frame, multi-image-ref, video-ref | `duration` (4/6/8/10s), `resolution` (720p/1080p/4k), `aspect_ratio` (16:9/9:16) |
 
 **All video generations are async.** `generate` returns `generation_started` and the result lands on the canvas minutes later.
+
+xAI keeps the stable Bragi IDs `grok-imagine` and `grok-video`. Image requests use `grok-imagine-image-2.0`. The xAI video entry is aggregated: text, first-frame, and reference generation use `grok-imagine-video-1.5`, while the official edit and extension endpoints still require `grok-imagine-video` because xAI rejects those operations on 1.5. Grok Image 2.0 edits accept 1–3 ordered upstream images; Auto ratio omits `aspect_ratio` so edits follow the first image. Grok Video 1.5 text/first-frame generation supports 1080p and reference-to-video accepts 1–7 images at up to 720p. Video edit and extension each require exactly one upstream video; edit inherits duration/ratio/resolution, while extension sends only a 2–10 second extension duration. Always read the provider-effective modes and params from `list_models` because fal.ai and SVRouter keep their existing routes.
 
 Seedance 2.5 uses upstream model `doubao-seedance-2-5-260628` on Volcengine, `dreamina-seedance-2-5-260628` on BytePlus, and `sv-seedance-2.5` through SVRouter. It accepts up to 30 reference images, 10 reference videos, and 10 reference audio clips; audio-only reference generation is supported by selecting `video-ref`. First-frame and first-last-frame modes require exactly one or two ordered upstream images and cannot be mixed with other reference media. Video edit and video extend require an upstream video. First-frame, first-last-frame, video-edit, and video-extend require `ratio: "adaptive"`; video-edit also requires `duration: "-1"` (Auto). Other tasks accept Auto or 4–30 seconds. MOV output is saved with a `.mov` extension.
 
