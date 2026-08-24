@@ -70,7 +70,7 @@ One style reference image feeds every shot.
      generate({ nodeId: shotNodeId, modelId: <image model that supports image refs>, … })
 ```
 
-Good image-ref-capable choices from `list_models({ type: "image" })`: `nano-banana-pro`, `nano-banana-2`, `grok-imagine`, `luma-uni-1`, and `seedream-5.0` / `seedream-4.5` when their providers are configured. Always pass the Bragi `modelId`, not the provider API model ID.
+Good image-ref-capable choices from `list_models({ type: "image" })`: `gpt-image-2`, `nano-banana-pro`, `nano-banana-2`, `grok-imagine`, `luma-uni-1`, and `seedream-5.0` / `seedream-4.5` when their providers are configured. Always pass the Bragi `modelId`, not the provider API model ID.
 
 ---
 

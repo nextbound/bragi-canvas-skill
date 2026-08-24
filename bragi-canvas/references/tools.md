@@ -56,7 +56,7 @@ Geometry-only edits use Canvas `moveAndResize`. Text or color edits rebuild the 
 - `toEnd?` — `"none" | "arrow"`, default `"arrow"`
 - `label?`
 
-**Returns** `{ edgeId }`.
+**Returns** `{ edgeId }` after the Canvas runtime has materialized the edge, so an immediate `get_upstream` or `generate` call can read it.
 
 **Critical:** Bragi only treats an edge as upstream input when `toEnd === "arrow"` and no reverse arrow is drawn. Self-loops are rejected.
 
@@ -80,7 +80,7 @@ Create many text nodes in one `importData` call.
 ```
 { edges: [{ fromId, toId, fromSide?, toSide?, toEnd?, label? }, ...] }
 ```
-**Returns** `{ edgeIds: [...] }`. Rejects self-loops and references to missing nodes.
+**Returns** `{ edgeIds: [...] }` after the Canvas runtime has materialized the edges. Rejects self-loops and references to missing nodes.
 
 Use batch variants when creating more than 2–3 nodes/edges at once — single round-trip instead of N.
 

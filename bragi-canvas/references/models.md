@@ -10,7 +10,7 @@ Model IDs below are exact strings to pass as `modelId` in `generate`.
 
 | Model | `modelId` | Providers | Modes | Key params |
 |-------|-----------|-----------|-------|-----------|
-| GPT Image 2 | `gpt-image-2` | OpenAI / fal.ai / TokenRouter / APIMart / SVRouter | text-to-image | `aspectRatio` (15 + Auto), `imageSize` (Auto/1K/2K/4K), `quality` (Auto/Low/Medium/High) |
+| GPT Image 2 | `gpt-image-2` | OpenAI / fal.ai / TokenRouter / APIMart / SVRouter | text-to-image (accepts upstream image refs) | `aspectRatio` (15 + Auto), `imageSize` (Auto/1K/2K/4K), `quality` (Auto/Low/Medium/High) |
 | GPT Image 2 (Official) | `gpt-image-2-official` | APIMart / SVRouter | text-to-image | same controls as GPT Image 2; the official channel honors `quality` |
 | Nano Banana Pro | `nano-banana-pro` | Gemini / fal.ai / TokenRouter / APIMart / SVRouter | text-to-image | `aspectRatio` (10), `imageSize` (1K/2K/4K) |
 | Nano Banana 2 | `nano-banana-2` | Gemini / fal.ai / TokenRouter / APIMart | text-to-image | `aspectRatio` (14), `imageSize` (512/1K/2K/4K) |
@@ -29,7 +29,7 @@ GPT Image 2's OpenAI and OpenAI-compatible image routes convert `imageSize` + `a
 
 FLUX.2 Klein 9B supports text-to-image and single reference image generation through BFL, Runpod, or fal.ai. BFL accepts up to 3K long edge; Runpod and fal.ai are capped at 2K. Bragi applies the provider's denoise-oriented defaults and optional color matching when reference images are used.
 
-When GPT Image 2 uses TokenRouter with upstream image refs, Bragi keeps those image refs inline and uploads them as multipart files to `/v1/images/edits`; TokenRouter ModelArk Asset IDs are only for Seedance refs.
+GPT Image 2 accepts ordered upstream image nodes as references while keeping MCP mode `text-to-image`; do not pass `image-ref-to-image` for this model. Through MCP, connect each image node to the prompt node with `toEnd: "arrow"`, then call `generate` on the prompt node; Bragi waits for the newly imported edge state before reading the images. When GPT Image 2 uses TokenRouter, Bragi keeps those image refs inline and uploads them as multipart files to `/v1/images/edits`; TokenRouter ModelArk Asset IDs are only for Seedance refs.
 
 MuleRouter Z-Image Spicy maps the selected `aspectRatio` to fixed dimensions inside MuleRouter's 256–1536 px range, then submits an async CarrotHub image task internally. Qwen Image Edit Spicy uses only the first ordered upstream image. Bragi waits for completion and writes the returned image URL to the canvas.
 
@@ -39,7 +39,7 @@ MuleRouter Z-Image Spicy maps the selected `aspectRatio` to fixed dimensions ins
 
 | Model | `modelId` | Providers | Modes | Key params |
 |-------|-----------|-----------|-------|-----------|
-| Seedance 2.5 | `seedance-2.5` | Volcengine / BytePlus / SVRouter | text-to-video, first-frame, first-last-frame, image-ref, video-ref, video-extend, video-edit | `duration` (Auto/4–30s), `ratio` (Adaptive + 6 fixed ratios where allowed), `resolution` (480p/720p), `generate_audio`, `output_format` (MP4/MOV) |
+| Seedance 2.5 | `seedance-2.5` | Volcengine / BytePlus / SVRouter | text-to-video, first-frame, first-last-frame, image-ref, video-ref, video-extend, video-edit | `duration` (Auto/4–30s), `ratio` (Adaptive + 6 fixed ratios where allowed), `resolution` (480p/720p/1080p), `generate_audio`, `output_format` (MP4/MOV) |
 | Seedance 2.0 | `seedance-2.0` | Volcengine / BytePlus / fal.ai / TokenRouter / Token360 / SVRouter | text-to-video, first-frame, image-ref, video-ref | `duration` (Auto/4–15s), `ratio` (5), `resolution` (480p/720p/1080p/4k), `generate_audio` |
 | Seedance 2.0 Fast | `seedance-2.0-fast` | Volcengine / BytePlus / TokenRouter / Token360 | same as above | `duration`, `ratio` (3), `resolution` (480p/720p), `generate_audio` |
 | Kling 3.0 | `kling-3.0` | Kling / Pika / APIMart / fal.ai / TokenRouter / SVRouter | provider-dependent | `duration` (5/10s), `aspect_ratio`; Pika hides the quality selector; APIMart is Motion Control only |
