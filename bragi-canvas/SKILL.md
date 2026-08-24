@@ -7,7 +7,7 @@ description: Drive an Obsidian Canvas as a node-based AI generation pipeline via
 
 Bragi Canvas turns an Obsidian `.canvas` file into a node-based AI generation pipeline: text nodes become prompts, arrows become data flow, and calling `generate` grows a new image / video / text / audio node next to the source. This skill is how an AI agent drives that pipeline through the plugin's MCP server.
 
-Current skill target: Bragi Canvas plugin **1.36.1**.
+Current skill target: Bragi Canvas plugin **1.36.2**.
 
 ## When to use this skill
 
