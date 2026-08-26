@@ -15,7 +15,7 @@ Model IDs below are exact strings to pass as `modelId` in `generate`.
 | Nano Banana Pro | `nano-banana-pro` | Gemini / fal.ai / TokenRouter / APIMart / SVRouter | text-to-image | `aspectRatio` (10), `imageSize` (1K/2K/4K) |
 | Nano Banana 2 | `nano-banana-2` | Gemini / fal.ai / TokenRouter / APIMart | text-to-image | `aspectRatio` (14), `imageSize` (512/1K/2K/4K) |
 | Grok Imagine | `grok-imagine` | xAI / fal.ai | text-to-image, image-ref-to-image | xAI Image 2.0: `aspectRatio` (14 incl. Auto), `resolution` (1K/2K), `quality` (Low/Medium); fal.ai keeps 9 legacy ratios |
-| Midjourney v8 | `midjourney-v8` | Legnext | text-to-image | `ar` (10), `quality`, `stylize` (0–1000) |
+| Midjourney V8.2 | `midjourney-v8` | Legnext | text-to-image | `ar` (10), `resolution` (Standard/2K HD), `stylize` (0–1000), `chaos` (0–100), `style` (Default/Raw), `stop` (10–100), `weird` (0–3000) |
 | Midjourney niji 7 | `midjourney-niji-7` | Legnext | text-to-image | `ar` (7), `stylize` |
 | Luma Uni-1 | `luma-uni-1` | Luma | text-to-image, image-ref-to-image | `aspectRatio` (5) |
 | FLUX.2 Klein 9B | `flux-2-klein-9b` | BFL / Runpod / fal.ai | text-to-image, image-ref-to-image | `aspectRatio` (9), `targetLongEdge` (1K/2K/3K; Runpod/fal max 2K), provider denoise defaults |
@@ -26,6 +26,8 @@ Model IDs below are exact strings to pass as `modelId` in `generate`.
 | Qwen Image Edit Spicy | `qwen-image-edit-spicy` | MuleRouter | image-ref-to-image | requires one upstream image |
 
 GPT Image 2's OpenAI and OpenAI-compatible image routes convert `imageSize` + `aspectRatio` into a concrete pixel `size`; APIMart and SVRouter's GPT Image 2 family send the selected aspect ratio as `size` and the same tier as `resolution`. APIMart's stable `gpt-image-2` Bragi model ID routes to the official upstream model ID so `quality` is honored. `gpt-image-2-official` remains a separate Bragi model for explicitly selecting the APIMart/SVRouter official channel; the non-official SV gateway route deliberately does not forward the OpenAI `quality` enum. SVRouter Nano Banana Pro also uses the APIMart-style `size` + `resolution` payload shape.
+
+Midjourney keeps the stable Bragi model ID `midjourney-v8` while targeting V8.2 through Legnext. Standard output omits `--hd`; 2K HD appends it and is billed by Legnext at 1.5x the Standard rate. V8.2 rejects `--q` / `--quality`, so those controls are not exposed. Explicit Midjourney flags already written in the prompt take precedence over catalogue params.
 
 FLUX.2 Klein 9B supports text-to-image and single reference image generation through BFL, Runpod, or fal.ai. BFL accepts up to 3K long edge; Runpod and fal.ai are capped at 2K. Bragi applies the provider's denoise-oriented defaults and optional color matching when reference images are used.
 
@@ -175,4 +177,4 @@ The user has to configure at least one provider key and connect that provider to
 - MiniMax key → native TTS/Music and voice ref cloning
 - Mureka key → prompt-to-song, upstream-lyrics-to-song, and instrumental music generation
 - ElevenLabs key → native TTS/Music/SFX and voice ref cloning (TTS returns binary mp3)
-- Legnext key → Midjourney v8 / niji 7
+- Legnext key → Midjourney V8.2 / niji 7
