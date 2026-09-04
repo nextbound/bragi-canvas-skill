@@ -22,7 +22,7 @@ When calling `connect_nodes`, leave `toEnd` at its default (`"arrow"`) unless yo
 
 `generate` resolves immediately after creating the placeholder node(s). The real provider call runs in the background. You get `placeholderIds` back — use them to track what you just started.
 
-- Sync types (image, text, and most audio): re-read the placeholder with `get_node(placeholderId)` after a short wait. When its type/content changes it's done. Red color + error text = failure.
+- Types without an exposed task ID (image, text, and most audio): re-read the placeholder with `get_node(placeholderId)` after a short wait. When its type/content changes it's done. Red color + error text = failure. SV NewAPI image routes can poll the gateway internally for up to 10 minutes; they still do not appear in `list_pending_tasks`, so check the placeholder at measured intervals.
 - Async types (video and providers such as Mureka Music): use `list_pending_tasks` and `get_task_status(taskId)` after submission. When the task disappears from the queue, check the placeholder. These tasks persist across plugin restarts and reopen with the matching canvas.
 
 Tasks are removed from the queue the moment they finish. `get_task_status` returning `"not_found"` is not an error — it means "the queue no longer tracks this, look at the placeholder node."
