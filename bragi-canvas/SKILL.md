@@ -7,7 +7,7 @@ description: Drive an Obsidian Canvas as a node-based AI generation pipeline via
 
 Bragi Canvas turns an Obsidian `.canvas` file into a node-based AI generation pipeline: text nodes become prompts, arrows become data flow, and calling `generate` grows a new image / video / text / audio node next to the source. This skill is how an AI agent drives that pipeline through the plugin's MCP server.
 
-Current skill target: Bragi Canvas plugin **1.40.0**.
+Current skill target: Bragi Canvas plugin **1.40.1**.
 
 ## When to use this skill
 
@@ -102,7 +102,15 @@ Once registered, the first tool to call is `get_active_canvas_info` — it confi
 
 ### Fallback: raw HTTP
 
-If the host cannot register MCP servers, you *can* POST JSON-RPC 2.0 directly to `http://127.0.0.1:17775/mcp` — but expect no schema, no session reuse, and worse errors. Always prefer registration.
+If the host cannot register MCP servers, send JSON-RPC 2.0 directly to `http://127.0.0.1:17775/mcp` with `Content-Type: application/json`. Local CLI requests without an Origin header are supported. Include `Authorization: Bearer <token>` if a token is configured.
+
+```sh
+curl http://127.0.0.1:17775/mcp \
+  -H 'Content-Type: application/json' \
+  --data '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+```
+
+The server accepts only loopback Host headers with the configured port. Browser requests must have the server's exact Origin; external sites and `Origin: null` are rejected. Bodies are limited to 64 MiB and must arrive within 30 seconds. Token-free mode does not isolate other processes on the same machine.
 
 ## The 27 tools at a glance
 

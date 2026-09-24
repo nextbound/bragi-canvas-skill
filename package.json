@@ -1,0 +1,5 @@
+{
+  "name": "bragi-canvas-skill-checks",
+  "private": true,
+  "scripts": { "verify": "node scripts/verify.mjs" }
+}

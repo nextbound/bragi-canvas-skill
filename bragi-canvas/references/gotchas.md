@@ -175,7 +175,7 @@ Generated files go to the vault-level `_bragi/assets/` directory. The file node'
 
 ## 14. Localhost + optional bearer token auth
 
-The MCP server binds to `127.0.0.1` with CORS `*`. If the user sets `MCP access token` in plugin settings, every request must carry `Authorization: Bearer <token>` (401 otherwise). If the token is blank, any local process can connect — treat canvas contents accordingly.
+The MCP server binds to `127.0.0.1`. Host must be a loopback address with the configured port. Requests without Origin work for local CLI clients; a present Origin must exactly match the server, and `Origin: null` is rejected. CORS is returned only for that matching origin. POST requests must use `application/json`, with at most 64 MiB and a 30-second body-read timeout. If the user sets `MCP access token` in plugin settings, every request must carry `Authorization: Bearer <token>` (401 otherwise). If the token is blank, any local process can connect — treat canvas contents accordingly.
 
 ---
 
@@ -198,3 +198,14 @@ Toggling `Enable MCP server` starts/stops the server live, but changing `MCP por
 | `Mode "…" is not supported by <provider> for <modelId>. Supported modes: …` | The mode isn't offered by the model's active provider. Use a mode from the model's `list_models` entry. |
 | `Settings not available` | MCP server started without the settings callback — shouldn't happen in practice. |
 | `Generation not available` | MCP started without the `runGeneration` callback — same, shouldn't happen. |
+
+
+## Task recovery and shared assets
+
+Transient network errors and HTTP 408, 429, or 5xx retry status/download checks after 5, 10, 20, 40, then 60 seconds, respecting a longer valid Retry-After. They never resubmit generation. Credentials, unknown responses and local storage errors require **Resume checking** from the placeholder menu or command palette. Keep the existing task ID; do not call `generate` to recover it.
+
+Source canvas, source node and output directory are captured before generation. Tasks on unopened canvases remain stored while another canvas is open or settings change. Downloaded file paths are saved before canvas updates, so a failed save can resume without another generation. If the placeholder was deleted, the output stays in the asset directory and a notice explains its location.
+
+**Tidy up generated files** copies assets and updates only the selected canvas. Original files remain available to other canvases and notes. A canvas backup is saved first; partial failures are reported. It does not delete old files across the vault.
+
+HTTP 403 means an invalid Host or Origin, 415 requires JSON, 413 exceeds the body limit, and 408 means body upload timed out. HTTP 401 means the configured MCP token was missing or incorrect.
