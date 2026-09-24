@@ -129,9 +129,12 @@ Text model output is a text node. Bragi validates upstream media against a model
 | ElevenLabs Music | `elevenlabs-music` | ElevenLabs / fal.ai | music | `music_length_ms` 3–300s, instrumental toggle |
 | MiniMax Music | `minimax-music` | MiniMax / fal.ai | music | instrumental OR with-lyrics (needs upstream text node for lyrics) |
 | Mureka Music | `mureka-music` | Mureka | music | `generation_mode`: `prompt`, `lyrics`, or `instrumental`; lyrics mode needs upstream text |
+| Sonilo Music | `sonilo-music` | Sonilo | music, video-to-music | Text mode: `duration` 5–360s. Video mode: one upstream video, `prompt_influence` 0–1. Both: `output_format` MP3/M4A/WAV. |
 | ElevenLabs SFX v2 | `elevenlabs-sfx` | ElevenLabs / fal.ai / SVRouter | sound-effect | `duration` ∈ {1,3,5,10,20,30}s |
 
 Mureka Music is asynchronous. The target node remains the music/style prompt in all three generation modes. In `lyrics` mode, ordered upstream text nodes are joined as lyrics; in `prompt` mode Mureka writes the song from the target prompt; in `instrumental` mode it uses the target prompt without vocals. Bragi always requests one Mureka choice per task and uses `batchCount` 1–4 for variations.
+
+Sonilo Music is asynchronous. `music` sends the target prompt to text-to-music. `video-to-music` requires exactly one directed upstream video file and uses the target prompt to guide its score; Bragi uploads the video through its temporary Relay. The video determines output duration. Sonilo receives one variant per task; `batchCount` creates separate tasks. Both modes return an audio file node after polling.
 
 Three audio-node utilities exist in the Obsidian UI, but they are **not MCP `generate` models** today and do not appear in `list_models`:
 
@@ -182,5 +185,6 @@ The user has to configure at least one provider key and connect that provider to
 - Luma key → Luma Uni-1 image generation
 - MiniMax key → native TTS/Music and voice ref cloning
 - Mureka key → prompt-to-song, upstream-lyrics-to-song, and instrumental music generation
+- Sonilo key → text-to-music and soundtrack generation from one upstream video
 - ElevenLabs key → native TTS/Music/SFX and voice ref cloning (TTS returns binary mp3)
 - Legnext key → Midjourney V8.2 / niji 7

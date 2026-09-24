@@ -23,7 +23,7 @@ When calling `connect_nodes`, leave `toEnd` at its default (`"arrow"`) unless yo
 `generate` resolves immediately after creating the placeholder node(s). The real provider call runs in the background. You get `placeholderIds` back — use them to track what you just started.
 
 - Types without an exposed task ID (image, text, and most audio): re-read the placeholder with `get_node(placeholderId)` after a short wait. When its type/content changes it's done. Red color + error text = failure. SV NewAPI image routes can poll the gateway internally for up to 10 minutes; they still do not appear in `list_pending_tasks`, so check the placeholder at measured intervals.
-- Async types (video and providers such as Mureka Music): use `list_pending_tasks` and `get_task_status(taskId)` after submission. When the task disappears from the queue, check the placeholder. These tasks persist across plugin restarts and reopen with the matching canvas.
+- Async types (video and providers such as Mureka or Sonilo Music): use `list_pending_tasks` and `get_task_status(taskId)` after submission. When the task disappears from the queue, check the placeholder. These tasks persist across plugin restarts and reopen with the matching canvas. Sonilo `video-to-music` requires exactly one upstream video and sends it through Bragi Relay; `music` uses text alone.
 
 SVRouter failures preserve the gateway's JSON error strings or plain-text response body. For failed `sv-seedance-2.5` task polls, the placeholder error includes `error.code — error.message` when both are present, including any request ID in the message. Read and report those details when diagnosing a failed task; other video models keep their existing message-only presentation.
 
