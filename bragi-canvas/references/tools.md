@@ -232,12 +232,14 @@ Trigger a generation. Returns immediately once the placeholder is created; the p
 - For `video` and async `audio` such as Mureka or Sonilo Music: call `list_pending_tasks` or `get_task_status(taskId)` after the provider has submitted the task. When the task disappears, inspect the placeholder as above.
 
 ### `list_pending_tasks`
-No params. Returns all currently pending async audio and video tasks:
+No params. Returns all retained async audio and video tasks, including closed canvases and tasks needing attention:
 ```
 [{ taskId, modelName, providerName, outputType: "audio" | "video", sourceNodeId,
-   placeholderNodeId, canvasPath, elapsedMs }, ...]
+   placeholderNodeId, canvasPath, elapsedMs,
+   state: "waiting-canvas" | "polling" | "retrying" | "needs-attention" | "ready-to-apply",
+   nextRetryAt?, lastError? }, ...]
 ```
-Empty array means no async work in flight.
+`nextRetryAt` is a Unix timestamp in milliseconds; `lastError` is a short diagnostic. A waiting or attention state does not authorize a new generation request. Open the source canvas and use **Resume checking** after fixing the issue. Empty means no retained tasks.
 
 ### `get_task_status`
 **Params** `{ taskId }`
@@ -245,4 +247,4 @@ Empty array means no async work in flight.
 - `{ status: "pending", taskId, modelName, providerName, outputType: "audio" | "video", ..., elapsedMs }` — still running
 - `{ status: "not_found", taskId }` — completed, failed, or never existed. Inspect `placeholderNodeId` on the canvas to see the actual outcome.
 
-**Note:** Tasks are removed from the queue the moment they complete (success or failure). "not_found" isn't an error — it's the signal that the placeholder is now the authoritative source of truth.
+**Note:** Tasks leave the queue after a result is saved and applied, or after an explicit remote failure/cancellation. Network, credential, and local-write errors retain the original task. "not_found" isn't an error — it's the signal that the placeholder is now the authoritative source of truth.

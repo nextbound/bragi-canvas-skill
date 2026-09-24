@@ -373,3 +373,12 @@ One RPC instead of 30.
 - 400–500px horizontal spacing between sequential shots
 - 300×200 default text node is usually too tall for one-line prompts — set `height: 100`
 - Vertical columns for variants, horizontal rows for sequence
+
+
+## Recover an interrupted generation
+
+1. Call `list_pending_tasks` and locate the existing provider/task pair.
+2. For `waiting-canvas`, open its `canvasPath`. For `retrying`, wait until `nextRetryAt`.
+3. For `needs-attention`, inspect `lastError`, fix the provider credentials or local storage, and use **Resume checking** in Obsidian.
+4. For `ready-to-apply`, reopen the source canvas so Bragi can finish saving the downloaded result.
+5. Recheck the placeholder or saved output. Do not submit a new generation as a retry.
