@@ -215,6 +215,7 @@ For Mureka Music, use `modelId: "mureka-music"` and one of the `generation_mode`
 - `instrumental`: the target node describes the instrumental music.
 
 Mureka is async. Bragi sends one choice per task and maps `batchCount` 1–4 to separate variations. After the provider task appears, track it with `list_pending_tasks`; when it disappears, inspect the placeholder/file node.
+For Sonilo Music, use `modelId: "sonilo-music"` with `mode: "music"` for a target text prompt, `duration` 5–360 seconds, and `output_format` (`mp3`, `m4a`, or `wav`). To score a video, connect exactly one video file node with a directed arrow into the target prompt node, then use `mode: "video-to-music"`; its length follows the video, and `prompt_influence` ranges from 0 to 1. Sonilo is async, so track the task and inspect the completed audio file node.
 For SFX: use `modelId: "elevenlabs-sfx"`, `mode: "sound-effect"`, and `duration` from {1,3,5,10,20,30}.
 
 For voice reference cloning in the Obsidian UI, connect an upstream audio file to a TTS prompt and choose the `Voice ref` source mode. Native ElevenLabs and MiniMax TTS can clone from the upstream audio; MCP `generate` can use an already-created custom voice ID via the model's `voice` param.

@@ -214,7 +214,7 @@ Trigger a generation. Returns immediately once the placeholder is created; the p
 **Params**
 - `nodeId` — must contain (or have upstream) prompt text
 - `modelId` — from `list_models`
-- `mode?` — must be one of the modes in the selected model's `list_models` entry (the active provider's modes). MCP validates it and rejects unsupported modes with `Mode "…" is not supported by …`. Common video modes include `"text-to-video" | "first-frame" | "first-last-frame" | "image-ref" | "video-ref" | "video-extend"`, audio modes include `"tts" | "music" | "sound-effect"`. Defaults to the first mode in that `list_models` entry (the active provider's first mode), not necessarily the catalogue default.
+- `mode?` — must be one of the modes in the selected model's `list_models` entry (the active provider's modes). MCP validates it and rejects unsupported modes with `Mode "…" is not supported by …`. Common video modes include `"text-to-video" | "first-frame" | "first-last-frame" | "image-ref" | "video-ref" | "video-extend"`, audio modes include `"tts" | "music" | "video-to-music" | "sound-effect"`. Defaults to the first mode in that `list_models` entry (the active provider's first mode), not necessarily the catalogue default.
 - `params?` — model-specific; pass only params present in the model's `list_models` entry for that provider (params hidden for the provider are ignored)
 - `batchCount?` — 1–4, default 1
 
@@ -229,7 +229,7 @@ Trigger a generation. Returns immediately once the placeholder is created; the p
 
 **How to track completion:**
 - For `image`/`text` and synchronous `audio`: call `get_node(placeholderId)` after a short delay. A file/text node = success. A red node with error text = failure.
-- For `video` and async `audio` such as Mureka Music: call `list_pending_tasks` or `get_task_status(taskId)` after the provider has submitted the task. When the task disappears, inspect the placeholder as above.
+- For `video` and async `audio` such as Mureka or Sonilo Music: call `list_pending_tasks` or `get_task_status(taskId)` after the provider has submitted the task. When the task disappears, inspect the placeholder as above.
 
 ### `list_pending_tasks`
 No params. Returns all currently pending async audio and video tasks:
