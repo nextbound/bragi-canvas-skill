@@ -139,7 +139,7 @@ With xAI active, `grok-video` is aggregated: Grok Imagine Video 1.5 handles text
 
 ## 9f. MiniMax-H3 frame and reference inputs are mutually exclusive
 
-For `minimax-h3`, `first-frame` requires exactly one ordered image and `first-last-frame` requires exactly two. Neither mode may include reference video or audio. Use `image-ref` for images with optional audio, or `video-ref` for at least one video with optional image/audio references. Audio-only generation is rejected by APIMart. Every MiniMax-H3 prompt is still required, including reference modes, and is limited to 7000 characters.
+For `minimax-h3`, `first-frame` requires exactly one ordered image and `first-last-frame` requires exactly two. Neither mode may include reference video or audio. Use `image-ref` for images with optional audio, or `video-ref` for video with optional image/audio references. Pika also accepts audio-only input through `video-ref`; APIMart rejects audio-only input. Every MiniMax-H3 prompt is required. APIMart caps prompts at 7000 characters.
 
 ---
 

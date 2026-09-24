@@ -124,7 +124,7 @@ The drag-sort order of the two images (stored as `bragiImageOrder` on the node) 
 
 ## 6a. MiniMax-H3 multimodal reference
 
-MiniMax-H3 uses distinct Bragi modes for frame control and multimodal references even though APIMart infers the upstream mode from request fields.
+MiniMax-H3 uses distinct Bragi modes for frame control and multimodal references. APIMart infers the upstream mode from request fields; Pika routes to three separate endpoints.
 
 For character + voice reference generation:
 
@@ -141,7 +141,7 @@ For character + voice reference generation:
 
 For motion video + optional character/voice references, connect at least one video and use `mode: "video-ref"`. This mode accepts up to 3 videos, 9 images, and 3 audio clips. Audio cannot be used alone. If one or two images are intended as first/last frames, use `first-frame` or `first-last-frame` and disconnect every video/audio reference first.
 
-All MiniMax-H3 inputs are automatically copied to temporary Bragi Relay URLs before APIMart receives the request.
+With Pika selected, `video-ref` also accepts audio-only references. Cite ordered references in the prompt as `@Image1`, `@Video1`, and `@Audio1`. All local MiniMax-H3 inputs are copied to temporary Bragi Relay URLs before either provider receives the request.
 
 ---
 
