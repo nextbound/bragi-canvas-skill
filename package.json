@@ -1,5 +1,8 @@
 {
   "name": "bragi-canvas-skill-checks",
   "private": true,
-  "scripts": { "verify": "node scripts/verify.mjs" }
+  "scripts": {
+    "verify": "npm run check:english && node scripts/verify.mjs",
+    "check:english": "node scripts/check-english.mjs"
+  }
 }
