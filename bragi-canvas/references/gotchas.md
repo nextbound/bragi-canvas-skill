@@ -204,7 +204,7 @@ Toggling `Enable MCP server` starts/stops the server live, but changing `MCP por
 
 DashScope limits voice-design preview text to 200 characters for CosyVoice and 1,024 for Qwen. These limits apply to the preview used to create a voice, not to the final speech text or the upstream voice description.
 
-The unreleased preview-limit fix on plugin main collapses whitespace and clips only that outgoing preview at Unicode code-point boundaries. It uses an English/Chinese character-count heuristic for the provider language hint; this is not general multilingual language detection. No hint is added when neither Latin letters nor Han characters are present. The released 1.40.1 build does not include this fix; do not assume the installed plugin has it merely because the Skill is updated.
+Plugin 1.40.2 and later collapses whitespace and clips only that outgoing preview at Unicode code-point boundaries. It uses an English/Chinese character-count heuristic for the provider language hint; this is not general multilingual language detection. No hint is added when neither Latin letters nor Han characters are present. Older builds, including 1.40.1, do not include this fix; confirm the installed plugin version before relying on it.
 
 ## Task recovery and shared assets
 
