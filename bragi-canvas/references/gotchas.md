@@ -200,6 +200,12 @@ Toggling `Enable MCP server` starts/stops the server live, but changing `MCP por
 | `Generation not available` | MCP started without the `runGeneration` callback — same, shouldn't happen. |
 
 
+## DashScope voice-design previews
+
+DashScope limits voice-design preview text to 200 characters for CosyVoice and 1,024 for Qwen. These limits apply to the preview used to create a voice, not to the final speech text or the upstream voice description.
+
+The unreleased preview-limit fix on plugin main collapses whitespace and clips only that outgoing preview at Unicode code-point boundaries. It uses an English/Chinese character-count heuristic for the provider language hint; this is not general multilingual language detection. No hint is added when neither Latin letters nor Han characters are present. The released 1.40.1 build does not include this fix; do not assume the installed plugin has it merely because the Skill is updated.
+
 ## Task recovery and shared assets
 
 Transient network errors and HTTP 408, 429, or 5xx retry status/download checks after 5, 10, 20, 40, then 60 seconds, respecting a longer valid Retry-After. Five unsuccessful automatic retries pause checking. A successful pending response resets the consecutive error count, but not the 15-minute checking window. The window starts when a task is accepted or manually resumed and persists across restarts; elapsed time while its canvas is closed still counts. Expiry pauses even an in-flight check. A late successful result can still be saved and applied.
