@@ -69,6 +69,8 @@ Seedance 2.5 uses upstream model `doubao-seedance-2-5-260628` on Volcengine, `dr
 
 BytePlus Seedance defaults to `https://ark.ap-southeast.bytepluses.com/api/v3/contents/generations/tasks`, but the provider settings can override the complete task endpoint for Seedance 2.0, Seedance 2.0 Fast, and Seedance 2.5. Bragi normalizes trailing slashes and polls by appending `/{task_id}` to the configured task endpoint.
 
+A custom BytePlus API model ID such as an inference endpoint identifies where to send a request; it does not change the selected catalog model's capabilities. Continue using the catalog `modelId` returned by `list_models` in MCP `generate`. Bragi resolves the configured API ID internally and keeps Seedance 2.0, 2.0 Fast, and 2.5 rules tied to the selected model. Providers that route by mode, including DashScope Wan, retain their own upstream routing.
+
 Seedance 2.5 determines reference-to-video, editing, and extension subtasks partly from prompt intent. For `video-edit`, explicitly use editing language such as “add”, “remove”, “replace”, or “change”. For `video-extend`, explicitly say “extend”, “continue”, or “continue the story”. This avoids the provider classifying the queued task differently and returning an asynchronous `InvalidParameter.TaskTypeConstraint` failure.
 
 TokenRouter Seedance maps `seedance-2.0` / `seedance-2.0-fast` to Dreamina model IDs and accepts reference images, audio, and videos. When both a TokenRouter key and TokenRouter Asset group ID are configured, Bragi routes reference images/audio/videos through that explicit ModelArk group and passes them as `asset://...`; without a group ID, local refs use temporary HTTPS URLs. BytePlus and Volcengine keep their own provider-scoped asset IDs.
