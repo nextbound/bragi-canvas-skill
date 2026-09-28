@@ -236,15 +236,15 @@ No params. Returns all retained async audio and video tasks, including closed ca
 ```
 [{ taskId, modelName, providerName, outputType: "audio" | "video", sourceNodeId,
    placeholderNodeId, canvasPath, elapsedMs,
-   state: "waiting-canvas" | "polling" | "retrying" | "needs-attention" | "ready-to-apply",
-   nextRetryAt?, lastError? }, ...]
+   state: "waiting-canvas" | "polling" | "downloading" | "retrying" | "needs-attention" | "ready-to-apply",
+   nextRetryAt?, lastError?, retryCount?, checkDeadlineAt? }, ...]
 ```
-`nextRetryAt` is a Unix timestamp in milliseconds; `lastError` is a short diagnostic. A waiting or attention state does not authorize a new generation request. Open the source canvas and use **Resume checking** after fixing the issue. Empty means no retained tasks.
+`nextRetryAt` and `checkDeadlineAt` are Unix timestamps in milliseconds; `lastError` is a short diagnostic. `retryCount` counts consecutive failed checks and resets after a successful pending response or manual resume. Automatic checking pauses after five retries or a 15-minute checking window. `downloading` is reported when the provider exposes that phase (currently SVRouter video). A waiting or attention state does not authorize a new generation request. Open the source canvas and use **Resume checking** after fixing the issue. Empty means no retained tasks.
 
 ### `get_task_status`
 **Params** `{ taskId }`
 **Returns**
-- `{ status: "pending", taskId, modelName, providerName, outputType: "audio" | "video", ..., elapsedMs }` — still running
+- `{ status: "pending", taskId, modelName, providerName, outputType: "audio" | "video", ..., elapsedMs, state, nextRetryAt?, lastError?, retryCount?, checkDeadlineAt? }` — retained; inspect `state` to distinguish active, retrying and paused checks. State and timing fields have the same meaning as `list_pending_tasks`.
 - `{ status: "not_found", taskId }` — completed, failed, or never existed. Inspect `placeholderNodeId` on the canvas to see the actual outcome.
 
 **Note:** Tasks leave the queue after a result is saved and applied, or after an explicit remote failure/cancellation. Network, credential, and local-write errors retain the original task. "not_found" isn't an error — it's the signal that the placeholder is now the authoritative source of truth.

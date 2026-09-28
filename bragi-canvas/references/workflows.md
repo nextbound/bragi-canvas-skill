@@ -378,7 +378,7 @@ One RPC instead of 30.
 ## Recover an interrupted generation
 
 1. Call `list_pending_tasks` and locate the existing provider/task pair.
-2. For `waiting-canvas`, open its `canvasPath`. For `retrying`, wait until `nextRetryAt`.
-3. For `needs-attention`, inspect `lastError`, fix the provider credentials or local storage, and use **Resume checking** in Obsidian.
+2. For `waiting-canvas`, open its `canvasPath`. For `retrying`, wait until `nextRetryAt`; for `downloading`, wait for the output. Five failed automatic retries or expiry of `checkDeadlineAt` pauses checks.
+3. For `needs-attention`, inspect `lastError`, address the reported connection/storage issue if needed, and use **Resume checking** on the node in Obsidian. This stops the paused presentation and opens a fresh 15-minute checking window for the existing task. Do not treat the outer MCP `status: "pending"` as evidence that checking is still running.
 4. For `ready-to-apply`, reopen the source canvas so Bragi can finish saving the downloaded result.
 5. Recheck the placeholder or saved output. Do not submit a new generation as a retry.
