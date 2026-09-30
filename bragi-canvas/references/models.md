@@ -20,6 +20,8 @@ Model IDs below are exact strings to pass as `modelId` in `generate`.
 | Midjourney niji 7 | `midjourney-niji-7` | Legnext | text-to-image | `ar` (7), `stylize` |
 | Luma Uni-1 | `luma-uni-1` | Luma | text-to-image, image-ref-to-image | `aspectRatio` (5) |
 | FLUX.2 Klein 9B | `flux-2-klein-9b` | BFL / Runpod / fal.ai | text-to-image, image-ref-to-image | `aspectRatio` (9), `targetLongEdge` (1K/2K/3K; Runpod/fal max 2K), provider denoise defaults |
+| Seedream 5.0 Pro | `seedream-5.0-pro` | Volcengine / BytePlus | text-to-image (accepts up to 10 image refs) | `aspectRatio` (8), `resolution` (1K/1.5K/2K), `optimizeMode` (Standard/Fast) |
+| Seedream 5.0 Flash | `seedream-5.0-flash` | Volcengine / BytePlus | text-to-image (accepts up to 10 image refs) | `aspectRatio` (8), `resolution` (1K/1.5K/2K) |
 | Seedream 5.0 | `seedream-5.0` | Volcengine | text-to-image | `aspectRatio` (8), `resolution` (2K/3K) |
 | Seedream 5.0 Lite | `seedream-5.0-lite` | Volcengine / BytePlus / SVRouter | text-to-image | `aspectRatio` (8), `resolution` (2K/3K/4K) |
 | Seedream 4.5 | `seedream-4.5` | Volcengine / TokenRouter | text-to-image | `aspectRatio` (8), `resolution` (2K/4K) |
@@ -29,6 +31,8 @@ Model IDs below are exact strings to pass as `modelId` in `generate`.
 GPT Image 2's OpenAI and OpenAI-compatible image routes convert `imageSize` + `aspectRatio` into a concrete pixel `size`; APIMart and SVRouter's GPT Image 2 family send the selected aspect ratio as `size` and the same tier as `resolution`. APIMart's stable `gpt-image-2` Bragi model ID routes to the official upstream model ID so `quality` is honored. `gpt-image-2-official` remains a separate Bragi model for explicitly selecting the APIMart/SVRouter official channel; the non-official SV gateway route deliberately does not forward the OpenAI `quality` enum. SVRouter Nano Banana Pro also uses the APIMart-style `size` + `resolution` payload shape.
 
 GPT Image 2.5 is one Bragi model with two upstream builds behind the `variant` param: `flare` (faster, the default) and `sunburst` (editing precision). It reuses the APIMart `size` + `resolution` payload shape but has no Auto size tier and adds two quality tiers (`xhigh`, `max`); both builds honor `quality` and accept up to 16 reference images via `image_urls`. Pass `variant` in `params` — the bare `gpt-image-2.5` id is not callable upstream, so Bragi appends the selected build for you. Like GPT Image 2, it takes ordered upstream image nodes while keeping MCP mode `text-to-image`.
+
+Seedream 5.0 Pro and Flash each produce one image from text plus up to 10 ordered upstream image refs; Lite and 4.5 accept up to 14. Keep MCP mode `text-to-image` for all of them. Both cap output at 2K; 1.5K costs the same as 1K upstream and renders better. Only Pro takes `optimizeMode: "fast"`, which trades a little quality for lower latency. Flash is already the low-latency model and has no `optimizeMode` param. Seedream images are saved as `.jpg`, because the upstream default is JPEG.
 
 Midjourney keeps the stable Bragi model ID `midjourney-v8` while targeting V8.2 through Legnext. Standard output omits `--hd`; 2K HD appends it and is billed by Legnext at 1.5x the Standard rate. V8.2 rejects `--q` / `--quality`, so those controls are not exposed. Explicit Midjourney flags already written in the prompt take precedence over catalogue params.
 
@@ -69,7 +73,7 @@ Seedance 2.5 uses upstream model `doubao-seedance-2-5-260628` on Volcengine, `dr
 
 BytePlus Seedance defaults to `https://ark.ap-southeast.bytepluses.com/api/v3/contents/generations/tasks`, but the provider settings can override the complete task endpoint for Seedance 2.0, Seedance 2.0 Fast, and Seedance 2.5. Bragi normalizes trailing slashes and polls by appending `/{task_id}` to the configured task endpoint.
 
-A custom BytePlus API model ID such as an inference endpoint identifies where to send a request; it does not change the selected catalog model's capabilities. Continue using the catalog `modelId` returned by `list_models` in MCP `generate`. Bragi resolves the configured API ID internally and keeps Seedance 2.0, 2.0 Fast, and 2.5 rules tied to the selected model. Providers that route by mode, including DashScope Wan, retain their own upstream routing.
+Every Volcengine and BytePlus model (Seedance and Seedream) lets the user replace the API model ID in settings, for example with a custom `ep-...` inference endpoint. A custom API model ID identifies where to send a request; it does not change the selected catalog model's capabilities. Continue using the catalog `modelId` returned by `list_models` in MCP `generate`. Bragi resolves the configured API ID internally and keeps Seedance 2.0, 2.0 Fast, and 2.5 rules tied to the selected model. Providers that route by mode, including DashScope Wan, retain their own upstream routing.
 
 Seedance 2.5 determines reference-to-video, editing, and extension subtasks partly from prompt intent. For `video-edit`, explicitly use editing language such as “add”, “remove”, “replace”, or “change”. For `video-extend`, explicitly say “extend”, “continue”, or “continue the story”. This avoids the provider classifying the queued task differently and returning an asynchronous `InvalidParameter.TaskTypeConstraint` failure.
 
@@ -168,8 +172,8 @@ The user has to configure at least one provider key and connect that provider to
 - OpenAI key → GPT Image 2, GPT-5.5, GPT-5.5 Pro
 - Gemini key → Nano Banana Pro/2, Veo 3.1 (+Lite), Gemini 3.x text including Gemini 3.5 Flash
 - Anthropic key OR AWS Bedrock → Claude 4.x text
-- Volcengine (ARK) key → Seedream / Seedance 2.5 / 2.0 native
-- BytePlus key → Seedance 2.5 / 2.0 on the configurable international endpoint (+ explicit Asset group ID for face refs) and Seedream 5.0 Lite image generation
+- Volcengine (ARK) key → Seedream (5.0 Pro / Flash / 5.0 / Lite / 4.5) / Seedance 2.5 / 2.0 native. Each model must also be activated in the Ark console.
+- BytePlus key → Seedance 2.5 / 2.0 on the configurable international endpoint (+ explicit Asset group ID for face refs) and Seedream 5.0 Pro / Flash / Lite image generation
 - Token360 key → Seedance 2.0 / 2.0 Fast via `https://api.token360.ai/v1` (+ optional Asset group ID for RealFace / Virtual Portrait image refs)
 - Kling AK+SK → Kling 2.6 / 3.0 / 3.0 Omni native
 - Pika key → Kling 3.0 aggregated routes

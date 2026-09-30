@@ -141,6 +141,10 @@ With xAI active, `grok-video` is aggregated: Grok Imagine Video 1.5 handles text
 
 For `minimax-h3`, `first-frame` requires exactly one ordered image and `first-last-frame` requires exactly two. Neither mode may include reference video or audio. Use `image-ref` for images with optional audio, or `video-ref` for video with optional image/audio references. Pika also accepts audio-only input through `video-ref`; APIMart rejects audio-only input. Every MiniMax-H3 prompt is required. APIMart caps prompts at 7000 characters.
 
+## 9g. Seedream 5.0 Pro / Flash limits
+
+`seedream-5.0-pro` and `seedream-5.0-flash` accept at most 10 upstream image refs. An 11th ref fails with `Seedream: InvalidParameter — ... number of reference images cannot exceed 10`. They output one image per run at 1K / 1.5K / 2K, and there is no sequential image set. Only Pro accepts `optimizeMode: "fast"`. A placeholder that fails with `Seedream: ModelNotOpen — Your account ... has not activated the model ...` has a valid key, but the model is not activated for that account in the Volcengine or BytePlus Ark console. Ask the user to activate it there, or switch the model's provider in settings.
+
 ---
 
 ## 10. Denoise actions are UI-only
