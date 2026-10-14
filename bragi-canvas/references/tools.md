@@ -211,11 +211,14 @@ Notes:
 ### `generate`
 Trigger a generation. Returns immediately once the placeholder is created; the provider call runs in the background.
 
+For the unreleased BreezeBlue candidate, use `modelId: "breeze-tts-2-multilingual"`, `mode: "tts"`, and `params: { preview_count: 3 }`. The model automatically uses Design; a directed upstream text node supplies the voice description and the target node supplies the spoken preview script. Optional `voiceDesignTextIndex` selects the upstream description by zero-based text-reference order. Both texts must contain 3–500 characters. Each request has one placeholder, replaced with 1–3 audio file nodes; use `list_nodes` or `get_downstream` to collect all resulting candidates, then connect the chosen file to a compatible video prompt. No save-voice or final TTS call is made. `batchCount` still submits separate requests and multiplies the total candidate count.
+
 **Params**
 - `nodeId` — must contain (or have upstream) prompt text
 - `modelId` — from `list_models`
 - `mode?` — must be one of the modes in the selected model's `list_models` entry (the active provider's modes). MCP validates it and rejects unsupported modes with `Mode "…" is not supported by …`. Common video modes include `"text-to-video" | "first-frame" | "first-last-frame" | "image-ref" | "video-ref" | "video-extend"`, audio modes include `"tts" | "music" | "video-to-music" | "sound-effect"`. Defaults to the first mode in that `list_models` entry (the active provider's first mode), not necessarily the catalogue default.
 - `params?` — model-specific; pass only params present in the model's `list_models` entry for that provider (params hidden for the provider are ignored)
+- Voice-source controls may additionally use `voiceMode: "builtin" | "reference" | "design"` and zero-based `voiceDesignTextIndex` / `voiceRefAudioIndex` where supported. `list_models` reports `voiceSources` and, for Design, `voiceDesignOutput` (`"voice-id"` or `"audio-previews"`).
 - `batchCount?` — 1–4, default 1
 
 **Returns**

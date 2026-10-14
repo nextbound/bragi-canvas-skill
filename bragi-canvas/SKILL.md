@@ -9,6 +9,8 @@ Bragi Canvas turns an Obsidian `.canvas` file into a node-based AI generation pi
 
 Current skill target: Bragi Canvas plugin **1.41.0**.
 
+The paired `feat/breezeblue-previews` candidate adds BreezeBlue reference-audio generation. Use it only when `list_models` includes `breeze-tts-2-multilingual`; it has not been released with the version above. Connect a voice-description text node to a script node, generate 1–3 audio candidates, and connect the chosen audio to a compatible video prompt. No reusable voice ID or save action is needed.
+
 ## When to use this skill
 
 - User asks you to create, connect, or edit nodes on an Obsidian canvas
