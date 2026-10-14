@@ -229,7 +229,7 @@ For voice reference cloning in the Obsidian UI, connect an upstream audio file t
 3. Create a separate text node with a representative spoken line. Keep each text between 3 and 500 characters.
 4. Connect the description to the script with a directed arrow.
 5. Call `generate` on the script with `modelId: "breeze-tts-2-multilingual"`, `mode: "tts"`, `params: { preview_count: 3 }`, and `batchCount: 1`.
-6. Wait for the placeholder to disappear, collect the three resulting audio nodes through `list_nodes` or `get_downstream`, and audition the candidates.
+6. Wait for the placeholder to disappear, collect the three resulting audio nodes through `list_nodes` and `list_edges`, and audition the candidates.
 7. Connect the chosen audio to a video prompt using a model that accepts audio references. Apply that video's usual image/video reference requirements as well.
 
 The synchronous preview request creates the final reference files. It does not enroll a reusable voice or submit another TTS request.
