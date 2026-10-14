@@ -2,6 +2,15 @@
 
 The things that will silently break if you don't know them.
 
+## BreezeBlue reference-audio candidates
+
+- Require `breeze-tts-2-multilingual` in `list_models` before using this workflow. New catalog models remain disabled until explicitly enabled and connected.
+- Keep the description upstream and the spoken script in the target node. Both have a 3–500-character limit; shorten a long script deliberately rather than silently truncating it.
+- `preview_count` accepts 1–3, not 1–10. The latter is the provider's optional guidance strength, which this workflow does not expose.
+- BreezeBlue returns encoded preview audio directly. Temporary voice IDs are not saved or used for later TTS. Local audio files remain usable as video references without saving a formal voice.
+- One synchronous request may produce several file nodes. Inspect all downstream nodes after its placeholder disappears. An empty async task queue does not mean this synchronous generation has completed.
+- Do not automatically retry a failed or interrupted synchronous generation: it may already have consumed preview credits.
+
 ---
 
 ## 1. Arrow direction is load-bearing
