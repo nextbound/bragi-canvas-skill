@@ -12,7 +12,7 @@ Model IDs below are exact strings to pass as `modelId` in `generate`.
 |-------|-----------|-----------|-------|-----------|
 | GPT Image 2 | `gpt-image-2` | OpenAI / fal.ai / TokenRouter / APIMart / SVRouter | text-to-image (accepts upstream image refs) | `aspectRatio` (15 + Auto), `imageSize` (Auto/1K/2K/4K), `quality` (Auto/Low/Medium/High) |
 | GPT Image 2 (Official) | `gpt-image-2-official` | APIMart / SVRouter | text-to-image | same controls as GPT Image 2; the official channel honors `quality` |
-| GPT Image 2.5 | `gpt-image-2.5` | APIMart | text-to-image (accepts up to 16 image refs) | `variant` (flare/sunburst), `aspectRatio` (15 + Auto), `imageSize` (1K/2K/4K), `quality` (Auto/Low/Medium/High/Extra high/Max) |
+| GPT Image 2.5 | `gpt-image-2.5` | APIMart / SVRouter (unreleased) | text-to-image (accepts up to 16 image refs) | `variant` (flare/sunburst), `aspectRatio` (15 + Auto), `imageSize` (1K/2K/4K), `quality` (Auto/Low/Medium/High/Extra high/Max) |
 | Nano Banana Pro | `nano-banana-pro` | Gemini / fal.ai / TokenRouter / APIMart / SVRouter | text-to-image | `aspectRatio` (10), `imageSize` (1K/2K/4K) |
 | Nano Banana 2 | `nano-banana-2` | Gemini / fal.ai / TokenRouter / APIMart | text-to-image | `aspectRatio` (14), `imageSize` (512/1K/2K/4K) |
 | Grok Imagine | `grok-imagine` | xAI / fal.ai | text-to-image, image-ref-to-image | xAI Image 2.0: `aspectRatio` (14 incl. Auto), `resolution` (1K/2K), `quality` (Low/Medium); fal.ai keeps 9 legacy ratios |
@@ -31,6 +31,13 @@ Model IDs below are exact strings to pass as `modelId` in `generate`.
 GPT Image 2's OpenAI and OpenAI-compatible image routes convert `imageSize` + `aspectRatio` into a concrete pixel `size`; APIMart and SVRouter's GPT Image 2 family send the selected aspect ratio as `size` and the same tier as `resolution`. APIMart's stable `gpt-image-2` Bragi model ID routes to the official upstream model ID so `quality` is honored. `gpt-image-2-official` remains a separate Bragi model for explicitly selecting the APIMart/SVRouter official channel; the non-official SV gateway route deliberately does not forward the OpenAI `quality` enum. SVRouter Nano Banana Pro also uses the APIMart-style `size` + `resolution` payload shape.
 
 GPT Image 2.5 is one Bragi model with two upstream builds behind the `variant` param: `flare` (faster, the default) and `sunburst` (editing precision). It reuses the APIMart `size` + `resolution` payload shape but has no Auto size tier and adds two quality tiers (`xhigh`, `max`); both builds honor `quality` and accept up to 16 reference images via `image_urls`. Pass `variant` in `params` — the bare `gpt-image-2.5` id is not callable upstream, so Bragi appends the selected build for you. Like GPT Image 2, it takes ordered upstream image nodes while keeping MCP mode `text-to-image`.
+
+The unreleased SVRouter pairing uses the same catalog model and variant control,
+routing to `sv-gpt-image-2.5-flare` or `sv-gpt-image-2.5-sunburst`. Configure the
+SVRouter gateway token in Bragi, not the upstream APIMart key. Adding this pairing
+does not enable the model or change an existing APIMart selection; connect and
+select SVRouter explicitly in settings. The gateway submits asynchronous image
+tasks and returns public result URLs, which Bragi downloads without gateway auth.
 
 Seedream 5.0 Pro and Flash each produce one image from text plus up to 10 ordered upstream image refs; Lite and 4.5 accept up to 14. Keep MCP mode `text-to-image` for all of them. Both cap output at 2K; 1.5K costs the same as 1K upstream and renders better. Only Pro takes `optimizeMode: "fast"`, which trades a little quality for lower latency. Flash is already the low-latency model and has no `optimizeMode` param. Seedream images are saved as `.jpg`, because the upstream default is JPEG.
 
@@ -61,9 +68,24 @@ MuleRouter Z-Image Spicy maps the selected `aspectRatio` to fixed dimensions ins
 | Veo 3.1 Lite | `veo-3.1-lite` | Gemini | text-to-video, first-frame (no image-ref) | same as 3.1 |
 | Grok Video | `grok-video` | xAI / fal.ai / SVRouter | provider-dependent; xAI Video 1.5 adds video-edit, fal.ai/SVRouter keep text-to-video, first-frame, image-ref, video-extend | `duration` (xAI 1–15s; extend 2–10s), `aspect_ratio` (7), `resolution` (480p/720p/1080p; image-ref max 720p) |
 | MiniMax-H3 | `minimax-h3` | APIMart / Pika | text-to-video, first-frame, first-last-frame, image-ref, video-ref | `duration` (4–15s), `resolution` (2K/768P), `aspect_ratio` (Adaptive + 6 fixed ratios), `watermark` |
+| Fast H3 Omni (unreleased) | `fast-h3-omni` | SVRouter | text-to-video, first-frame, first-last-frame, image-ref | `seconds` (5.875/8/10.125/12.25/14.375), `canvas` (16:9/1:1/9:16/4:3), `seed` |
 | Omni-Flash-Ext | `omni-flash-ext` | APIMart / SuChuang | text-to-video, first-frame, multi-image-ref, video-ref | `duration` (4/6/8/10s), `resolution` (720p/1080p/4k), `aspect_ratio` (16:9/9:16) |
 
 **All video generations are async.** `generate` returns `generation_started` and the result lands on the canvas minutes later.
+
+Fast H3 Omni requires the unreleased plugin integration and the SVRouter Reactor
+worker/channel deployment. Its gateway model ID is `sv-fast-h3-omni`; do not pass
+that provider ID as the MCP catalog `modelId`. Keep `seconds` fractional: these
+are exact allowed clip lengths, not rounded whole-second durations. Canvas
+selects fixed output dimensions; arbitrary resolution and video references are
+unsupported. Image-reference generation takes up to nine images and three
+ordered audio references (native prompt tokens `<Picture 1>`, `<Audio 1>`, and so on). Frame modes also
+require an appearance reference image. Each job has an independent bounded GPU
+session; output duration differs from billable GPU time. Bragi downloads the
+completed MP4 from the authenticated gateway content endpoint and retains the
+accepted task for normal resume checking. A completed live MP4 remains unverified
+because the upstream probe failed in GPU execution before playback; use the
+draft integration for review until an end-to-end run is confirmed.
 
 HappyHorse 1.1 is aggregated on DashScope: the mode picks the upstream id (`happyhorse-1.1-t2v` / `-i2v` / `-r2v`, and `happyhorse-1.0-video-edit` for video-edit, because Alibaba ships no 1.1 editing build). `first-frame` takes exactly one image and ignores `ratio`; `image-ref` takes 1-9 reference images; `video-edit` takes one upstream video plus 0-5 reference images and follows the source clip's length, so it exposes neither `duration` nor `ratio`. Reference media goes up as Bragi Relay HTTPS URLs, and the model, endpoint, and API key must all belong to the region the DashScope base URL points at.
 

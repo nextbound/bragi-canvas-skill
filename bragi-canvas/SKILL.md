@@ -9,6 +9,11 @@ Bragi Canvas turns an Obsidian `.canvas` file into a node-based AI generation pi
 
 Current skill target: Bragi Canvas plugin **1.41.0**.
 
+The SVRouter GPT Image 2.5 pairing and Fast H3 Omni documented below require
+the unreleased `feat/svrouter-gpt25-reactor-h3` plugin changes. Stock 1.41.0
+supports GPT Image 2.5 on APIMart only and does not include Fast H3 Omni.
+Use `list_models` to confirm the installed build and explicitly enabled models.
+
 ## When to use this skill
 
 - User asks you to create, connect, or edit nodes on an Obsidian canvas
