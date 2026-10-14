@@ -211,7 +211,7 @@ Notes:
 ### `generate`
 Trigger a generation. Returns immediately once the placeholder is created; the provider call runs in the background.
 
-For the unreleased BreezeBlue candidate, use `modelId: "breeze-tts-2-multilingual"`, `mode: "tts"`, and `params: { preview_count: 3 }`. The model automatically uses Design; a directed upstream text node supplies the voice description and the target node supplies the spoken preview script. Optional `voiceDesignTextIndex` selects the upstream description by zero-based text-reference order. Both texts must contain 3–500 characters. Each request has one placeholder, replaced with 1–3 audio file nodes; use `list_nodes` and `list_edges` to collect all resulting candidates, then connect the chosen file to a compatible video prompt. No save-voice or final TTS call is made. `batchCount` still submits separate requests and multiplies the total candidate count.
+For BreezeBlue, use `modelId: "breeze-tts-2-multilingual"`, `mode: "tts"`, and `params: { preview_count: 3 }`. The model automatically uses Design; a directed upstream text node supplies the voice description and the target node supplies the spoken preview script. Optional `voiceDesignTextIndex` selects the upstream description by zero-based text-reference order. Both texts must contain 3–500 characters. Each request has one placeholder, replaced with 1–3 audio file nodes; use `list_nodes` and `list_edges` to collect all resulting candidates, then connect the chosen file to a compatible video prompt. No save-voice or final TTS call is made. `batchCount` still submits separate requests and multiplies the total candidate count.
 
 **Params**
 - `nodeId` — must contain (or have upstream) prompt text

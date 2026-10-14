@@ -2,7 +2,7 @@
 
 The things that will silently break if you don't know them.
 
-## BreezeBlue reference-audio candidates (unreleased)
+## BreezeBlue reference-audio candidates
 
 - Require `breeze-tts-2-multilingual` in `list_models` before using this workflow. New catalog models remain disabled until explicitly enabled and connected.
 - Keep the description upstream and the spoken script in the target node. Both have a 3–500-character limit; shorten a long script deliberately rather than silently truncating it.

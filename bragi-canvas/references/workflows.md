@@ -222,7 +222,7 @@ For voice reference cloning in the Obsidian UI, connect an upstream audio file t
 
 ---
 
-## BreezeBlue voice references for video (unreleased candidate)
+## BreezeBlue voice references for video
 
 1. Require the enabled `breeze-tts-2-multilingual` model in `list_models`.
 2. Create a text node describing the reusable voice, including audible texture, accent and habitual pacing.
