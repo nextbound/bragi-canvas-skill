@@ -151,6 +151,7 @@ Text model output is a text node. Bragi validates upstream media against a model
 
 | Model | `modelId` | Providers | Mode(s) | Key params |
 |-------|-----------|-----------|---------|-----------|
+| Breeze TTS 2 Multilingual | `breeze-tts-2-multilingual` | BreezeBlue | tts (Design only) | `preview_count` 1–3, default 1; upstream description + target script; separate reference-audio files |
 | ElevenLabs TTS v3 | `elevenlabs-tts-v3` | ElevenLabs / fal.ai / SVRouter | tts | 8 English voices, stability/similarity/style/speed; native ElevenLabs supports voice ref cloning |
 | MiniMax TTS | `minimax-tts` | MiniMax / fal.ai / SVRouter | tts | 12 ZH+EN voices, speed 0.5–2.0; native MiniMax supports voice ref cloning |
 | Grok TTS | `grok-tts` | xAI | tts | 5 voices, 9 language options |
