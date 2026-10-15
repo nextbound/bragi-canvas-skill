@@ -11,9 +11,10 @@ Current skill target: Bragi Canvas plugin **1.42.0**.
 
 BreezeBlue reference-audio generation is available when `list_models` includes `breeze-tts-2-multilingual`. Connect a voice-description text node to a script node, generate 1–3 audio candidates, and connect the chosen audio to a compatible video prompt. No reusable voice ID or save action is needed.
 
-The SVRouter GPT Image 2.5 pairing and Fast H3 Omni documented below require
-the unreleased `feat/svrouter-gpt25-reactor-h3` plugin changes. Stock 1.41.0
-supports GPT Image 2.5 on APIMart only and does not include Fast H3 Omni.
+The SVRouter GPT Image 2.5 pairing, Fast H3 Omni, and ordered `get_upstream.audios`
+documented below require the unreleased `feat/svrouter-gpt25-reactor-h3` plugin
+changes. Stock 1.42.0 supports GPT Image 2.5 on APIMart only, does not include
+Fast H3 Omni, and returns audio references in connection order.
 Use `list_models` to confirm the installed build and explicitly enabled models.
 
 ## When to use this skill
@@ -177,7 +178,7 @@ Full parameter schemas, return shapes, and examples live in `references/tools.md
 
 ## How to answer questions about the current canvas
 
-Prefer `list_nodes` + `list_edges` (compact) over `read_canvas` (raw dump). Use `get_node` when you only need one. Use `get_upstream(id)` instead of manually tracing edges — it applies Bragi's arrow-direction rules and gives ordered image/text-ref views. Note that `get_upstream.prompts` is a raw quick view; final generation resolves ordered text / `.md` refs internally.
+Prefer `list_nodes` + `list_edges` (compact) over `read_canvas` (raw dump). Use `get_node` when you only need one. Use `get_upstream(id)` instead of manually tracing edges — it applies Bragi's arrow-direction rules and gives ordered image/text-ref views, plus ordered audio references on the paired unreleased build. Note that `get_upstream.prompts` is a raw quick view; final generation resolves ordered text / `.md` refs internally.
 
 ## Detailed references
 

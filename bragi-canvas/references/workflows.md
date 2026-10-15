@@ -278,6 +278,7 @@ get_upstream(nodeId)  →  { prompts, images, videos, audios, pdfs, textRefs }
 Use this to verify:
 - That the expected text / `.md` refs are present in `textRefs`
 - That reference images are in the order you expect
+- On the paired unreleased plugin build, that `audios` matches the intended numbered audio references; inspect again after dragging the audio chips into a new order
 - That no stray undirected edge is missing (absent refs = missing arrow direction)
 
 `get_upstream.prompts` is a raw quick view and may contain `__md__:<path>` entries. Generation itself resolves ordered text / `.md` refs internally.
