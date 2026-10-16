@@ -204,6 +204,7 @@ Each entry is scoped to the model's **active provider**: `modes` is that provide
 
 Notes:
 - `images` is ordered with `bragiImageOrder` / drag order applied.
+- `audios` applies `bragiAudioOrder` / drag order and contains each connected audio file once, matching video and supported text generation. Removed files are ignored; newly connected files follow the saved entries in connection order. Without a saved order, connection order is used. Number audio prompt references from this array and inspect it again after reordering.
 - `textRefs` is ordered with `bragiTextOrder` / drag order applied and is the best view for text / `.md` reference ordering.
 - `prompts` is a raw quick view from the edge parser; `.md` refs may appear as `__md__:<path>` and are not the authoritative final prompt. Generation resolves ordered text and `.md` refs internally before calling the provider.
 - Upstream audio and PDF files can be consumed by text generation where supported; use `audios` / `pdfs` to inspect those refs before calling `generate`.

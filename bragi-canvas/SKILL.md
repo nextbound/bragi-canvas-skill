@@ -7,9 +7,14 @@ description: Drive an Obsidian Canvas as a node-based AI generation pipeline via
 
 Bragi Canvas turns an Obsidian `.canvas` file into a node-based AI generation pipeline: text nodes become prompts, arrows become data flow, and calling `generate` grows a new image / video / text / audio node next to the source. This skill is how an AI agent drives that pipeline through the plugin's MCP server.
 
-Current skill target: Bragi Canvas plugin **1.42.0**.
+Current skill target: Bragi Canvas plugin **1.43.0**.
 
 BreezeBlue reference-audio generation is available when `list_models` includes `breeze-tts-2-multilingual`. Connect a voice-description text node to a script node, generate 1–3 audio candidates, and connect the chosen audio to a compatible video prompt. No reusable voice ID or save action is needed.
+
+Plugin 1.43.0 includes GPT Image 2.5 on SVRouter, Fast H3 Omni, and ordered
+`get_upstream.audios`. Fast H3 Omni requires a deployed SVRouter Reactor worker
+and channel. Use `list_models` to confirm explicitly enabled models; model
+support in the plugin does not establish gateway or upstream availability.
 
 ## When to use this skill
 
@@ -172,7 +177,7 @@ Full parameter schemas, return shapes, and examples live in `references/tools.md
 
 ## How to answer questions about the current canvas
 
-Prefer `list_nodes` + `list_edges` (compact) over `read_canvas` (raw dump). Use `get_node` when you only need one. Use `get_upstream(id)` instead of manually tracing edges — it applies Bragi's arrow-direction rules and gives ordered image/text-ref views. Note that `get_upstream.prompts` is a raw quick view; final generation resolves ordered text / `.md` refs internally.
+Prefer `list_nodes` + `list_edges` (compact) over `read_canvas` (raw dump). Use `get_node` when you only need one. Use `get_upstream(id)` instead of manually tracing edges — it applies Bragi's arrow-direction rules and gives ordered image/audio/text-ref views. Note that `get_upstream.prompts` is a raw quick view; final generation resolves ordered text / `.md` refs internally.
 
 ## Detailed references
 

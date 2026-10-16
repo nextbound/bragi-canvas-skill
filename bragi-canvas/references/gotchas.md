@@ -71,7 +71,7 @@ The model will receive both concatenated.
 
 When multiple upstream images feed one node, the order Bragi uses is stored on the downstream node as `bragiImageOrder` (similarly `bragiTextOrder`, `bragiAudioOrder`). If you haven't set it, order falls back to edge creation order.
 
-To inspect ordering from MCP, call `get_upstream(id)`. The `images` array is ordered and `textRefs` shows ordered text / `.md` refs. The `prompts` array is only a raw edge-parser view; `.md` refs may appear as `__md__:<path>`, and final generation resolves ordered text / `.md` refs internally.
+To inspect ordering from MCP, call `get_upstream(id)`. The `images` array is ordered and `textRefs` shows ordered text / `.md` refs. `audios` also follows the visible drag order, with duplicate files removed, matching generation. Recheck this array after reordering before using numbered audio references. The `prompts` array is only a raw edge-parser view; `.md` refs may appear as `__md__:<path>`, and final generation resolves ordered text / `.md` refs internally.
 
 To *control* order from MCP, create the edges in the desired order, or use `read_canvas` to inspect/set the order array directly (then `update_node` — but note `update_node` only exposes standard fields; custom order fields require a raw canvas write, which the MCP doesn't expose cleanly).
 
