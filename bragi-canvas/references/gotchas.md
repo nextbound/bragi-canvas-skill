@@ -233,7 +233,7 @@ Source canvas, source node and output directory are captured before generation. 
 
 HTTP 403 means an invalid Host or Origin, 415 requires JSON, 413 exceeds the body limit, and 408 means body upload timed out. HTTP 401 means the configured MCP token was missing or incorrect.
 
-## Seedance draft identity and failures (unreleased)
+## Seedance draft identity and failures (plugin 1.44.0)
 
 A BytePlus draft is identified by the persisted `bragiSeedanceDraft` marker, not by its 480p resolution or filename. Importing a video file alone does not restore draft identity. Keep the original canvas node. The action appears only while Seedance 2.5 is enabled and its active configured provider is BytePlus; switching provider hides it.
 

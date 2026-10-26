@@ -396,7 +396,7 @@ One RPC instead of 30.
 4. For `ready-to-apply`, reopen the source canvas so Bragi can finish saving the downloaded result.
 5. Recheck the placeholder or saved output. Do not submit a new generation as a retry.
 
-## Seedance 2.5 draft to final (unreleased)
+## Seedance 2.5 draft to final (plugin 1.44.0)
 
 1. Call `list_models({ type: "video" })`. Confirm `seedance-2.5` is using BytePlus and its resolution options include `draft`.
 2. Keep the usual prompt, connected references, mode, and controls. Call `generate` with `params.resolution: "draft"` and track the returned placeholder using the usual async tools.

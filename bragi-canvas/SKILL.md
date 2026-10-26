@@ -7,7 +7,7 @@ description: Drive an Obsidian Canvas as a node-based AI generation pipeline via
 
 Bragi Canvas turns an Obsidian `.canvas` file into a node-based AI generation pipeline: text nodes become prompts, arrows become data flow, and calling `generate` grows a new image / video / text / audio node next to the source. This skill is how an AI agent drives that pipeline through the plugin's MCP server.
 
-Current skill target: Bragi Canvas plugin **1.43.1**.
+Current skill target: Bragi Canvas plugin **1.44.0**.
 
 BreezeBlue reference-audio generation is available when `list_models` includes `breeze-tts-2-multilingual`. Connect a voice-description text node to a script node, generate 1–3 audio candidates, and connect the chosen audio to a compatible video prompt. No reusable voice ID or save action is needed.
 
@@ -16,7 +16,7 @@ Plugin 1.43.0 includes GPT Image 2.5 on SVRouter, Fast H3 Omni, and ordered
 and channel. Use `list_models` to confirm explicitly enabled models; model
 support in the plugin does not establish gateway or upstream availability.
 
-Unreleased companion branch: Seedance 2.5 on BytePlus adds `resolution: "draft"` only when advertised by `list_models`. Drafts finish as marked 480p video nodes; **Generate 1080p** is a UI action on the draft node. See the draft workflow and gotchas before using it. This is not part of the published 1.43.1 release.
+Plugin 1.44.0: Seedance 2.5 on BytePlus adds `resolution: "draft"` only when advertised by `list_models`. Drafts finish as marked 480p video nodes; **Generate 1080p** is a UI action on the draft node. See the draft workflow and gotchas before using it.
 
 ## When to use this skill
 
