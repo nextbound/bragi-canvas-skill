@@ -404,3 +404,13 @@ One RPC instead of 30.
 4. Track the separate final placeholder with the existing task tools. The draft remains available and the completed final does not offer draft finalization.
 
 Use the saved draft node within BytePlus's seven-day validity period and with an account that can access its task. Draft and final requests are billed independently. Changing the current prompt or references does not change finalization; make a new draft for those changes. Do not emulate this workflow by passing the same seed to a normal generation.
+
+## Wan Prime and Vidu Q4 Preview (unreleased candidate)
+
+Discover enabled video models with `list_models` first. Use only the parameters it advertises.
+
+For Wan Prime, create a text prompt and call `generate({ nodeId, modelId: "wan-3.0", mode: "text-to-video", params: { variant: "prime", duration: 2, resolution: "480P" } })`. Standard remains the default if variant is omitted.
+
+For prompt-free Vidu animation, create an empty text node, connect exactly one image to it, and call `generate({ nodeId, modelId: "vidu-q4-preview", mode: "first-frame", params: { duration: 3, resolution: "720p" } })`. The image supplies the starting frame and ratio.
+
+For Vidu reference audio, put a motion description on the target text node. Connect 1–15 images and up to three MP3 clips (3–12 seconds each, at most 50 MB/file). Call `generate` with `mode: "image-ref"`. A single image is treated as a reference, not a fixed first frame. Track the async placeholder and inspect the saved video; resume an accepted task rather than generating a second time.
