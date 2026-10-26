@@ -232,3 +232,9 @@ Source canvas, source node and output directory are captured before generation. 
 **Tidy up generated files** copies assets and updates only the selected canvas. Original files remain available to other canvases and notes. A canvas backup is saved first; partial failures are reported. It does not delete old files across the vault.
 
 HTTP 403 means an invalid Host or Origin, 415 requires JSON, 413 exceeds the body limit, and 408 means body upload timed out. HTTP 401 means the configured MCP token was missing or incorrect.
+
+## Seedance draft identity and failures (plugin 1.44.0)
+
+A BytePlus draft is identified by the persisted `bragiSeedanceDraft` marker, not by its 480p resolution or filename. Importing a video file alone does not restore draft identity. Keep the original canvas node. The action appears only while Seedance 2.5 is enabled and its active configured provider is BytePlus; switching provider hides it.
+
+Draft tasks expire after seven days according to BytePlus. Switching the BytePlus account or endpoint can make an existing draft inaccessible. Bragi submits using the saved task/API model IDs and current provider configuration; it does not predict expiry or validate account ownership locally. Submission rejection produces the normal failed output node with the upstream error. It leaves the draft intact and does not fall back to a fresh generation. A final already in progress from the same node is not submitted twice. Accepted final tasks use the existing task recovery behavior; **Resume checking** continues that task without paying for a new submission.
