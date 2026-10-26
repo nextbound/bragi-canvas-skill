@@ -395,3 +395,12 @@ One RPC instead of 30.
 3. For `needs-attention`, inspect `lastError`, address the reported connection/storage issue if needed, and use **Resume checking** on the node in Obsidian. This stops the paused presentation and opens a fresh 15-minute checking window for the existing task. Do not treat the outer MCP `status: "pending"` as evidence that checking is still running.
 4. For `ready-to-apply`, reopen the source canvas so Bragi can finish saving the downloaded result.
 5. Recheck the placeholder or saved output. Do not submit a new generation as a retry.
+
+## Seedance 2.5 draft to final (unreleased)
+
+1. Call `list_models({ type: "video" })`. Confirm `seedance-2.5` is using BytePlus and its resolution options include `draft`.
+2. Keep the usual prompt, connected references, mode, and controls. Call `generate` with `params.resolution: "draft"` and track the returned placeholder using the usual async tools.
+3. Preview the completed 480p video. Select its node in Obsidian and click **Generate 1080p** in the top toolbar when the result is suitable.
+4. Track the separate final placeholder with the existing task tools. The draft remains available and the completed final does not offer draft finalization.
+
+Use the saved draft node within BytePlus's seven-day validity period and with an account that can access its task. Draft and final requests are billed independently. Changing the current prompt or references does not change finalization; make a new draft for those changes. Do not emulate this workflow by passing the same seed to a normal generation.

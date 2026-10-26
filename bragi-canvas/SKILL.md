@@ -16,6 +16,8 @@ Plugin 1.43.0 includes GPT Image 2.5 on SVRouter, Fast H3 Omni, and ordered
 and channel. Use `list_models` to confirm explicitly enabled models; model
 support in the plugin does not establish gateway or upstream availability.
 
+Unreleased companion branch: Seedance 2.5 on BytePlus adds `resolution: "draft"` only when advertised by `list_models`. Drafts finish as marked 480p video nodes; **Generate 1080p** is a UI action on the draft node. See the draft workflow and gotchas before using it. This is not part of the published 1.43.1 release.
+
 ## When to use this skill
 
 - User asks you to create, connect, or edit nodes on an Obsidian canvas
