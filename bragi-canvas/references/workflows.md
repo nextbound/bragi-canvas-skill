@@ -405,7 +405,7 @@ One RPC instead of 30.
 
 Use the saved draft node within BytePlus's seven-day validity period and with an account that can access its task. Draft and final requests are billed independently. Changing the current prompt or references does not change finalization; make a new draft for those changes. Do not emulate this workflow by passing the same seed to a normal generation.
 
-## Wan Prime and Vidu Q4 Preview (unreleased candidate)
+## Wan Prime and Vidu Q4 Preview (plugin 1.45.0)
 
 Discover enabled video models with `list_models` first. Use only the parameters it advertises.
 
@@ -415,7 +415,7 @@ For prompt-free Vidu animation, create an empty text node, connect exactly one i
 
 For Vidu reference audio, put a motion description on the target text node. Connect 1–15 images and up to three MP3 clips (3–12 seconds each, at most 50 MB/file). Call `generate` with `mode: "image-ref"`. A single image is treated as a reference, not a fixed first frame. Track the async placeholder and inspect the saved video; resume an accepted task rather than generating a second time.
 
-## Kling 4.0 ordered keyframes (unreleased candidate)
+## Kling 4.0 ordered keyframes (plugin 1.45.0)
 
 1. Enable Kling 4.0 on APIMart, then check its `list_models` entry.
 2. Connect your image nodes to a text or Markdown prompt node with arrows. Read `get_upstream` to get the current image numbers.
