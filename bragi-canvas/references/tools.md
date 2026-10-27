@@ -219,7 +219,7 @@ For BreezeBlue, use `modelId: "breeze-tts-2-multilingual"`, `mode: "tts"`, and `
 **Params**
 - `nodeId` — must contain (or have upstream) prompt text
 - `modelId` — from `list_models`
-- `mode?` — must be one of the modes in the selected model's `list_models` entry (the active provider's modes). MCP validates it and rejects unsupported modes with `Mode "…" is not supported by …`. Common video modes include `"text-to-video" | "first-frame" | "first-last-frame" | "image-ref" | "video-ref" | "video-extend"`, audio modes include `"tts" | "music" | "video-to-music" | "sound-effect"`. Defaults to the first mode in that `list_models` entry (the active provider's first mode), not necessarily the catalogue default.
+- `mode?` — must be one of the modes in the selected model's `list_models` entry (the active provider's modes). MCP validates it and rejects unsupported modes with `Mode "…" is not supported by …`. Common video modes include `"text-to-video" | "first-frame" | "first-last-frame" | "keyframes" | "image-ref" | "video-ref" | "video-extend"`, audio modes include `"tts" | "music" | "video-to-music" | "sound-effect"`. Defaults to the first mode in that `list_models` entry (the active provider's first mode), not necessarily the catalogue default.
 - `params?` — model-specific; pass only params present in the model's `list_models` entry for that provider (params hidden for the provider are ignored)
 - Voice-source controls may additionally use `voiceMode: "builtin" | "reference" | "design"` and zero-based `voiceDesignTextIndex` / `voiceRefAudioIndex` where supported. `list_models` reports `voiceSources` and, for Design, `voiceDesignOutput` (`"voice-id"` or `"audio-previews"`).
 - `batchCount?` — 1–4, default 1
@@ -254,3 +254,8 @@ No params. Returns all retained async audio and video tasks, including closed ca
 - `{ status: "not_found", taskId }` — completed, failed, or never existed. Inspect `placeholderNodeId` on the canvas to see the actual outcome.
 
 **Note:** Tasks leave the queue after a result is saved and applied, or after an explicit remote failure/cancellation. Network, credential, and local-write errors retain the original task. "not_found" isn't an error — it's the signal that the placeholder is now the authoritative source of truth.
+
+
+### Kling 4.0 candidate prompt behavior
+
+The unreleased paired plugin candidate accepts an empty target prompt for Kling 4.0 `first-frame` and `first-last-frame`; connect the required image count. Connected text/Markdown prompts are merged before generation, so a separate text node can carry a `[Keyframes]` block while the target stays empty. Use `mode: "keyframes"` explicitly and follow the notation in [workflows](workflows.md#kling-40-ordered-keyframes-unreleased-candidate). `get_upstream.images` supplies image numbering; block line order supplies temporal order. The `generate` result and existing task-tracking tools are unchanged. Invalid keyframes or changed saved image bindings are rejected before generation starts.
