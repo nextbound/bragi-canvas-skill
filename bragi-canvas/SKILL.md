@@ -7,9 +7,9 @@ description: Drive an Obsidian Canvas as a node-based AI generation pipeline via
 
 Bragi Canvas turns an Obsidian `.canvas` file into a node-based AI generation pipeline: text nodes become prompts, arrows become data flow, and calling `generate` grows a new image / video / text / audio node next to the source. This skill is how an AI agent drives that pipeline through the plugin's MCP server.
 
-Current skill target: Bragi Canvas plugin **1.44.0**.
+Current skill target: Bragi Canvas plugin **1.45.0**.
 
-Unreleased candidate support: Wan 3.0 `variant: prime` and APIMart Vidu Q4 Preview. Use these only when `list_models` advertises them. Vidu first-frame allows an empty text node with exactly one upstream image; reference-image mode requires text.
+Plugin 1.45.0 support: Wan 3.0 `variant: prime` and APIMart Vidu Q4 Preview. Use these only when `list_models` advertises them. Vidu first-frame allows an empty text node with exactly one upstream image; reference-image mode requires text.
 
 BreezeBlue reference-audio generation is available when `list_models` includes `breeze-tts-2-multilingual`. Connect a voice-description text node to a script node, generate 1–3 audio candidates, and connect the chosen audio to a compatible video prompt. No reusable voice ID or save action is needed.
 
@@ -183,7 +183,7 @@ Full parameter schemas, return shapes, and examples live in `references/tools.md
 
 Prefer `list_nodes` + `list_edges` (compact) over `read_canvas` (raw dump). Use `get_node` when you only need one. Use `get_upstream(id)` instead of manually tracing edges — it applies Bragi's arrow-direction rules and gives ordered image/audio/text-ref views. Note that `get_upstream.prompts` is a raw quick view; final generation resolves ordered text / `.md` refs internally.
 
-The paired unreleased candidate also includes Kling 4.0 and the explicit `keyframes` mode. Consult the models and workflows references before using its frame notation; the stable target remains 1.44.0 until the candidate is released.
+Plugin 1.45.0 also includes Kling 4.0 and the explicit `keyframes` mode. Consult the models and workflows references before using its frame notation.
 
 ## Detailed references
 

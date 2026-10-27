@@ -63,8 +63,8 @@ MuleRouter Z-Image Spicy maps the selected `aspectRatio` to fixed dimensions ins
 | Kling 3.0 Omni | `kling-3.0-omni` | Kling / APIMart | text-to-video, first-frame, first-last-frame, image-ref, video-ref, video-edit | `duration` (3–15s), `aspect_ratio`, `mode` (std/pro/4k), `multi_shot` (default true), mode-specific audio control |
 | Kling 2.6 | `kling-2.6` | Kling / TokenRouter | same as 3.0 | same |
 | HappyHorse 1.1 | `happyhorse-1.1` | DashScope | text-to-video, first-frame, image-ref, video-edit | `resolution` (480P/720P/1080P; video-edit 720P/1080P only), `ratio` (9 values, t2v + image-ref only), `duration` (3-15s, not video-edit), `audio_setting` (video-edit only) |
-| Wan 3.0 | `wan-3.0` | DashScope | text-to-video, first-frame, first-last-frame, image-ref, video-ref | `variant`: standard/prime (unreleased); `resolution` (480P/720P/1080P), `ratio` (Adaptive + 5 fixed ratios), `duration` (Auto/2–30s), `audio` |
-| Vidu Q4 Preview (unreleased) | `vidu-q4-preview` | APIMart | first-frame, image-ref | `duration` 3–16s, `resolution` 540p/720p/1080p/2K/4K, `aspect_ratio` (image-ref only), `audio`, `seed` |
+| Wan 3.0 | `wan-3.0` | DashScope | text-to-video, first-frame, first-last-frame, image-ref, video-ref | `variant`: standard/prime (plugin 1.45.0); `resolution` (480P/720P/1080P), `ratio` (Adaptive + 5 fixed ratios), `duration` (Auto/2–30s), `audio` |
+| Vidu Q4 Preview (plugin 1.45.0) | `vidu-q4-preview` | APIMart | first-frame, image-ref | `duration` 3–16s, `resolution` 540p/720p/1080p/2K/4K, `aspect_ratio` (image-ref only), `audio`, `seed` |
 | Wan 2.7 | `wan-2.7` | DashScope / MuleRouter | provider-dependent (see note) | DashScope: `resolution` (720P/1080P), `ratio`, `duration` (2–15s), `prompt_extend`, `audio_setting` (video-edit only). MuleRouter: `resolution` (720p/1080p), `duration`, `prompt_extend` (no `ratio`) |
 | Veo 3.1 | `veo-3.1` | Gemini / fal.ai / SVRouter | provider-dependent; Gemini/fal include text-to-video, first-frame, first-last-frame, image-ref (≤3); SVRouter exposes text-to-video + first-frame | `durationSeconds` (4/6/8s), `aspectRatio` (16:9/9:16), `resolution` (720p/1080p) |
 | Veo 3.1 Lite | `veo-3.1-lite` | Gemini | text-to-video, first-frame (no image-ref) | same as 3.1 |
@@ -109,7 +109,7 @@ Token360 Seedance uses the official `seedance-2.0` / `seedance-2.0-fast` model I
 
 Pika is an aggregated Kling provider for `kling-3.0`. It uses the current Pika `kling-3.0` routes and exposes `text-to-video`, `first-frame`, and `motion-control`; Bragi hides the quality selector because Pika no longer exposes the old Standard/Pro/4K route family. Pika does not currently list a compatible Kling 3.0 Omni model, so Bragi does not expose Pika for `kling-3.0-omni`. Always use the provider-effective modes and params from `list_models`.
 
-Wan 3.0 uses DashScope's unified video endpoint. In the unreleased candidate, `variant` selects `standard` (default, `wan3.0-video`) or `prime` (`wan3.0-video-prime`) without changing the Bragi ID `wan-3.0`. `first-frame` requires exactly one upstream image; `first-last-frame` requires exactly two and cannot be mixed with reference video/audio/files. Reference modes accept up to 10 images, 5 videos, 5 audio clips, and one upstream PDF file, which Bragi uploads to temporary HTTPS URLs. Video and audio reference clips must each fit the upstream 1–15 second limit, and the total reference-video and reference-audio durations must each remain within 15 seconds. Output may be 2–30 seconds at 480P, 720P, or 1080P; generated audio is on by default. International-region users must set the DashScope Base URL to the workspace-scoped Singapore `/api/v1` endpoint that matches their API key.
+Wan 3.0 uses DashScope's unified video endpoint. In plugin 1.45.0, `variant` selects `standard` (default, `wan3.0-video`) or `prime` (`wan3.0-video-prime`) without changing the Bragi ID `wan-3.0`. `first-frame` requires exactly one upstream image; `first-last-frame` requires exactly two and cannot be mixed with reference video/audio/files. Reference modes accept up to 10 images, 5 videos, 5 audio clips, and one upstream PDF file, which Bragi uploads to temporary HTTPS URLs. Video and audio reference clips must each fit the upstream 1–15 second limit, and the total reference-video and reference-audio durations must each remain within 15 seconds. Output may be 2–30 seconds at 480P, 720P, or 1080P; generated audio is on by default. International-region users must set the DashScope Base URL to the workspace-scoped Singapore `/api/v1` endpoint that matches their API key.
 
 Wan 2.7 is a single model (`wan-2.7`) with two providers whose modes differ — always read the modes from the model's `list_models` entry for the active provider:
 
@@ -130,7 +130,7 @@ Kling 3.0 Omni uses the native Kling `/v1/videos/omni-video` endpoint or APIMart
 
 SuChuang Omni-Flash-Ext uses the provider's `google_omni` endpoint. It accepts text plus up to 7 reference images, sent as temporary Bragi Relay URLs in the comma-separated `images` field. SuChuang does not support reference videos on this endpoint and only supports 720p/1080p sizes; choose APIMart when you need `video-ref` or `4k`.
 
-Vidu Q4 Preview (unreleased) uses APIMart `viduq4-preview`. First-frame accepts exactly one image and an optional prompt, inherits the image ratio, and cannot use reference audio. Image-ref requires a prompt, 1–15 images, and optionally up to three MP3 clips of 3–12 seconds each (50 MB maximum per file). Even one image is explicitly sent as a reference, not a starting frame. APIMart validates reference-audio duration. Video, PDF, and end-frame inputs are unsupported. Audio defaults on; `audio: "false"` requests silent output; seed 0 is random.
+Vidu Q4 Preview (plugin 1.45.0) uses APIMart `viduq4-preview`. First-frame accepts exactly one image and an optional prompt, inherits the image ratio, and cannot use reference audio. Image-ref requires a prompt, 1–15 images, and optionally up to three MP3 clips of 3–12 seconds each (50 MB maximum per file). Even one image is explicitly sent as a reference, not a starting frame. APIMart validates reference-audio duration. Video, PDF, and end-frame inputs are unsupported. Audio defaults on; `audio: "false"` requests silent output; seed 0 is random.
 
 ---
 
@@ -209,10 +209,10 @@ The user has to configure at least one provider key and connect that provider to
 - fal.ai key → fal-ai/* variants of almost everything (universal fallback)
 - TokenRouter key → selected text/image/video models via `https://api.tokenrouter.com/v1` (+ optional ModelArk Asset group ID for Seedance `asset://...` refs)
 - MuleRouter key → Z-Image Spicy, Qwen Image Edit Spicy, Wan 2.7 (`first-frame` only)
-- DashScope key (video) → Wan 3.0 (Standard/Prime in the unreleased candidate) + Wan 2.7 (Wan 2.7 includes `video-edit`)
+- DashScope key (video) → Wan 3.0 (Standard/Prime in plugin 1.45.0) + Wan 2.7 (Wan 2.7 includes `video-edit`)
 - DashScope key → Qwen Voice audio + Qwen 3.6 Plus text (native multimodal)
 - xAI key → Grok text/image/video/TTS
-- APIMart key → GPT Image 2, GPT Image 2 (Official), GPT Image 2.5, GPT-5.5, GPT-5.5 Pro, Kling 3.0 Omni, MiniMax-H3, Omni-Flash-Ext, Vidu Q4 Preview (unreleased)
+- APIMart key → GPT Image 2, GPT Image 2 (Official), GPT Image 2.5, GPT-5.5, GPT-5.5 Pro, Kling 3.0 Omni, Kling 4.0, MiniMax-H3, Omni-Flash-Ext, Vidu Q4 Preview (plugin 1.45.0)
 - SVRouter key → gateway `sv-*` routes for GPT Image 2 / GPT Image 2 (Official), selected image/video/audio models, and GPT-5.5 text. The stored settings key remains `svnewapi` for compatibility.
 - BFL key → FLUX.2 Klein 9B image generation
 - Runpod or fal.ai key → FLUX.2 Klein 9B image generation with provider-specific long-edge limits
@@ -225,9 +225,9 @@ The user has to configure at least one provider key and connect that provider to
 - Legnext key → Midjourney V8.2 / niji 7
 
 
-### Kling 4.0 candidate
+### Kling 4.0 (plugin 1.45.0)
 
-The paired unreleased plugin candidate adds `kling-4.0` through APIMart (`kling-v4`). Enable the model and connect it to APIMart explicitly. The eight Bragi modes separate frame controls from reference generation, editing, and extension. Do not send Kling 3 parameters such as `mode`, `multi_shot`, `multi_prompt`, `element_list`, `negative_prompt`, `sound`, or `audio`.
+Plugin 1.45.0 adds `kling-4.0` through APIMart (`kling-v4`). Enable the model and connect it to APIMart explicitly. The eight Bragi modes separate frame controls from reference generation, editing, and extension. Do not send Kling 3 parameters such as `mode`, `multi_shot`, `multi_prompt`, `element_list`, `negative_prompt`, `sound`, or `audio`.
 
 First-frame and first-last-frame use exactly one or two images and allow an empty prompt. Keyframes uses a `[Keyframes]` block with one first frame, up to eight intermediate frames and an optional last frame (ten frame entries total). Frame modes reject video/audio references. Reference generation permits ten images, five videos totaling at most 30 seconds, and three audio clips of 5–30 seconds each, with fifteen references total. Use `image-ref` for images with optional audio; use `video-ref` for videos with optional images/audio or for audio-only generation. A single reference image is sent explicitly as a reference, never as a first frame.
 
