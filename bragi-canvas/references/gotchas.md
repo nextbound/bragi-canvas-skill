@@ -238,3 +238,10 @@ HTTP 403 means an invalid Host or Origin, 415 requires JSON, 413 exceeds the bod
 A BytePlus draft is identified by the persisted `bragiSeedanceDraft` marker, not by its 480p resolution or filename. Importing a video file alone does not restore draft identity. Keep the original canvas node. The action appears only while Seedance 2.5 is enabled and its active configured provider is BytePlus; switching provider hides it.
 
 Draft tasks expire after seven days according to BytePlus. Switching the BytePlus account or endpoint can make an existing draft inaccessible. Bragi submits using the saved task/API model IDs and current provider configuration; it does not predict expiry or validate account ownership locally. Submission rejection produces the normal failed output node with the upstream error. It leaves the draft intact and does not fall back to a fresh generation. A final already in progress from the same node is not submitted twice. Accepted final tasks use the existing task recovery behavior; **Resume checking** continues that task without paying for a new submission.
+
+
+## Kling 4.0 frame roles (unreleased candidate)
+
+Select `keyframes` explicitly; three or more connected images otherwise infer a reference workflow. A malformed block, an unavailable image number, multiple last frames, a last frame before another entry, or more than eight intermediate frames fails before uploads and task submission. Bragi preserves a first-frame image reused as the final frame for loops. Changed image bindings also fail before submission: review thumbnails and bind the current numbers in the generator, or create a fresh prompt node.
+
+The target prompt may be empty for Kling 4.0 `first-frame` / `first-last-frame`; other modes require prompt text, which may come from a connected text/Markdown node. Keyframes requires its structural block but descriptions can be blank. Do not require a first-frame image when extending an existing video: the source video supplies the starting point, and its one optional connected image is the target last frame. Reference audio is uploaded for Kling 4.0, rather than silently omitted.

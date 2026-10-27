@@ -404,3 +404,28 @@ One RPC instead of 30.
 4. Track the separate final placeholder with the existing task tools. The draft remains available and the completed final does not offer draft finalization.
 
 Use the saved draft node within BytePlus's seven-day validity period and with an account that can access its task. Draft and final requests are billed independently. Changing the current prompt or references does not change finalization; make a new draft for those changes. Do not emulate this workflow by passing the same seed to a normal generation.
+
+
+## Kling 4.0 ordered keyframes (unreleased candidate)
+
+1. Enable Kling 4.0 on APIMart, then check its `list_models` entry.
+2. Connect your image nodes to a text or Markdown prompt node with arrows. Read `get_upstream` to get the current image numbers.
+3. Put this block at the top of the prompt, with optional general camera instructions below it:
+
+```text
+[Keyframes]
+@Image1: Standing outside the door
+@Image2: Opening the door
+@Image3: Walking into the room
+[@Image4]: Sitting on the sofa
+[/Keyframes]
+
+The camera follows her smoothly into the room.
+```
+
+4. Call `generate` with `modelId: "kling-4.0"`, `mode: "keyframes"`, and parameters from `list_models`.
+5. Track the existing async placeholder and task queue, then inspect the downloaded video.
+
+The first ordinary entry is the first frame. Further ordinary entries are intermediate frames in line order, regardless of image numbering. A bracketed `[@ImageN]` entry is an optional last frame: at most one, and only as the final nonblank entry in the block. Without it, the final listed image remains an intermediate frame. Blank descriptions are allowed; both ASCII and full-width colons and surrounding spaces are accepted. The parser sends actual image roles to APIMart and rewrites numbered prompt references to match submission order. There are no exact frame timestamps.
+
+The generator inserts a starter block when you explicitly select Keyframes and no connected prompt already contains one. A separate connected text node may carry the block. Existing text is preserved. Image bindings are saved with the prompt node. After changing reference order or connections, review the visible thumbnails and use **Bind image numbers** before reusing changed numbers. An agent can also create a fresh prompt node with reviewed references. Do not bypass an image-binding error by blindly retrying generation.
