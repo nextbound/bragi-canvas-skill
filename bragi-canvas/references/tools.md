@@ -219,9 +219,9 @@ For BreezeBlue, use `modelId: "breeze-tts-2-multilingual"`, `mode: "tts"`, and `
 Unreleased Wan Prime: keep `modelId: "wan-3.0"` and pass `params: { variant: "prime" }` when advertised by `list_models`; omitted variant remains Standard. Unreleased Vidu uses `modelId: "vidu-q4-preview"`; connect references as nodes, never as `params` URLs. Use `audio: "false"` for silent output.
 
 **Params**
-- `nodeId` — target text or Markdown prompt node. The unreleased Vidu Q4 Preview first-frame mode permits empty text with exactly one upstream image and no other media. Other MCP generation requires text on the target node.
+- `nodeId` — target text or Markdown prompt node. The unreleased Vidu Q4 Preview first-frame mode permits empty text with exactly one upstream image and no other media. Kling 4.0 first-frame and first-last-frame also permit empty text. Other generation requires prompt text on the target or a connected text/Markdown node.
 - `modelId` — from `list_models`
-- `mode?` — must be one of the modes in the selected model's `list_models` entry (the active provider's modes). MCP validates it and rejects unsupported modes with `Mode "…" is not supported by …`. Common video modes include `"text-to-video" | "first-frame" | "first-last-frame" | "image-ref" | "video-ref" | "video-extend"`, audio modes include `"tts" | "music" | "video-to-music" | "sound-effect"`. Defaults to the first mode in that `list_models` entry (the active provider's first mode), not necessarily the catalogue default. Vidu Q4 Preview infers first-frame for one image, or image-ref for multiple images or image plus audio. Explicit mode always takes precedence.
+- `mode?` — must be one of the modes in the selected model's `list_models` entry (the active provider's modes). MCP validates it and rejects unsupported modes with `Mode "…" is not supported by …`. Common video modes include `"text-to-video" | "first-frame" | "first-last-frame" | "keyframes" | "image-ref" | "video-ref" | "video-extend"`, audio modes include `"tts" | "music" | "video-to-music" | "sound-effect"`. Defaults to the first mode in that `list_models` entry (the active provider's first mode), not necessarily the catalogue default. Vidu Q4 Preview infers first-frame for one image, or image-ref for multiple images or image plus audio. Explicit mode always takes precedence.
 - `params?` — model-specific; pass only params present in the model's `list_models` entry for that provider (params hidden for the provider are ignored)
 - Voice-source controls may additionally use `voiceMode: "builtin" | "reference" | "design"` and zero-based `voiceDesignTextIndex` / `voiceRefAudioIndex` where supported. `list_models` reports `voiceSources` and, for Design, `voiceDesignOutput` (`"voice-id"` or `"audio-previews"`).
 - `batchCount?` — 1–4, default 1
@@ -256,3 +256,8 @@ No params. Returns all retained async audio and video tasks, including closed ca
 - `{ status: "not_found", taskId }` — completed, failed, or never existed. Inspect `placeholderNodeId` on the canvas to see the actual outcome.
 
 **Note:** Tasks leave the queue after a result is saved and applied, or after an explicit remote failure/cancellation. Network, credential, and local-write errors retain the original task. "not_found" isn't an error — it's the signal that the placeholder is now the authoritative source of truth.
+
+
+### Kling 4.0 candidate prompt behavior
+
+The unreleased paired plugin candidate accepts an empty target prompt for Kling 4.0 `first-frame` and `first-last-frame`; connect the required image count. Connected text/Markdown prompts are merged before generation, so a separate text node can carry a `[Keyframes]` block while the target stays empty. Use `mode: "keyframes"` explicitly and follow the notation in [workflows](workflows.md#kling-40-ordered-keyframes-unreleased-candidate). `get_upstream.images` supplies image numbering; block line order supplies temporal order. The `generate` result and existing task-tracking tools are unchanged. Invalid keyframes or changed saved image bindings are rejected before generation starts.

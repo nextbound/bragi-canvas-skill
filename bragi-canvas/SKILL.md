@@ -183,6 +183,8 @@ Full parameter schemas, return shapes, and examples live in `references/tools.md
 
 Prefer `list_nodes` + `list_edges` (compact) over `read_canvas` (raw dump). Use `get_node` when you only need one. Use `get_upstream(id)` instead of manually tracing edges — it applies Bragi's arrow-direction rules and gives ordered image/audio/text-ref views. Note that `get_upstream.prompts` is a raw quick view; final generation resolves ordered text / `.md` refs internally.
 
+The paired unreleased candidate also includes Kling 4.0 and the explicit `keyframes` mode. Consult the models and workflows references before using its frame notation; the stable target remains 1.44.0 until the candidate is released.
+
 ## Detailed references
 
 Load these on demand — they are not in this file to keep SKILL.md small:

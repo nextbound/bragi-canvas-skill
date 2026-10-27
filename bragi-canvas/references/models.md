@@ -58,6 +58,7 @@ MuleRouter Z-Image Spicy maps the selected `aspectRatio` to fixed dimensions ins
 | Seedance 2.5 | `seedance-2.5` | Volcengine / BytePlus / SVRouter | text-to-video, first-frame, first-last-frame, image-ref, video-ref, video-extend, video-edit | `duration` (Auto/4–30s), `ratio` (Adaptive + 6 fixed ratios where allowed), `resolution` (480p/720p/1080p), `generate_audio`, `output_format` (MP4/MOV) |
 | Seedance 2.0 | `seedance-2.0` | Volcengine / BytePlus / fal.ai / TokenRouter / Token360 / SVRouter | text-to-video, first-frame, image-ref, video-ref | `duration` (Auto/4–15s), `ratio` (5), `resolution` (480p/720p/1080p/4k), `generate_audio` |
 | Seedance 2.0 Fast | `seedance-2.0-fast` | Volcengine / BytePlus / TokenRouter / Token360 | same as above | `duration`, `ratio` (3), `resolution` (480p/720p), `generate_audio` |
+| Kling 4.0 | `kling-4.0` | APIMart | text-to-video, first-frame, first-last-frame, keyframes, image-ref, video-ref, video-edit, video-extend | `duration` (3–30s), `resolution` (720p/1080p), `aspect_ratio`, `edit_duration` (source/3–30s), `audio_setting`; always stereo audio |
 | Kling 3.0 | `kling-3.0` | Kling / Pika / APIMart / fal.ai / TokenRouter / SVRouter | provider-dependent | `duration` (5/10s), `aspect_ratio`; Pika hides the quality selector; APIMart is Motion Control only |
 | Kling 3.0 Omni | `kling-3.0-omni` | Kling / APIMart | text-to-video, first-frame, first-last-frame, image-ref, video-ref, video-edit | `duration` (3–15s), `aspect_ratio`, `mode` (std/pro/4k), `multi_shot` (default true), mode-specific audio control |
 | Kling 2.6 | `kling-2.6` | Kling / TokenRouter | same as 3.0 | same |
@@ -222,3 +223,12 @@ The user has to configure at least one provider key and connect that provider to
 - Sonilo key → text-to-music and soundtrack generation from one upstream video
 - ElevenLabs key → native TTS/Music/SFX and voice ref cloning (TTS returns binary mp3)
 - Legnext key → Midjourney V8.2 / niji 7
+
+
+### Kling 4.0 candidate
+
+The paired unreleased plugin candidate adds `kling-4.0` through APIMart (`kling-v4`). Enable the model and connect it to APIMart explicitly. The eight Bragi modes separate frame controls from reference generation, editing, and extension. Do not send Kling 3 parameters such as `mode`, `multi_shot`, `multi_prompt`, `element_list`, `negative_prompt`, `sound`, or `audio`.
+
+First-frame and first-last-frame use exactly one or two images and allow an empty prompt. Keyframes uses a `[Keyframes]` block with one first frame, up to eight intermediate frames and an optional last frame (ten frame entries total). Frame modes reject video/audio references. Reference generation permits ten images, five videos totaling at most 30 seconds, and three audio clips of 5–30 seconds each, with fifteen references total. Use `image-ref` for images with optional audio; use `video-ref` for videos with optional images/audio or for audio-only generation. A single reference image is sent explicitly as a reference, never as a first frame.
+
+Editing requires one source video of at least three seconds, may add ten reference images, and defaults to the source duration and ratio with original audio. Set `edit_duration` to a whole number from 3 through 30 to override source length. Source videos longer than 30 seconds are trimmed upstream. Extension requires one source video and permits one target ending image; its `duration` is the added segment and the result includes the original clip. Extension inherits framing and audio handling. `audio_setting` applies to editing and video references: `default`, `origin`, or `auto`. All outputs include stereo audio; muting generation is unsupported.

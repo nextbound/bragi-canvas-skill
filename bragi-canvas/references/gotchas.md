@@ -47,7 +47,7 @@ There is no `prompt` argument on `generate`. The prompt is *read from the target
 - text node → `node.text`
 - `.md` file node → the file's contents
 
-MCP requires text on the target node and otherwise throws `Node contains no prompt text`. The unreleased Vidu Q4 Preview first-frame mode is the exception: an empty text node may have exactly one upstream image and no other media. Image-ref still requires a prompt.
+MCP requires prompt text on the target or a connected text/Markdown node and otherwise throws `Node contains no prompt text`. In the unreleased candidate, Kling 4.0 first-frame and first-last-frame permit empty text with their required images. Vidu Q4 Preview first-frame permits an empty text node with exactly one upstream image and no other media. Vidu image-ref still requires a prompt.
 
 To set a prompt programmatically, `create_text_node` with the text you want, or `update_node({ id, text })`.
 
@@ -242,3 +242,9 @@ Draft tasks expire after seven days according to BytePlus. Switching the BytePlu
 ## Vidu reference audio and image roles (unreleased)
 
 Vidu Q4 Preview supports only first-frame and image-ref. First-frame cannot combine audio with the frame. For image-ref, connect 1–15 images plus at most three MP3 files, each 3–12 seconds and at most 50 MB. Bragi rejects non-MP3 audio and oversized files locally; APIMart checks duration. A single image in image-ref is sent with an explicit reference role. Never assume it becomes the first frame. Reference order follows the visible image/audio chips. Keep `mode` explicit when you need this distinction.
+
+## Kling 4.0 frame roles (unreleased candidate)
+
+Select `keyframes` explicitly; three or more connected images otherwise infer a reference workflow. A malformed block, an unavailable image number, multiple last frames, a last frame before another entry, or more than eight intermediate frames fails before uploads and task submission. Bragi preserves a first-frame image reused as the final frame for loops. Changed image bindings also fail before submission: review thumbnails and bind the current numbers in the generator, or create a fresh prompt node.
+
+The target prompt may be empty for Kling 4.0 `first-frame` / `first-last-frame`; other modes require prompt text, which may come from a connected text/Markdown node. Keyframes requires its structural block but descriptions can be blank. Do not require a first-frame image when extending an existing video: the source video supplies the starting point, and its one optional connected image is the target last frame. Reference audio is uploaded for Kling 4.0, rather than silently omitted.

@@ -414,3 +414,27 @@ For Wan Prime, create a text prompt and call `generate({ nodeId, modelId: "wan-3
 For prompt-free Vidu animation, create an empty text node, connect exactly one image to it, and call `generate({ nodeId, modelId: "vidu-q4-preview", mode: "first-frame", params: { duration: 3, resolution: "720p" } })`. The image supplies the starting frame and ratio.
 
 For Vidu reference audio, put a motion description on the target text node. Connect 1–15 images and up to three MP3 clips (3–12 seconds each, at most 50 MB/file). Call `generate` with `mode: "image-ref"`. A single image is treated as a reference, not a fixed first frame. Track the async placeholder and inspect the saved video; resume an accepted task rather than generating a second time.
+
+## Kling 4.0 ordered keyframes (unreleased candidate)
+
+1. Enable Kling 4.0 on APIMart, then check its `list_models` entry.
+2. Connect your image nodes to a text or Markdown prompt node with arrows. Read `get_upstream` to get the current image numbers.
+3. Put this block at the top of the prompt, with optional general camera instructions below it:
+
+```text
+[Keyframes]
+@Image1: Standing outside the door
+@Image2: Opening the door
+@Image3: Walking into the room
+[@Image4]: Sitting on the sofa
+[/Keyframes]
+
+The camera follows her smoothly into the room.
+```
+
+4. Call `generate` with `modelId: "kling-4.0"`, `mode: "keyframes"`, and parameters from `list_models`.
+5. Track the existing async placeholder and task queue, then inspect the downloaded video.
+
+The first ordinary entry is the first frame. Further ordinary entries are intermediate frames in line order, regardless of image numbering. A bracketed `[@ImageN]` entry is an optional last frame: at most one, and only as the final nonblank entry in the block. Without it, the final listed image remains an intermediate frame. Blank descriptions are allowed; both ASCII and full-width colons and surrounding spaces are accepted. The parser sends actual image roles to APIMart and rewrites numbered prompt references to match submission order. There are no exact frame timestamps.
+
+The generator inserts a starter block when you explicitly select Keyframes and no connected prompt already contains one. A separate connected text node may carry the block. Existing text is preserved. Image bindings are saved with the prompt node. After changing reference order or connections, review the visible thumbnails and use **Bind image numbers** before reusing changed numbers. An agent can also create a fresh prompt node with reviewed references. Do not bypass an image-binding error by blindly retrying generation.
