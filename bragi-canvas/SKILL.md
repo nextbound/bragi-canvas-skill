@@ -9,6 +9,8 @@ Bragi Canvas turns an Obsidian `.canvas` file into a node-based AI generation pi
 
 Current skill target: Bragi Canvas plugin **1.44.0**.
 
+Unreleased candidate support: Wan 3.0 `variant: prime` and APIMart Vidu Q4 Preview. Use these only when `list_models` advertises them. Vidu first-frame allows an empty text node with exactly one upstream image; reference-image mode requires text.
+
 BreezeBlue reference-audio generation is available when `list_models` includes `breeze-tts-2-multilingual`. Connect a voice-description text node to a script node, generate 1–3 audio candidates, and connect the chosen audio to a compatible video prompt. No reusable voice ID or save action is needed.
 
 Plugin 1.43.0 includes GPT Image 2.5 on SVRouter, Fast H3 Omni, and ordered

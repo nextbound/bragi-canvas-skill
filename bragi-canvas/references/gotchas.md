@@ -47,7 +47,7 @@ There is no `prompt` argument on `generate`. The prompt is *read from the target
 - text node → `node.text`
 - `.md` file node → the file's contents
 
-If the node has no text AND no upstream text node, `generate` throws `Node contains no prompt text`.
+MCP requires prompt text on the target or a connected text/Markdown node and otherwise throws `Node contains no prompt text`. In the unreleased candidate, Kling 4.0 first-frame and first-last-frame permit empty text with their required images. Vidu Q4 Preview first-frame permits an empty text node with exactly one upstream image and no other media. Vidu image-ref still requires a prompt.
 
 To set a prompt programmatically, `create_text_node` with the text you want, or `update_node({ id, text })`.
 
@@ -112,7 +112,7 @@ Gemini and DashScope upload large or non-inline refs through Bragi Relay. Claude
 
 ## 9. Video mode defaults from MCP are dumber than the UI's
 
-The Obsidian bottom bar auto-picks a smart mode based on upstream (1 img → first-frame, 2 img → first-last-frame, etc). The MCP does *not* do this — if you pass no `mode`, it uses the **first mode in the model's `list_models` entry** (the active provider's first mode). For most video models that is `text-to-video`, but for a provider that only exposes a subset it is that subset's first mode (e.g. MuleRouter `wan-2.7` → `first-frame`). Always pass `mode` explicitly for video.
+The Obsidian bottom bar auto-picks a smart mode based on upstream (1 img → first-frame, 2 img → first-last-frame, etc). Vidu Q4 Preview in the unreleased candidate follows this inference, including image plus audio selecting image-ref. For other models, if you pass no `mode`, it uses the **first mode in the model's `list_models` entry** (the active provider's first mode). For most video models that is `text-to-video`, but for a provider that only exposes a subset it is that subset's first mode (e.g. MuleRouter `wan-2.7` → `first-frame`). Always pass `mode` explicitly for video.
 
 ---
 
@@ -239,6 +239,9 @@ A BytePlus draft is identified by the persisted `bragiSeedanceDraft` marker, not
 
 Draft tasks expire after seven days according to BytePlus. Switching the BytePlus account or endpoint can make an existing draft inaccessible. Bragi submits using the saved task/API model IDs and current provider configuration; it does not predict expiry or validate account ownership locally. Submission rejection produces the normal failed output node with the upstream error. It leaves the draft intact and does not fall back to a fresh generation. A final already in progress from the same node is not submitted twice. Accepted final tasks use the existing task recovery behavior; **Resume checking** continues that task without paying for a new submission.
 
+## Vidu reference audio and image roles (unreleased)
+
+Vidu Q4 Preview supports only first-frame and image-ref. First-frame cannot combine audio with the frame. For image-ref, connect 1–15 images plus at most three MP3 files, each 3–12 seconds and at most 50 MB. Bragi rejects non-MP3 audio and oversized files locally; APIMart checks duration. A single image in image-ref is sent with an explicit reference role. Never assume it becomes the first frame. Reference order follows the visible image/audio chips. Keep `mode` explicit when you need this distinction.
 
 ## Kling 4.0 frame roles (unreleased candidate)
 
