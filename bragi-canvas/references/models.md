@@ -70,7 +70,7 @@ MuleRouter Z-Image Spicy maps the selected `aspectRatio` to fixed dimensions ins
 | Veo 3.1 Lite | `veo-3.1-lite` | Gemini | text-to-video, first-frame (no image-ref) | same as 3.1 |
 | Grok Video | `grok-video` | xAI / fal.ai / SVRouter | provider-dependent; xAI Video 1.5 adds video-edit, fal.ai/SVRouter keep text-to-video, first-frame, image-ref, video-extend | `duration` (xAI 1–15s; extend 2–10s), `aspect_ratio` (7), `resolution` (480p/720p/1080p; image-ref max 720p) |
 | MiniMax-H3 | `minimax-h3` | APIMart / Pika | text-to-video, first-frame, first-last-frame, image-ref, video-ref | `duration` (4–15s), `resolution` (2K/768P), `aspect_ratio` (Adaptive + 6 fixed ratios), `watermark` |
-| MAGI-2 (development build) | `magi-2` | Higgsfield | text-to-video | `duration` (4–30s, default 5), `resolution` (1080p), `aspect_ratio` (21:9, 16:9, 4:3, 1:1, 3:4, 9:16), `generate_audio` (on by default), `seed` |
+| MAGI-2 (plugin 1.47.0) | `magi-2` | Higgsfield | text-to-video | `duration` (4–30s, default 5), `resolution` (1080p), `aspect_ratio` (21:9, 16:9, 4:3, 1:1, 3:4, 9:16), `generate_audio` (on by default), `seed` (MCP) |
 | Fast H3 Omni | `fast-h3-omni` | SVRouter | text-to-video, first-frame, first-last-frame, image-ref | `seconds` (5.875/8/10.125/12.25/14.375), `canvas` (16:9/1:1/9:16/4:3), `seed` |
 | Omni-Flash-Ext | `omni-flash-ext` | APIMart / SuChuang | text-to-video, first-frame, multi-image-ref, video-ref | `duration` (4/6/8/10s), `resolution` (720p/1080p/4k), `aspect_ratio` (16:9/9:16) |
 
@@ -207,7 +207,7 @@ The user has to configure at least one provider key and connect that provider to
 - Token360 key → Seedance 2.0 / 2.0 Fast via `https://api.token360.ai/v1` (+ optional Asset group ID for RealFace / Virtual Portrait image refs)
 - Kling AK+SK → Kling 2.6 / 3.0 / 3.0 Omni native
 - Pika key → Kling 3.0 aggregated routes
-- Higgsfield key (`key-id:secret` in a single field) → MAGI-2 text-to-video in the development build
+- Higgsfield key (`key-id:secret` in a single field) → MAGI-2 text-to-video (plugin 1.47.0)
 - fal.ai key → fal-ai/* variants of almost everything (universal fallback)
 - TokenRouter key → selected text/image/video models via `https://api.tokenrouter.com/v1` (+ optional ModelArk Asset group ID for Seedance `asset://...` refs)
 - MuleRouter key → Z-Image Spicy, Qwen Image Edit Spicy, Wan 2.7 (`first-frame` only)

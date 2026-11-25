@@ -7,9 +7,9 @@ description: Drive an Obsidian Canvas as a node-based AI generation pipeline via
 
 Bragi Canvas turns an Obsidian `.canvas` file into a node-based AI generation pipeline: text nodes become prompts, arrows become data flow, and calling `generate` grows a new image / video / text / audio node next to the source. This skill is how an AI agent drives that pipeline through the plugin's MCP server.
 
-Current skill target: Bragi Canvas plugin **1.46.0**.
+Current skill target: Bragi Canvas plugin **1.47.0**.
 
-The MAGI-2 development build adds Higgsfield text-to-video. Use it only when `list_models` includes `magi-2` with Higgsfield as its active provider.
+Plugin 1.47.0 adds MAGI-2 text-to-video on Higgsfield. Use it when `list_models` includes `magi-2` with Higgsfield as its active provider.
 
 Plugin 1.45.0 support: Wan 3.0 `variant: prime` and APIMart Vidu Q4 Preview. Use these only when `list_models` advertises them. Vidu first-frame allows an empty text node with exactly one upstream image; reference-image mode requires text.
 
