@@ -156,6 +156,12 @@ For `minimax-h3`, `first-frame` requires exactly one ordered image and `first-la
 
 ---
 
+## MAGI-2 media connections
+
+MAGI-2 accepts prompt text from the target or connected text nodes. Disconnect reference images, videos, audio, and PDFs before generating. Higgsfield runs one MAGI-2 generation at a time per account by default, so an accepted request may wait in the provider queue. Bragi checks a MAGI-2 task for up to 45 minutes per checking window. If checking pauses, **Resume checking** starts a new 45-minute window for the saved task.
+
+---
+
 ## 10. Denoise actions are UI-only
 
 NLM 35 and FLUX Denoise are Obsidian UI actions on image file nodes, not MCP models. They do not appear in `list_models`, and `generate` will reject denoise-like model IDs.
