@@ -438,3 +438,10 @@ The camera follows her smoothly into the room.
 The first ordinary entry is the first frame. Further ordinary entries are intermediate frames in line order, regardless of image numbering. A bracketed `[@ImageN]` entry is an optional last frame: at most one, and only as the final nonblank entry in the block. Without it, the final listed image remains an intermediate frame. Blank descriptions are allowed; both ASCII and full-width colons and surrounding spaces are accepted. The parser sends actual image roles to APIMart and rewrites numbered prompt references to match submission order. There are no exact frame timestamps.
 
 The generator inserts a starter block when you explicitly select Keyframes and no connected prompt already contains one. A separate connected text node may carry the block. Existing text is preserved. Image bindings are saved with the prompt node. After changing reference order or connections, review the visible thumbnails and use **Bind image numbers** before reusing changed numbers. An agent can also create a fresh prompt node with reviewed references. Do not bypass an image-binding error by blindly retrying generation.
+
+## MAGI-2 text to video (development build)
+
+1. Add Higgsfield in Bragi Canvas settings using the complete `key-id:secret` credential and enable MAGI-2.
+2. Check that `list_models({ type: "video" })` lists `magi-2` with Higgsfield as its active provider. Create a prompt node without connected media.
+3. Call `generate({ nodeId, modelId: "magi-2", mode: "text-to-video", params: { duration: 4, aspect_ratio: "16:9", generate_audio: "true" } })`.
+4. Follow the video placeholder until it becomes a saved video file.

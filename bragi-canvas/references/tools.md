@@ -218,6 +218,8 @@ For BreezeBlue, use `modelId: "breeze-tts-2-multilingual"`, `mode: "tts"`, and `
 
 Wan Prime (plugin 1.45.0): keep `modelId: "wan-3.0"` and pass `params: { variant: "prime" }` when advertised by `list_models`; omitted variant remains Standard. Vidu (plugin 1.45.0) uses `modelId: "vidu-q4-preview"`; connect references as nodes, never as `params` URLs. Use `audio: "false"` for silent output.
 
+MAGI-2 (development build) uses `modelId: "magi-2"` and `mode: "text-to-video"` with a text prompt. For silent output use `params: { generate_audio: "false" }`. The optional `seed` takes an integer from 0 to 4294967295. Omit it or pass `-1` for a random seed. Track the accepted job through the usual video placeholder.
+
 **Params**
 - `nodeId` — target text or Markdown prompt node. Vidu Q4 Preview first-frame mode permits empty text with exactly one upstream image and no other media. Kling 4.0 first-frame and first-last-frame also permit empty text. Other generation requires prompt text on the target or a connected text/Markdown node.
 - `modelId` — from `list_models`
