@@ -158,7 +158,7 @@ For `minimax-h3`, `first-frame` requires exactly one ordered image and `first-la
 
 ## MAGI-2 media connections
 
-The MAGI-2 development build accepts prompt text from the target or connected text nodes. Disconnect reference images, videos, audio, and PDFs before generating. Higgsfield runs one MAGI-2 generation at a time per account by default, so an accepted request may wait in the provider queue. If monitoring pauses, resume the existing task to avoid submitting another generation.
+The MAGI-2 development build accepts prompt text from the target or connected text nodes. Disconnect reference images, videos, audio, and PDFs before generating. Higgsfield runs one MAGI-2 generation at a time per account by default, so an accepted request may wait in the provider queue. Bragi checks a MAGI-2 task for up to 45 minutes per checking window. If checking pauses, **Resume checking** starts a new 45-minute window for the saved task.
 
 ---
 
