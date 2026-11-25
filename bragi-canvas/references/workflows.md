@@ -439,9 +439,11 @@ The first ordinary entry is the first frame. Further ordinary entries are interm
 
 The generator inserts a starter block when you explicitly select Keyframes and no connected prompt already contains one. A separate connected text node may carry the block. Existing text is preserved. Image bindings are saved with the prompt node. After changing reference order or connections, review the visible thumbnails and use **Bind image numbers** before reusing changed numbers. An agent can also create a fresh prompt node with reviewed references. Do not bypass an image-binding error by blindly retrying generation.
 
-## MAGI-2 text to video (plugin 1.47.0)
+## MAGI-2 video on Higgsfield
 
 1. Add Higgsfield in Bragi Canvas settings using the complete `key-id:secret` credential and enable MAGI-2.
-2. Check that `list_models({ type: "video" })` lists `magi-2` with Higgsfield as its active provider. Create a prompt node without connected media.
+2. Check that `list_models({ type: "video" })` lists `magi-2` with Higgsfield as its active provider. For text-to-video, create a prompt node without connected media.
 3. Call `generate({ nodeId, modelId: "magi-2", mode: "text-to-video", params: { duration: 4, aspect_ratio: "16:9", generate_audio: "true" } })`.
 4. Follow the video placeholder until it becomes a saved video file.
+
+When the extra modes appear in `list_models`, connect one or two ordered images for frame animation or connect images, video and audio to guide a reference generation. Call `get_upstream` to verify the inputs. Use the same model ID throughout and set `mode: "reference-to-video"` when using one or two images as visual guides. The media modes can run with an empty prompt.

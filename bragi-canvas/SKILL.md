@@ -9,7 +9,7 @@ Bragi Canvas turns an Obsidian `.canvas` file into a node-based AI generation pi
 
 Current skill target: Bragi Canvas plugin **1.47.0**.
 
-Plugin 1.47.0 adds MAGI-2 text-to-video on Higgsfield. Use it when `list_models` includes `magi-2` with Higgsfield as its active provider.
+Use MAGI-2 when `list_models` includes `magi-2` with Higgsfield as its active provider. Plugin 1.47.0 supports text-to-video. On newer builds, check the advertised modes for frame and multimodal reference generation.
 
 Plugin 1.45.0 support: Wan 3.0 `variant: prime` and APIMart Vidu Q4 Preview. Use these only when `list_models` advertises them. Vidu first-frame allows an empty text node with exactly one upstream image; reference-image mode requires text.
 

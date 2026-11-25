@@ -158,7 +158,7 @@ For `minimax-h3`, `first-frame` requires exactly one ordered image and `first-la
 
 ## MAGI-2 media connections
 
-MAGI-2 accepts prompt text from the target or connected text nodes. Disconnect reference images, videos, audio, and PDFs before generating. Higgsfield runs one MAGI-2 generation at a time per account by default, so an accepted request may wait in the provider queue. Bragi checks a MAGI-2 task for up to 45 minutes per checking window. If checking pauses, **Resume checking** starts a new 45-minute window for the saved task.
+MAGI-2 reads the target and connected text nodes. Text-to-video requires a prompt and no media. In builds with frame and reference modes, frame generation uses the visible order of the connected images. Reference-to-video accepts up to 10 images, 5 MP4/MOV videos, and 5 WAV/MP3 audio clips, including audio alone. Higgsfield requires each video or audio clip to run 2–30 seconds, with 30 seconds total per modality. Bragi relays local files to temporary HTTPS URLs. PDF references are unsupported. Higgsfield runs one MAGI-2 generation at a time per account by default, so an accepted request may wait in the provider queue. Bragi checks a MAGI-2 task for up to 45 minutes per checking window. If checking pauses, **Resume checking** starts a new 45-minute window for the saved task.
 
 ---
 
